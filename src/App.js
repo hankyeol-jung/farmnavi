@@ -18,6 +18,7 @@ import moment from "moment";
 import "moment/locale/ko";
 import Clock from "react-live-clock";
 import { useState, useRef, useEffect, useBoolean } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 
 function App() {
   let timeFirst = moment().format("a");
@@ -66,6 +67,10 @@ function App() {
           </span>
         </div>
       </div>
+
+      <Routes>
+        <Route path="/" element={<div>ddddd</div>} />
+      </Routes>
 
       {/* 네비게이션 메뉴 */}
       <div className="bg-white grid grid-cols-8 h-[108px] bottom-0 fixed w-screen">
