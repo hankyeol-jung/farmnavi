@@ -1,3 +1,13 @@
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
 function Environment() {
   return (
     <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7">
@@ -22,7 +32,7 @@ function Environment() {
           </div>
         </div>
         <div className="absolute bottom-0 w-full h-[calc(100%_-_106px)] overflow-scroll">
-          <div className="w-full h-[1500px] px-11 pt-8">
+          <div className="w-full pt-8 px-11">
             <div className="flex items-center justify-between h-[8.75rem] mb-6">
               <TemperatureHumidity
                 borderColor="border-[#FEC104]"
@@ -43,6 +53,11 @@ function Environment() {
                 width="w-[25rem]"
               />
             </div>
+
+            <div>
+              <SuggestionBarChart />
+            </div>
+
             <div className="after:absolute after:w-px after:h-[90px] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[90px] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 h-[8.75rem] w-full border rounded-xl border-neutral-400 px-6 py-4">
               <Suggestion
                 title="관수 권장"
@@ -70,6 +85,37 @@ function Environment() {
       <div className="h-full bg-white"></div>
     </div>
   );
+}
+
+// 관수 & 환기 & 진입 오늘/내일 그래프 컴포넌트
+function SuggestionBarChart(props) {
+  const data = {
+    labels: ["00:00", "00:01", "00:02", "00:03", "00:04", "00:05", "00:06"],
+    datasets: [
+      {
+        data: [1, 2, 3, 4, 5, 6, 7],
+        backgroundColor: [
+          "#0069D9",
+          "#dddddd",
+          "#dddddd",
+          "#dddddd",
+          "#dddddd",
+          "#dddddd",
+          "#dddddd",
+        ],
+        borderWidth: 0,
+      },
+    ],
+  };
+  const options = {
+    scales: {
+      y: {
+        max: 20,
+      },
+    },
+  };
+  ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+  return <Bar data={data} options={options} />;
 }
 
 // 관수 & 환기 & 진입 권장 컴포넌트
