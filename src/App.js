@@ -18,49 +18,80 @@ import moment from "moment";
 import "moment/locale/ko";
 import Clock from "react-live-clock";
 import { useState, useRef, useEffect, useBoolean } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 
 function App() {
   let timeFirst = moment().format("a");
 
-  let menuIcons = [
-    <FontAwesomeIcon icon={faSeedling} />,
-    <FontAwesomeIcon icon={faWater} />,
-    <span class="material-icons text-3xl">emoji_nature</span>,
-    <FontAwesomeIcon icon={faPenToSquare} />,
-    <FontAwesomeIcon icon={faBuildingWheat} />,
-    <FontAwesomeIcon icon={faTrowel} />,
-    <FontAwesomeIcon icon={faMusic} />,
-    <FontAwesomeIcon icon={faCloud} />,
-  ];
-  let menuTitle = [
-    "환경",
-    "배지",
-    "수정벌",
-    "컨설팅",
-    "농업기술센터",
-    "농자재",
-    "음악",
-    "날씨",
+  let menuContents = [
+    {
+      enname: "environment",
+      icon: <FontAwesomeIcon icon={faSeedling} />,
+      koname: "환경",
+      style: false,
+    },
+    {
+      enname: "badge",
+      icon: <FontAwesomeIcon icon={faWater} />,
+      koname: "배지",
+    },
+    {
+      enname: "fertilized-bee",
+      icon: <FontAwesomeIcon icon={faForumbee} />,
+      koname: "수정벌",
+    },
+    {
+      enname: "consulting",
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
+      koname: "컨설팅",
+    },
+    {
+      enname: "agricultural-technology-center",
+      icon: <FontAwesomeIcon icon={faBuildingWheat} />,
+      koname: "농업기술센터",
+    },
+    {
+      enname: "agricultural-materials",
+      icon: <FontAwesomeIcon icon={faTrowel} />,
+      koname: "농자재",
+    },
+    {
+      enname: "music",
+      icon: <FontAwesomeIcon icon={faMusic} />,
+      koname: "음악",
+    },
+    {
+      enname: "weather",
+      icon: <FontAwesomeIcon icon={faCloud} />,
+      koname: "날씨",
+    },
   ];
 
+  let [test, setTest] = useState(
+    menuContents.map((m, i) =>
+      window.location.pathname == "/" + m.enname ? true : false
+    )
+  );
+
+  console.log(test);
+
   return (
-    <div className="App bg-slate-200 w-screen h-screen">
+    <div className="w-screen h-screen App bg-slate-200">
       {/* 헤더메뉴 */}
       <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
         <div className="w-1/3 cursor-pointer">
           <img src={logo} className="w-[12.25rem]"></img>
         </div>
-        <div className="w-1/3 flex justify-center items-end">
-          <p className="text-2xl text-neutral-600 font-medium mr-3">
+        <div className="flex items-end justify-center w-1/3">
+          <p className="mr-3 text-2xl font-medium text-neutral-600">
             {timeFirst == "am" ? "오전" : "오후"}
           </p>
-          <p className="text-4xl text-neutral-700 font-bold">
+          <p className="text-4xl font-bold text-neutral-700">
             <Clock format="hh:mm" ticking={true}></Clock>
           </p>
         </div>
-        <div className="w-1/3 flex justify-end items-center">
-          <p className="text-xl text-neutral-700 font-bold mr-3">홍길동님</p>
+        <div className="flex items-center justify-end w-1/3">
+          <p className="mr-3 text-xl font-bold text-neutral-700">홍길동님</p>
           <span className="flex items-center cursor-pointer">
             <img src={userIcon} className="w-[3.25rem] mr-3"></img>
             <img src={arrowBottom} className="w-6"></img>
@@ -69,35 +100,58 @@ function App() {
       </div>
 
       <Routes>
-        <Route path="/환경" element={<div>환경페이지</div>} />
-        <Route path="/배지" element={<div>배지페이지</div>} />
-        <Route path="/수정벌" element={<div>수정벌페이지</div>} />
-        <Route path="/컨설팅" element={<div>컨설팅</div>} />
-        <Route path="/농업기술센터" element={<div>농업기술센터</div>} />
-        <Route path="/농자재" element={<div>농자재</div>} />
-        <Route path="/음악" element={<div>음악</div>} />
-        <Route path="/날씨" element={<div>날씨</div>} />
+        {menuContents.map((m, i) => (
+          <Route path={"/" + m.enname} element={<div>{m.koname}</div>} />
+        ))}
       </Routes>
 
       {/* 네비게이션 메뉴 */}
       <div className="bg-white grid grid-cols-8 h-[108px] bottom-0 fixed w-screen">
-        {menuIcons.map(function (icon, i) {
-          return (
-            <Link
-              to={"/" + menuTitle[i]}
-              className="flex justify-center items-center"
-            >
-              <span className="flex flex-col justify-center items-center cursor-pointer relative before:w-[2px] before:h-12 before:bg-neutral-300 before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:translate-x-1/2 last-of-type:before:hidden">
-                <div className="text-2xl text-gray-600 mb-2 w-10 h-10 flex justify-center items-center">
-                  {icon}
-                </div>
-                <p className="text-xl font-medium text-gray-600">
-                  {menuTitle[i]}
-                </p>
-              </span>
-            </Link>
-          );
-        })}
+        {menuContents.map((m, i) => (
+          <Link
+            key={m.enname + i}
+            to={"/" + m.enname}
+            className=" flex justify-center items-center cursor-pointer relative before:w-[2px] before:h-12 before:bg-neutral-300 before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:translate-x-1/2 last-of-type:before:hidden"
+            onClick={() => {
+              let copy = [...test];
+
+              test.map((a, i) => (copy[i] = false));
+
+              copy[i] = true;
+
+              setTest(copy);
+            }}
+          >
+            <span
+              className={
+                `${
+                  test[i] == true
+                    ? "w-40 before:border-[0.75rem]"
+                    : "w-0 before:border-[0px]"
+                }` +
+                " before:transition-[0.5s] before:absolute before:top-0 before:left-1/2 before:-translate-x-1/2 before:w-0 before:h-0 before:border-b-transparent before:border-t-[#2eabe2] before:border-r-transparent before:border-l-transparent h-1 bg-[#2eabe2] transition-[0.5s] absolute top-0"
+              }
+            ></span>
+            <span className="flex flex-col items-center justify-center">
+              <div
+                className={
+                  "text-2xl mb-2 w-10 h-10 flex justify-center items-center transition " +
+                  `${test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
+                }
+              >
+                {m.icon}
+              </div>
+              <p
+                className={
+                  "text-xl font-medium transition " +
+                  `${test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
+                }
+              >
+                {m.koname}
+              </p>
+            </span>
+          </Link>
+        ))}
       </div>
     </div>
   );
