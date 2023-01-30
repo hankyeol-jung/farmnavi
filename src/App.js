@@ -20,6 +20,15 @@ import Clock from "react-live-clock";
 import { useState, useRef, useEffect, useBoolean } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 
+import Environment from "./page/Environment.js";
+import Badge from "./page/Badge.js";
+import FertilizedBee from "./page/FertilizedBee.js";
+import Consulting from "./page/Consulting.js";
+import AgriculturalTechnologyCenter from "./page/AgriculturalTechnologyCenter.js";
+import AgriculturalMaterials from "./page/AgriculturalMaterials.js";
+import Music from "./page/Music.js";
+import Weather from "./page/Weather.js";
+
 function App() {
   let timeFirst = moment().format("a");
 
@@ -28,42 +37,49 @@ function App() {
       enname: "environment",
       icon: <FontAwesomeIcon icon={faSeedling} />,
       koname: "환경",
-      style: false,
+      file: <Environment />,
     },
     {
       enname: "badge",
       icon: <FontAwesomeIcon icon={faWater} />,
       koname: "배지",
+      file: <Badge />,
     },
     {
       enname: "fertilized-bee",
       icon: <FontAwesomeIcon icon={faForumbee} />,
       koname: "수정벌",
+      file: <FertilizedBee />,
     },
     {
       enname: "consulting",
       icon: <FontAwesomeIcon icon={faPenToSquare} />,
       koname: "컨설팅",
+      file: <Consulting />,
     },
     {
       enname: "agricultural-technology-center",
       icon: <FontAwesomeIcon icon={faBuildingWheat} />,
       koname: "농업기술센터",
+      file: <AgriculturalTechnologyCenter />,
     },
     {
       enname: "agricultural-materials",
       icon: <FontAwesomeIcon icon={faTrowel} />,
       koname: "농자재",
+      file: <AgriculturalMaterials />,
     },
     {
       enname: "music",
       icon: <FontAwesomeIcon icon={faMusic} />,
       koname: "음악",
+      file: <Music />,
     },
     {
       enname: "weather",
       icon: <FontAwesomeIcon icon={faCloud} />,
       koname: "날씨",
+      file: <Weather />,
     },
   ];
 
@@ -101,7 +117,7 @@ function App() {
 
       <Routes>
         {menuContents.map((m, i) => (
-          <Route path={"/" + m.enname} element={<div>{m.koname}</div>} />
+          <Route path={"/" + m.enname} element={m.file} />
         ))}
       </Routes>
 
