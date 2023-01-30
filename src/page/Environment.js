@@ -26,10 +26,10 @@ function Environment() {
             <div className="flex items-center justify-between h-[8.75rem] mb-6">
               <TemperatureHumidity
                 borderColor="border-[#FEC104]"
-                nowTemperature="29.3"
-                nowHumidity="48.8"
-                suggestionTemperature="28.5"
-                suggestionHumidity="52.5"
+                nowTemperature="29.3" //현재온도
+                nowHumidity="48.8" //현재습도
+                suggestionTemperature="28.5" //추천온도
+                suggestionHumidity="52.5" //추천습도
               ></TemperatureHumidity>
               <SuitableTranspiration
                 title="적합한 증산 진입 예상"
@@ -43,11 +43,48 @@ function Environment() {
                 width="w-[25rem]"
               />
             </div>
+            <div className="after:absolute after:w-px after:h-[90px] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[90px] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 h-[8.75rem] w-full border rounded-xl border-neutral-400 px-6 py-4">
+              <Suggestion
+                title="관수 권장"
+                today="10:32"
+                yesterday="09:30"
+                tomorrow="10:12"
+              />
+              <Suggestion
+                title="환기 권장"
+                today="10:32"
+                yesterday="09:30"
+                tomorrow="10:12"
+              />
+              <Suggestion
+                title="진입 권장"
+                today="10:32"
+                yesterday="09:30"
+                tomorrow="10:12"
+              />
+            </div>
           </div>
         </div>
       </div>
       {/* 농장환경예측 */}
       <div className="h-full bg-white"></div>
+    </div>
+  );
+}
+
+// 관수 & 환기 & 진입 권장 컴포넌트
+function Suggestion(props) {
+  return (
+    <div className="flex flex-col justify-between h-full mx-auto w-[15.625rem]">
+      <p className="text-xl font-medium text-neutral-500">{props.title}</p>
+      <div>
+        <p className="mb-1 text-2xl font-medium text-black">
+          오늘 {props.today} (어제 {props.yesterday})
+        </p>
+        <span className="px-4 py-1 bg-[#2eabe2] rounded-full text-xl font-medium text-white">
+          내일 {props.tomorrow} 예측
+        </span>
+      </div>
     </div>
   );
 }

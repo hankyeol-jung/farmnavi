@@ -89,8 +89,6 @@ function App() {
     )
   );
 
-  console.log(test);
-
   return (
     <div className="w-screen h-screen App bg-slate-200">
       {/* 헤더메뉴 */}
