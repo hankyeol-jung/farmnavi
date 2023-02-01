@@ -1,14 +1,41 @@
 import {
   Chart as ChartJS,
   BarElement,
+  LineElement,
+  PointElement,
   CategoryScale,
   LinearScale,
+  Title,
   Tooltip,
   Legend,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { useRef, useState, useEffect } from "react";
+import { Bar, Line } from "react-chartjs-2";
+import Recommend from "../json/recommend.json";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 
 function Environment() {
+  let [timeValue, setTimeValue] = useState(1);
+
+  let scrollRef = useRef(0);
+
+  let up = () => {
+    scrollRef.current.scrollTop = scrollRef.current.scrollTop - 200;
+  };
+  let down = () => {
+    scrollRef.current.scrollTop = scrollRef.current.scrollTop + 200;
+  };
+
+  let [growthDay, setGrowthDay] = useState([
+    "9/27",
+    "9/28",
+    "9/29",
+    "9/30",
+    "10/1",
+    "10/2 예측",
+  ]);
+
   return (
     <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7">
       {/* 환경콘텐츠 */}
@@ -31,8 +58,11 @@ function Environment() {
             </p>
           </div>
         </div>
-        <div className="absolute bottom-0 w-full h-[calc(100%_-_106px)] overflow-scroll">
-          <div className="w-full pt-8 px-11">
+        <div
+          className="absolute bottom-0 w-full h-[calc(100%_-_106px)] overflow-scroll scroll-smooth"
+          ref={scrollRef}
+        >
+          <div className="absolute w-full pt-8 pb-16 px-11 text-neutral-400">
             <div className="flex items-center justify-between h-[8.75rem] mb-6">
               <TemperatureHumidity
                 borderColor="border-[#FEC104]"
@@ -54,11 +84,33 @@ function Environment() {
               />
             </div>
 
-            <div>
-              <SuggestionBarChart />
+            <div className="w-full px-6 py-4 mb-6 border rounded-xl border-neutral-400">
+              <div className="grid grid-cols-3 gap-5 mb-5">
+                <TimeViewButton
+                  functionValue={1}
+                  timeValue={timeValue}
+                  setTimeValue={setTimeValue}
+                  title={"1분 간격 보기"}
+                />
+                <TimeViewButton
+                  functionValue={10}
+                  timeValue={timeValue}
+                  setTimeValue={setTimeValue}
+                  title={"10분 간격 보기"}
+                />
+                <TimeViewButton
+                  functionValue={60}
+                  timeValue={timeValue}
+                  setTimeValue={setTimeValue}
+                  title={"1시간 간격 보기"}
+                />
+              </div>
+              <div className="h-[300px] w-full">
+                <SuggestionBarChart timeValue={timeValue} />
+              </div>
             </div>
 
-            <div className="after:absolute after:w-px after:h-[90px] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[90px] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 h-[8.75rem] w-full border rounded-xl border-neutral-400 px-6 py-4">
+            <div className="mb-6 after:absolute after:w-px after:h-[90px] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[90px] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 h-[8.75rem] w-full border rounded-xl border-neutral-400 px-6 py-4">
               <Suggestion
                 title="관수 권장"
                 today="10:32"
@@ -78,7 +130,34 @@ function Environment() {
                 tomorrow="10:12"
               />
             </div>
+
+            <div className="w-full px-6 py-4 mb-6 border rounded-xl border-neutral-400">
+              <p className="text-2xl font-medium text-neutral-500">
+                환경에 의한 초세/생장 추이
+              </p>
+              <div className=" before:absolute before:w-full before:h-px before:top-[calc(50%_+_5px)] before:-translate-y-1/2 before:bg-neutral-400 h-[240px] w-full relative">
+                <p className="absolute top-[calc(50%_-_20px)] text-neutral-500 text-base">
+                  영양
+                </p>
+                <div className="absolute flex flex-col items-center justify-between h-full text-base -translate-x-1/2 left-1/2 text-[#28A745]">
+                  <p>초세강함</p>
+                  <div className="w-px h-[75%] bg-neutral-400"></div>
+                  <p>초세약함</p>
+                </div>
+                <GrowthLineChart />
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* 스크롤무브 버튼 */}
+        <div className=" bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
+          <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
+            <FontAwesomeIcon icon={faCaretUp} onClick={up} className="mt-1" />
+          </span>
+          <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
+            <FontAwesomeIcon icon={faCaretDown} onClick={down} />
+          </span>
         </div>
       </div>
       {/* 농장환경예측 */}
@@ -87,33 +166,174 @@ function Environment() {
   );
 }
 
-// 관수 & 환기 & 진입 오늘/내일 그래프 컴포넌트
-function SuggestionBarChart(props) {
+// 1분&10분&1시간 간격 보기 버튼
+function TimeViewButton(props) {
+  return (
+    <span
+      className={
+        "px-4 py-2 text-xl text-center rounded-full cursor-pointer transition " +
+        `${
+          props.timeValue == props.functionValue
+            ? "bg-[#2EABE2] text-white font-bold"
+            : "bg-slate-200 text-black font-medium"
+        }`
+      }
+      onClick={() => {
+        props.setTimeValue(props.functionValue);
+      }}
+    >
+      {props.title}
+    </span>
+  );
+}
+
+// 환경에 의한 초세/생장 추이 그래프
+function GrowthLineChart(props) {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+
+  let graphData = [3, 13, 6, 18, 4, 8];
+
+  let borderColor = graphData.map((g, i) => {
+    if (g > 10) {
+      return "#FEC104";
+    } else if (g == 10) {
+      return "#28A745";
+    } else {
+      return "#DC3545";
+    }
+  });
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    pointRadius: 7,
+    pointBackgroundColor: "#ffffff",
+    pointBorderColor: borderColor,
+    pointBorderWidth: 3,
+    maintainAspectRatio: false,
+    lineTension: 0.5,
+    scales: {
+      y: {
+        display: false,
+        max: 20.0,
+        ticks: {
+          display: false,
+          beginAtZero: true, // 0부터 시작하게 합니다.
+          stepSize: 10, // 10 씩 증가하도록 설정합니다.
+        },
+        grid: {
+          drawTicks: false,
+          display: false,
+        },
+      },
+      x: {
+        visible: false,
+        grid: {
+          drawTicks: false,
+          display: false,
+        },
+        border: {
+          display: false,
+        },
+      },
+    },
+  };
+
   const data = {
-    labels: ["00:00", "00:01", "00:02", "00:03", "00:04", "00:05", "00:06"],
+    labels: ["9/27", "9/28", "9/29", "9/30", "10/1", "10/2 예측"],
     datasets: [
       {
-        data: [1, 2, 3, 4, 5, 6, 7],
-        backgroundColor: [
-          "#0069D9",
-          "#dddddd",
-          "#dddddd",
-          "#dddddd",
-          "#dddddd",
-          "#dddddd",
-          "#dddddd",
-        ],
+        label: "Dataset 1",
+        data: graphData,
+        borderColor: "#DDDDDD",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
+
+  return <Line options={options} data={data} />;
+}
+
+// 관수 & 환기 & 진입 오늘/내일 그래프 컴포넌트
+function SuggestionBarChart(props) {
+  let [recommend, setRecommend] = useState(Recommend);
+
+  // 배열 총 개수
+  let maxValue = recommend.length;
+
+  let recommendTest = [];
+  // 10분 단위로 출력
+  function timeChoice(num) {
+    for (let i = 0; i < maxValue; i++) {
+      if (i % num == 0) {
+        recommendTest.push(recommend[i]);
+      }
+    }
+  }
+
+  timeChoice(props.timeValue);
+
+  let recommendColor = recommendTest.map((recommend, i) => {
+    const { x, ...copy } = recommend;
+    if (copy.y <= 1) {
+      return "#0069D9";
+    } else if (1 < copy.y && copy.y <= 3) {
+      return "#58AAFF";
+    } else if (3 < copy.y && copy.y <= 6) {
+      return "#28A745";
+    } else if (6 < copy.y && copy.y <= 13) {
+      return "#FFD75E";
+    }
+  });
+
+  const data = {
+    datasets: [
+      {
+        backgroundColor: recommendColor,
+        data: recommendTest,
         borderWidth: 0,
       },
     ],
   };
   const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    maintainAspectRatio: false,
     scales: {
       y: {
-        max: 20,
+        max: 20.0,
+        ticks: {
+          beginAtZero: true, // 0부터 시작하게 합니다.
+          stepSize: 10, // 10 씩 증가하도록 설정합니다.
+        },
+        grid: {
+          display: false,
+        },
+      },
+      x: {
+        grid: {
+          drawTicks: false,
+        },
       },
     },
   };
+
   ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
   return <Bar data={data} options={options} />;
 }
