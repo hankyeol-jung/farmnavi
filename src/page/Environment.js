@@ -36,11 +36,33 @@ function Environment() {
     "10/2 예측",
   ]);
 
+  let averageTemperature = [
+    { label: "2주평균", value: 26.2 },
+    { label: "1주평균", value: 25.5 },
+    { label: "어제", value: 24.2 },
+    { label: "오늘(예측)", value: 24.8 },
+    { label: "내일(예측)", value: 24.3 },
+  ];
+  let morningTemperature = [
+    { label: "2주평균", value: 26.2 },
+    { label: "1주평균", value: 25.5 },
+    { label: "어제", value: 24.2 },
+    { label: "오늘(예측)", value: 24.8 },
+    { label: "내일(예측)", value: 24.3 },
+  ];
+  let dayAndNight = [
+    { label: "2주평균", value: 26.2 },
+    { label: "1주평균", value: 25.5 },
+    { label: "어제", value: 24.2 },
+    { label: "오늘(예측)", value: 24.8 },
+    { label: "내일(예측)", value: 24.3 },
+  ];
+
   return (
     <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7">
       {/* 환경콘텐츠 */}
       <div className="relative h-full col-span-3 bg-white">
-        <div className="absolute top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
+        <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
           <div className="flex items-center">
             <p className="mr-6 text-4xl font-bold text-black ">
               홍길동 농장 A동
@@ -58,11 +80,14 @@ function Environment() {
             </p>
           </div>
         </div>
+
+        <div className="z-30 absolute top-0 w-full h-[60px] bg-gradient-to-b to-[#ffffff05] from-white mt-[100px]"></div>
+
         <div
-          className="absolute bottom-0 w-full h-[calc(100%_-_106px)] overflow-scroll scroll-smooth"
+          className="absolute bottom-[60px] w-full h-[calc(100%_-_106px_-_60px)] overflow-scroll scroll-smooth"
           ref={scrollRef}
         >
-          <div className="absolute w-full pt-8 pb-16 px-11 text-neutral-400">
+          <div className="absolute w-full pt-8 px-11 text-neutral-400">
             <div className="flex items-center justify-between h-[8.75rem] mb-6">
               <TemperatureHumidity
                 borderColor="border-[#FEC104]"
@@ -135,11 +160,11 @@ function Environment() {
               <p className="text-2xl font-medium text-neutral-500">
                 환경에 의한 초세/생장 추이
               </p>
-              <div className=" before:absolute before:w-full before:h-px before:top-[calc(50%_+_5px)] before:-translate-y-1/2 before:bg-neutral-400 h-[240px] w-full relative">
-                <p className="absolute top-[calc(50%_-_20px)] text-neutral-500 text-base">
+              <div className=" z-10 before:-z-10 before:absolute before:w-full before:h-px before:top-[calc(50%_+_5px)] before:-translate-y-1/2 before:bg-neutral-400 h-[240px] w-full relative">
+                <p className=" -z-10 absolute top-[calc(50%_-_20px)] text-neutral-500 text-base">
                   영양
                 </p>
-                <div className="absolute flex flex-col items-center justify-between h-full text-base -translate-x-1/2 left-1/2 text-[#28A745]">
+                <div className=" -z-10 absolute flex flex-col items-center justify-between h-full text-base -translate-x-1/2 left-1/2 text-[#28A745]">
                   <p>초세강함</p>
                   <div className="w-px h-[75%] bg-neutral-400"></div>
                   <p>초세약함</p>
@@ -147,11 +172,28 @@ function Environment() {
                 <GrowthLineChart />
               </div>
             </div>
+
+            <TemperatureGraph
+              title="24시간 평균온도(°C)"
+              advice={"24시간 평균온도를 낮추세요!"}
+              temperatureGraphData={averageTemperature}
+            />
+            <TemperatureGraph
+              title="이른아침 온도상승(°C/시간당)"
+              advice={"오전 7시 ~ 9시 경에 온도를 서서히 높이세요!"}
+              temperatureGraphData={morningTemperature}
+            />
+            <TemperatureGraph
+              title="주야간온도편차(°C)"
+              advice={"주야간 온도편차를 줄이세요!"}
+              temperatureGraphData={dayAndNight}
+            />
           </div>
         </div>
 
+        <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
         {/* 스크롤무브 버튼 */}
-        <div className=" bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
+        <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
           <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
             <FontAwesomeIcon icon={faCaretUp} onClick={up} className="mt-1" />
           </span>
@@ -162,6 +204,118 @@ function Environment() {
       </div>
       {/* 농장환경예측 */}
       <div className="h-full bg-white"></div>
+    </div>
+  );
+}
+
+// 온도 그래프 컴포넌트
+function TemperatureGraph(props) {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+
+  let temperatureGraphData = props.temperatureGraphData;
+
+  let labelsLabel = temperatureGraphData.map((l, i) => {
+    return l.label;
+  });
+
+  let graphData = [26.2, 25.5, 24.2, 24.8, 24.3];
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: false,
+      },
+      hover: { mode: null },
+    },
+    pointRadius: 10,
+    pointBackgroundColor: "#ffffff",
+    pointBorderColor: "#2EABE2",
+    pointBorderWidth: 3,
+    maintainAspectRatio: false,
+    lineTension: 0.5,
+    scales: {
+      y: {
+        display: false,
+        ticks: {
+          display: false,
+          beginAtZero: true, // 0부터 시작하게 합니다.
+        },
+        grid: {
+          drawTicks: false,
+          display: false,
+        },
+      },
+      x: {
+        visible: false,
+        ticks: {
+          display: false,
+        },
+        grid: {
+          drawTicks: false,
+          display: false,
+        },
+        border: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  // console.log(labels.label);
+
+  const data = {
+    labels: labelsLabel,
+    datasets: [
+      {
+        label: graphData,
+        data: graphData,
+        borderColor: "#2EABE2",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
+
+  return (
+    <div className=" flex items-center h-[300px] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400 ">
+      <div className="w-[334px] h-full flex flex-col justify-between mr-5">
+        <div>
+          <p className="text-xl font-bold text-neutral-500">{props.title}</p>
+        </div>
+        <div className="px-10 bg-[#2EABE2] w-full h-[152px] text-white text-2xl font-bold rounded-2xl flex justify-center items-center text-center">
+          <p className=" break-keep">{props.advice}</p>
+        </div>
+      </div>
+      <div className="z-10 w-[70%] h-full bg-[#31ABE220] rounded-2xl relative">
+        <div className="absolute flex flex-col justify-between w-full h-full py-3 text-base font-medium -z-10 text-neutral-600 ">
+          <div className="grid h-full grid-cols-5">
+            {temperatureGraphData.map((l, i) => {
+              return (
+                <div className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[150px] before:bg-neutral-400 h-full">
+                  <div className="flex flex-col items-center justify-between h-full">
+                    <p className="block text-center ">{l.label}</p>
+                    <p className="text-center">{l.value}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className="w-full h-full px-[8.5%] py-12 mx-auto">
+          <Line options={options} data={data} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -218,7 +372,7 @@ function GrowthLineChart(props) {
         display: false,
       },
     },
-    pointRadius: 7,
+    pointRadius: 10,
     pointBackgroundColor: "#ffffff",
     pointBorderColor: borderColor,
     pointBorderWidth: 3,
@@ -255,7 +409,7 @@ function GrowthLineChart(props) {
     labels: ["9/27", "9/28", "9/29", "9/30", "10/1", "10/2 예측"],
     datasets: [
       {
-        label: "Dataset 1",
+        label: "생식",
         data: graphData,
         borderColor: "#DDDDDD",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
