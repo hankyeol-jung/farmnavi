@@ -15,17 +15,16 @@ import Recommend from "../json/recommend.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import Fade from "react-reveal/Fade";
 
 function Environment() {
   let [timeValue, setTimeValue] = useState(1);
 
   let scrollRef = useRef(0);
 
-  let up = () => {
+  let scrollRefUp = (text) => {
     scrollRef.current.scrollTop = scrollRef.current.scrollTop - 200;
   };
-  let down = () => {
+  let scrollRefDown = (text) => {
     scrollRef.current.scrollTop = scrollRef.current.scrollTop + 200;
   };
 
@@ -63,202 +62,182 @@ function Environment() {
   let lastScrollY = 0;
 
   let reveal = () => {
-    var reveals = document.querySelectorAll(".reveal");
-    for (var i = 0; i < reveals.length; i++) {
-      var windowHeight = window.innerHeight;
-      var elementTop = reveals[i].getBoundingClientRect().top;
-      var elementVisible = 150;
+    let reveals = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver((e) => {
+      e.forEach((box) => {
+        if (box.isIntersecting) {
+          box.target.classList.remove("opacity-0");
+          box.target.classList.remove("scale-[0.7]");
+        } else {
+          box.target.classList.add("opacity-0");
+          box.target.classList.add("scale-[0.7]");
+        }
+      });
+    });
 
-      if (elementTop < windowHeight - elementVisible) {
-        reveals[i].classList.add("active");
-      } else {
-        reveals[i].classList.remove("active");
-      }
+    for (let i = 0; i < reveals.length; i++) {
+      observer.observe(reveals[i]);
     }
   };
 
-  // let observer = new IntersectionObserver((e) => {
-  //   e.forEach((box) => {
-  //     if (box.isIntersecting) {
-  //       box.target.style.opacity = 1;
-  //     } else {
-  //       box.target.style.opacity = 0;
-  //     }
-  //   });
-  // });
-
-  // let reveal = document.querySelectorAll(".reveal");
-
-  // console.log(reveal);
-
-  // observer.observe(reveal[0]);
-  // observer.observe(reveal[1]);
-  // observer.observe(reveal[2]);
-  // observer.observe(reveal[3]);
-  // observer.observe(reveal[4]);
-  // observer.observe(reveal[5]);
-
   return (
-    <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7 ">
-      {/* 환경콘텐츠 */}
-      <div className="relative h-full col-span-3 bg-white">
-        <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
-          <div className="flex items-center">
-            <p className="mr-6 text-4xl font-bold text-black ">
-              홍길동 농장 A동
-            </p>
-            <span className="px-5 py-1 text-xl font-bold text-black bg-[#ffc107] rounded-xl">
-              내부가 조금 건조해요
-            </span>
-          </div>
-          <div className="flex items-center">
-            <p className=" text-[28px] font-medium mr-5 text-neutral-500 ">
-              오늘의 환경점수
-            </p>
-            <p className=" text-[32px] font-medium text-black ">
-              <b className=" text-[40px] font-bold text-[#28a745]">61</b>점
-            </p>
-          </div>
-        </div>
-
-        <div className="z-30 absolute top-0 w-full h-[60px] bg-gradient-to-b to-[#ffffff05] from-white mt-[100px]"></div>
-
-        <div
-          className="absolute bottom-[60px] w-full h-[calc(100%_-_106px_-_60px)] overflow-scroll scroll-smooth"
-          ref={scrollRef}
-          onScroll={() => {
-            reveal();
-          }}
-        >
-          <div className="absolute w-full pt-8 px-11 text-neutral-400">
-            <div className="transition">
-              <div className="flex items-center justify-between h-[8.75rem] mb-6 ">
-                <TemperatureHumidity
-                  borderColor="border-[#FEC104]"
-                  nowTemperature="29.3" //현재온도
-                  nowHumidity="48.8" //현재습도
-                  suggestionTemperature="28.5" //추천온도
-                  suggestionHumidity="52.5" //추천습도
-                ></TemperatureHumidity>
-                <SuitableTranspiration
-                  title="적합한 증산 진입 예상"
-                  time="02시간 50분 후"
-                  width="w-[20rem]"
-                  margin="mx-6"
-                />
-                <SuitableTranspiration
-                  title="적합한 증산활동 시간"
-                  time="오늘 02시간 10분 예측"
-                  width="w-[25rem]"
-                />
-              </div>
-            </div>
-
-            <div className="transition duration-1000 ">
-              <div className="w-full px-6 py-4 mb-6 border rounded-xl border-neutral-400 ">
-                <div className="grid grid-cols-3 gap-5 mb-5">
-                  <TimeViewButton
-                    functionValue={1}
-                    timeValue={timeValue}
-                    setTimeValue={setTimeValue}
-                    title={"1분 간격 보기"}
-                  />
-                  <TimeViewButton
-                    functionValue={10}
-                    timeValue={timeValue}
-                    setTimeValue={setTimeValue}
-                    title={"10분 간격 보기"}
-                  />
-                  <TimeViewButton
-                    functionValue={60}
-                    timeValue={timeValue}
-                    setTimeValue={setTimeValue}
-                    title={"1시간 간격 보기"}
-                  />
-                </div>
-                <div className="h-[300px] w-full">
-                  <SuggestionBarChart timeValue={timeValue} />
-                </div>
-              </div>
-            </div>
-            <div className="transition duration-1000 reveal">
-              <div className=" mb-6 after:absolute after:w-px after:h-[90px] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[90px] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 h-[8.75rem] w-full border rounded-xl border-neutral-400 px-6 py-4">
-                <Suggestion
-                  title="관수 권장"
-                  today="10:32"
-                  yesterday="09:30"
-                  tomorrow="10:12"
-                />
-                <Suggestion
-                  title="환기 권장"
-                  today="10:32"
-                  yesterday="09:30"
-                  tomorrow="10:12"
-                />
-                <Suggestion
-                  title="진입 권장"
-                  today="10:32"
-                  yesterday="09:30"
-                  tomorrow="10:12"
-                />
-              </div>
-            </div>
-            <div className="transition duration-1000 opacity-0 reveal">
-              <div className="w-full px-6 py-4 mb-6 border rounded-xl border-neutral-400 ">
-                <p className="text-2xl font-medium text-neutral-500">
-                  환경에 의한 초세/생장 추이
-                </p>
-                <div className=" z-10 before:-z-10 before:absolute before:w-full before:h-px before:top-[calc(50%_+_5px)] before:-translate-y-1/2 before:bg-neutral-400 h-[240px] w-full relative">
-                  <p className=" -z-10 absolute top-[calc(50%_-_20px)] text-neutral-500 text-base">
-                    영양
-                  </p>
-                  <div className=" -z-10 absolute flex flex-col items-center justify-between h-full text-base -translate-x-1/2 left-1/2 text-[#28A745]">
-                    <p>초세강함</p>
-                    <div className="w-px h-[75%] bg-neutral-400"></div>
-                    <p>초세약함</p>
-                  </div>
-                  <GrowthLineChart />
-                </div>
-              </div>
-            </div>
-
-            <div className="transition duration-1000 opacity-0 reveal">
-              <TemperatureGraph
-                title="24시간 평균온도(°C)"
-                advice={"24시간 평균온도를 낮추세요!"}
-                temperatureGraphData={averageTemperature}
-              />
-            </div>
-            <div className="transition duration-1000 opacity-0 reveal">
-              <TemperatureGraph
-                title="이른아침 온도상승(°C/시간당)"
-                advice={"오전 7시 ~ 9시 경에 온도를 서서히 높이세요!"}
-                temperatureGraphData={morningTemperature}
-              />
-            </div>
-            <div className="transition duration-1000 opacity-0 reveal">
-              <TemperatureGraph
-                title="주야간온도편차(°C)"
-                advice={"주야간 온도편차를 줄이세요!"}
-                temperatureGraphData={dayAndNight}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
-        {/* 스크롤무브 버튼 */}
-        <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
-          <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
-            <FontAwesomeIcon icon={faCaretUp} onClick={up} className="mt-1" />
+    <div className="relative h-full col-span-3 bg-white">
+      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
+        <div className="flex items-center">
+          <p className="mr-6 text-4xl font-bold text-black ">홍길동 농장 A동</p>
+          <span className="px-5 py-1 text-xl font-bold text-black bg-[#ffc107] rounded-xl">
+            내부가 조금 건조해요
           </span>
-          <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
-            <FontAwesomeIcon icon={faCaretDown} onClick={down} />
-          </span>
+        </div>
+        <div className="flex items-center">
+          <p className=" text-[28px] font-medium mr-5 text-neutral-500 ">
+            오늘의 환경점수
+          </p>
+          <p className=" text-[32px] font-medium text-black ">
+            <b className=" text-[40px] font-bold text-[#28a745]">61</b>점
+          </p>
         </div>
       </div>
-      {/* 농장환경예측 */}
-      <div className="h-full bg-white"></div>
+
+      <div className="z-30 absolute top-0 w-full h-[60px] bg-gradient-to-b to-[#ffffff05] from-white mt-[100px]"></div>
+
+      <div
+        className="absolute bottom-[60px] w-full h-[calc(100%_-_106px_-_60px)] overflow-scroll scroll-smooth"
+        ref={scrollRef}
+        onScroll={() => {
+          reveal();
+        }}
+      >
+        <div className="absolute w-full pt-8 px-11 text-neutral-400">
+          <div className="transition duration-1000 reveal">
+            <div className="flex items-center justify-between h-[8.75rem] mb-6 ">
+              <TemperatureHumidity
+                borderColor="border-[#FEC104]"
+                nowTemperature="29.3" //현재온도
+                nowHumidity="48.8" //현재습도
+                suggestionTemperature="28.5" //추천온도
+                suggestionHumidity="52.5" //추천습도
+              ></TemperatureHumidity>
+              <SuitableTranspiration
+                title="적합한 증산 진입 예상"
+                time="02시간 50분 후"
+                width="w-[20rem]"
+                margin="mx-6"
+              />
+              <SuitableTranspiration
+                title="적합한 증산활동 시간"
+                time="오늘 02시간 10분 예측"
+                width="w-[25rem]"
+              />
+            </div>
+          </div>
+
+          <div className="transition duration-1000 reveal ">
+            <div className="w-full px-6 py-4 mb-6 border rounded-xl border-neutral-400 ">
+              <div className="grid grid-cols-3 gap-5 mb-5">
+                <TimeViewButton
+                  functionValue={1}
+                  timeValue={timeValue}
+                  setTimeValue={setTimeValue}
+                  title={"1분 간격 보기"}
+                />
+                <TimeViewButton
+                  functionValue={10}
+                  timeValue={timeValue}
+                  setTimeValue={setTimeValue}
+                  title={"10분 간격 보기"}
+                />
+                <TimeViewButton
+                  functionValue={60}
+                  timeValue={timeValue}
+                  setTimeValue={setTimeValue}
+                  title={"1시간 간격 보기"}
+                />
+              </div>
+              <div className="h-[300px] w-full">
+                <SuggestionBarChart timeValue={timeValue} />
+              </div>
+            </div>
+          </div>
+          <div className="transition duration-1000 reveal">
+            <div className=" mb-6 after:absolute after:w-px after:h-[90px] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[90px] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 h-[8.75rem] w-full border rounded-xl border-neutral-400 px-6 py-4">
+              <Suggestion
+                title="관수 권장"
+                today="10:32"
+                yesterday="09:30"
+                tomorrow="10:12"
+              />
+              <Suggestion
+                title="환기 권장"
+                today="10:32"
+                yesterday="09:30"
+                tomorrow="10:12"
+              />
+              <Suggestion
+                title="진입 권장"
+                today="10:32"
+                yesterday="09:30"
+                tomorrow="10:12"
+              />
+            </div>
+          </div>
+          <div className="transition duration-1000 reveal">
+            <div className="w-full px-6 py-4 mb-6 border rounded-xl border-neutral-400 ">
+              <p className="text-2xl font-medium text-neutral-500">
+                환경에 의한 초세/생장 추이
+              </p>
+              <div className=" z-10 before:-z-10 before:absolute before:w-full before:h-px before:top-[calc(50%_+_5px)] before:-translate-y-1/2 before:bg-neutral-400 h-[240px] w-full relative">
+                <p className=" -z-10 absolute top-[calc(50%_-_20px)] text-neutral-500 text-base">
+                  영양
+                </p>
+                <div className=" -z-10 absolute flex flex-col items-center justify-between h-full text-base -translate-x-1/2 left-1/2 text-[#28A745]">
+                  <p>초세강함</p>
+                  <div className="w-px h-[75%] bg-neutral-400"></div>
+                  <p>초세약함</p>
+                </div>
+                <GrowthLineChart />
+              </div>
+            </div>
+          </div>
+
+          <div className="transition duration-1000 reveal">
+            <TemperatureGraph
+              title="24시간 평균온도(°C)"
+              advice={"24시간 평균온도를 낮추세요!"}
+              temperatureGraphData={averageTemperature}
+            />
+          </div>
+          <div className="transition duration-1000 reveal">
+            <TemperatureGraph
+              title="이른아침 온도상승(°C/시간당)"
+              advice={"오전 7시 ~ 9시 경에 온도를 서서히 높이세요!"}
+              temperatureGraphData={morningTemperature}
+            />
+          </div>
+          <div className="transition duration-1000 reveal">
+            <TemperatureGraph
+              title="주야간온도편차(°C)"
+              advice={"주야간 온도편차를 줄이세요!"}
+              temperatureGraphData={dayAndNight}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
+      {/* 스크롤무브 버튼 */}
+      <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
+        <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
+          <FontAwesomeIcon
+            icon={faCaretUp}
+            onClick={scrollRefUp}
+            className="mt-1"
+          />
+        </span>
+        <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
+          <FontAwesomeIcon icon={faCaretDown} onClick={scrollRefDown} />
+        </span>
+      </div>
     </div>
   );
 }
