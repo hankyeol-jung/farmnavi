@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import Recommend from "../json/recommend.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -61,6 +61,7 @@ function Environment() {
 
   let lastScrollY = 0;
 
+  // 스크롤애니메이션 함수
   let reveal = () => {
     let reveals = document.querySelectorAll(".reveal");
     const observer = new IntersectionObserver((e) => {
@@ -336,7 +337,10 @@ function TemperatureGraph(props) {
           <div className="grid h-full grid-cols-5">
             {temperatureGraphData.map((l, i) => {
               return (
-                <div className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[150px] before:bg-neutral-400 h-full">
+                <div
+                  key={i}
+                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[150px] before:bg-neutral-400 h-full"
+                >
                   <div className="flex flex-col items-center justify-between h-full">
                     <p className="block text-center ">{l.label}</p>
                     <p className="text-center">{l.value}</p>

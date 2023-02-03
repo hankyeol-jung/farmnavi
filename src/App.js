@@ -262,6 +262,7 @@ function App() {
                     totalTime={e.totalTime}
                     yesterdayTime={e.yesterdayTime}
                     state={e.state}
+                    key={i}
                   />
                 );
               })}
@@ -354,7 +355,10 @@ function EnvironmentalForecasting(props) {
   };
 
   return (
-    <div className="transition border-b border-gray-500 duration-[1000ms] reveal2 last:border-none">
+    <div
+      key={props.i}
+      className="transition border-b border-gray-500 duration-[1000ms] reveal2 last:border-none"
+    >
       <div
         className={
           stateColor() +
