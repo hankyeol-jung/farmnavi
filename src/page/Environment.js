@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import Recommend from "../json/recommend.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -81,8 +81,17 @@ function Environment() {
     }
   };
 
+  let [fade, setFade] = useState("");
+
+  useEffect(() => {
+    setFade("end");
+    return () => {
+      setFade("");
+    };
+  }, []);
+
   return (
-    <div className="relative h-full col-span-3 bg-white">
+    <div className={"transition duration-[800ms] start " + fade}>
       <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
         <div className="flex items-center">
           <p className="mr-6 text-4xl font-bold text-black ">홍길동 농장 A동</p>

@@ -32,6 +32,57 @@ import AgriculturalMaterials from "./page/AgriculturalMaterials.js";
 import Music from "./page/Music.js";
 import Weather from "./page/Weather.js";
 
+let menuContents = [
+  {
+    enname: "environment",
+    icon: <FontAwesomeIcon icon={faSeedling} />,
+    koname: "환경",
+    file: <Environment />,
+  },
+  {
+    enname: "badge",
+    icon: <FontAwesomeIcon icon={faWater} />,
+    koname: "배지",
+    file: <Badge />,
+  },
+  {
+    enname: "fertilized-bee",
+    icon: <FontAwesomeIcon icon={faForumbee} />,
+    koname: "수정벌",
+    file: <FertilizedBee />,
+  },
+  {
+    enname: "consulting",
+    icon: <FontAwesomeIcon icon={faPenToSquare} />,
+    koname: "컨설팅",
+    file: <Consulting />,
+  },
+  {
+    enname: "agricultural-technology-center",
+    icon: <FontAwesomeIcon icon={faBuildingWheat} />,
+    koname: "농업기술센터",
+    file: <AgriculturalTechnologyCenter />,
+  },
+  {
+    enname: "agricultural-materials",
+    icon: <FontAwesomeIcon icon={faTrowel} />,
+    koname: "농자재",
+    file: <AgriculturalMaterials />,
+  },
+  {
+    enname: "music",
+    icon: <FontAwesomeIcon icon={faMusic} />,
+    koname: "음악",
+    file: <Music />,
+  },
+  {
+    enname: "weather",
+    icon: <FontAwesomeIcon icon={faCloud} />,
+    koname: "날씨",
+    file: <Weather />,
+  },
+];
+
 function App() {
   let environmentalForecastingRef = useRef(0);
   let environmentalForecastingRefUp = (text) => {
@@ -136,63 +187,6 @@ function App() {
 
   let timeFirst = moment().format("a");
 
-  let menuContents = [
-    {
-      enname: "environment",
-      icon: <FontAwesomeIcon icon={faSeedling} />,
-      koname: "환경",
-      file: <Environment />,
-    },
-    {
-      enname: "badge",
-      icon: <FontAwesomeIcon icon={faWater} />,
-      koname: "배지",
-      file: <Badge />,
-    },
-    {
-      enname: "fertilized-bee",
-      icon: <FontAwesomeIcon icon={faForumbee} />,
-      koname: "수정벌",
-      file: <FertilizedBee />,
-    },
-    {
-      enname: "consulting",
-      icon: <FontAwesomeIcon icon={faPenToSquare} />,
-      koname: "컨설팅",
-      file: <Consulting />,
-    },
-    {
-      enname: "agricultural-technology-center",
-      icon: <FontAwesomeIcon icon={faBuildingWheat} />,
-      koname: "농업기술센터",
-      file: <AgriculturalTechnologyCenter />,
-    },
-    {
-      enname: "agricultural-materials",
-      icon: <FontAwesomeIcon icon={faTrowel} />,
-      koname: "농자재",
-      file: <AgriculturalMaterials />,
-    },
-    {
-      enname: "music",
-      icon: <FontAwesomeIcon icon={faMusic} />,
-      koname: "음악",
-      file: <Music />,
-    },
-    {
-      enname: "weather",
-      icon: <FontAwesomeIcon icon={faCloud} />,
-      koname: "날씨",
-      file: <Weather />,
-    },
-  ];
-
-  let [test, setTest] = useState(
-    menuContents.map((m, i) =>
-      window.location.pathname == "/" + m.enname ? true : false
-    )
-  );
-
   return (
     <div className="w-screen h-screen App bg-slate-200">
       {/* 헤더메뉴 */}
@@ -218,11 +212,13 @@ function App() {
       </div>
 
       <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7 ">
-        <Routes>
-          {menuContents.map((m, i) => (
-            <Route path={"/" + m.enname} element={m.file} />
-          ))}
-        </Routes>
+        <div className="relative h-full col-span-3 bg-white">
+          <Routes>
+            {menuContents.map((m, i) => (
+              <Route path={"/" + m.enname} element={m.file} />
+            ))}
+          </Routes>
+        </div>
 
         {/* 농장환경예측 */}
         <div className="relative h-full bg-white">
@@ -288,54 +284,65 @@ function App() {
         </div>
       </div>
 
-      {/* 네비게이션 메뉴 */}
-      <div className="bg-white grid grid-cols-8 h-[108px] bottom-0 fixed w-screen">
-        {menuContents.map((m, i) => (
-          <Link
-            key={m.enname + i}
-            to={"/" + m.enname}
-            className=" flex justify-center items-center cursor-pointer relative before:w-[2px] before:h-12 before:bg-neutral-300 before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:translate-x-1/2 last-of-type:before:hidden"
-            onClick={() => {
-              let copy = [...test];
+      <NavigationMenu />
+    </div>
+  );
+}
 
-              test.map((a, i) => (copy[i] = false));
+// 네비게이션 메뉴 컴포넌트
+function NavigationMenu(props) {
+  let [test, setTest] = useState(
+    menuContents.map((m, i) =>
+      window.location.pathname == "/" + m.enname ? true : false
+    )
+  );
+  return (
+    <div className="bg-white grid grid-cols-8 h-[108px] bottom-0 fixed w-screen">
+      {menuContents.map((m, i) => (
+        <Link
+          key={m.enname + i}
+          to={"/" + m.enname}
+          className=" flex justify-center items-center cursor-pointer relative before:w-[2px] before:h-12 before:bg-neutral-300 before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:translate-x-1/2 last-of-type:before:hidden"
+          onClick={() => {
+            let copy = [...test];
 
-              copy[i] = true;
+            test.map((a, i) => (copy[i] = false));
 
-              setTest(copy);
-            }}
-          >
-            <span
+            copy[i] = true;
+
+            setTest(copy);
+          }}
+        >
+          <span
+            className={
+              `${
+                test[i] == true
+                  ? "w-40 before:border-[0.75rem]"
+                  : "w-0 before:border-[0px]"
+              }` +
+              " before:transition-[0.5s] before:absolute before:top-0 before:left-1/2 before:-translate-x-1/2 before:w-0 before:h-0 before:border-b-transparent before:border-t-[#2eabe2] before:border-r-transparent before:border-l-transparent h-1 bg-[#2eabe2] transition-[0.5s] absolute top-0"
+            }
+          ></span>
+          <span className="flex flex-col items-center justify-center">
+            <div
               className={
-                `${
-                  test[i] == true
-                    ? "w-40 before:border-[0.75rem]"
-                    : "w-0 before:border-[0px]"
-                }` +
-                " before:transition-[0.5s] before:absolute before:top-0 before:left-1/2 before:-translate-x-1/2 before:w-0 before:h-0 before:border-b-transparent before:border-t-[#2eabe2] before:border-r-transparent before:border-l-transparent h-1 bg-[#2eabe2] transition-[0.5s] absolute top-0"
+                "text-2xl mb-2 w-10 h-10 flex justify-center items-center transition " +
+                `${test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
               }
-            ></span>
-            <span className="flex flex-col items-center justify-center">
-              <div
-                className={
-                  "text-2xl mb-2 w-10 h-10 flex justify-center items-center transition " +
-                  `${test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
-                }
-              >
-                {m.icon}
-              </div>
-              <p
-                className={
-                  "text-xl font-medium transition " +
-                  `${test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
-                }
-              >
-                {m.koname}
-              </p>
-            </span>
-          </Link>
-        ))}
-      </div>
+            >
+              {m.icon}
+            </div>
+            <p
+              className={
+                "text-xl font-medium transition " +
+                `${test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
+              }
+            >
+              {m.koname}
+            </p>
+          </span>
+        </Link>
+      ))}
     </div>
   );
 }
