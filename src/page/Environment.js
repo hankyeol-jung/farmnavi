@@ -21,10 +21,10 @@ function Environment() {
 
   let scrollRef = useRef(0);
 
-  let scrollRefUp = (text) => {
+  let scrollRefUp = () => {
     scrollRef.current.scrollTop = scrollRef.current.scrollTop - 200;
   };
-  let scrollRefDown = (text) => {
+  let scrollRefDown = () => {
     scrollRef.current.scrollTop = scrollRef.current.scrollTop + 200;
   };
 
