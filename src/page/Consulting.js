@@ -99,7 +99,7 @@ function Consulting() {
   );
 }
 
-// 컨설팅 보고서
+// 컨설팅 보고서 컴포넌트
 function ConsultingReport() {
   return (
     <div className="w-full p-10 bg-white border rounded-xl border-neutral-400">
