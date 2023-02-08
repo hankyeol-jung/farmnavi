@@ -3,7 +3,6 @@ import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState, useEffect } from "react";
 import {
   Chart as ChartJS,
-  BarElement,
   LineElement,
   PointElement,
   CategoryScale,
@@ -175,6 +174,7 @@ function Badge() {
                     today={s.today}
                     yesterday={s.yesterday}
                     tomorow={s.tomorow}
+                    key={s + i}
                   />
                 );
               })}

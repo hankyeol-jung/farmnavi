@@ -266,7 +266,7 @@ function TemperatureGraph(props) {
 
   let temperatureGraphData = props.temperatureGraphData;
 
-  let labelsLabel = temperatureGraphData.map((l, i) => {
+  let labelsLabel = temperatureGraphData.map((l) => {
     return l.label;
   });
 
@@ -316,8 +316,6 @@ function TemperatureGraph(props) {
       },
     },
   };
-
-  // console.log(labels.label);
 
   const data = {
     labels: labelsLabel,
