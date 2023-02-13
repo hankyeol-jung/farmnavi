@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "title": "모두싹 프리미엄 500ml 유기농 배추 고추 나라바이오 진딧물 응애 탄저병 노균병 흰가루 병 충 친환경살충제 비료",
+    "delivery": 1,
+    "purchase": 156,
+    "review": 34,
+    "wish": 29,
+    "price": 11000,
+    "shippingPrice": 0,
+    "img": "54171491241491460_1685915928.jpeg"
+  },
+  {
+    "id": 2,
+    "title": "버그올킬 500ml 친환경 식물관리살충제",
+    "delivery": 0,
+    "purchase": 0,
+    "review": 11,
+    "wish": 1,
+    "price": 7000,
+    "shippingPrice": 3000,
+    "img": "1000004613_magnify_097.jpeg"
+  },
+  {
+    "id": 3,
+    "title": "아즈모엠지 유황 고추 탄저병 흰가루병 살균제 살충제 마늘 양파 친환경 유기농 500g",
+    "delivery": 1,
+    "purchase": 11,
+    "review": 10,
+    "wish": 5,
+    "price": 10000,
+    "shippingPrice": 2000,
+    "img": "59989928386901089_1635167688.jpeg"
+  },
+  {
+    "id": 4,
+    "title": "대유 총진싹 - 총채 흡증성 해충 친환경 살충제 250ml",
+    "delivery": 0,
+    "purchase": 0,
+    "review": 0,
+    "wish": 81,
+    "price": 5700,
+    "shippingPrice": 2300,
+    "img": "76388441478384445_1173019521.jpeg"
+  }
+]
