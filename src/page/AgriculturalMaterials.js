@@ -121,7 +121,7 @@ function AgriculturalMaterials() {
                       ? "bg-[#2EABE2] text-white"
                       : "text-[#2EABE2] "
                   }` +
-                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 "
+                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 cursor-pointer "
                 }
                 onClick={() => {
                   let copy = [...pesticide];
@@ -141,7 +141,7 @@ function AgriculturalMaterials() {
                       ? "bg-[#2EABE2] text-white"
                       : "text-[#2EABE2] "
                   }` +
-                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 "
+                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 cursor-pointer "
                 }
                 onClick={() => {
                   let copy = [...pesticide];
@@ -161,7 +161,7 @@ function AgriculturalMaterials() {
                       ? "bg-[#2EABE2] text-white"
                       : "text-[#2EABE2] "
                   }` +
-                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 "
+                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 cursor-pointer "
                 }
                 onClick={() => {
                   let copy = [...pesticide];
@@ -206,7 +206,7 @@ function AgriculturalMaterials() {
                       ? "bg-[#2EABE2] text-white"
                       : "text-[#2EABE2] "
                   }` +
-                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 "
+                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 cursor-pointer "
                 }
                 onClick={() => {
                   let copy = [...fertilizer];
@@ -226,7 +226,7 @@ function AgriculturalMaterials() {
                       ? "bg-[#2EABE2] text-white"
                       : "text-[#2EABE2] "
                   }` +
-                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 "
+                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 cursor-pointer "
                 }
                 onClick={() => {
                   let copy = [...fertilizer];
@@ -246,7 +246,7 @@ function AgriculturalMaterials() {
                       ? "bg-[#2EABE2] text-white"
                       : "text-[#2EABE2] "
                   }` +
-                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 "
+                  " border border-[#2EABE2] duration-300 transition-all font-medium text-xl rounded-full px-6 py-1 mr-2 cursor-pointer "
                 }
                 onClick={() => {
                   let copy = [...fertilizer];

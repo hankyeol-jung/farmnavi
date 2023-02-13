@@ -209,11 +209,32 @@ function Weather() {
   return (
     <div
       className={
-        "flex w-full transition duration-[800ms] start py-8 px-11 h-full " +
+        "relative flex w-full transition duration-[800ms] start py-8 px-11 h-full " +
         fade
       }
     >
-      <div className=" w-[40%] border rounded-xl border-neutral-400 h-full px-10 py-6 mr-6">
+      <div className=" relative w-[40%] border rounded-xl border-neutral-400 h-full px-10 py-6 mr-6">
+        {result.isLoading && (
+          <div className="absolute z-50 flex items-center justify-center w-full h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
+            <svg
+              className="spinner"
+              width="65px"
+              height="65px"
+              viewBox="0 0 66 66"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                className="path"
+                fill="none"
+                stroke-width="6"
+                stroke-linecap="round"
+                cx="33"
+                cy="33"
+                r="30"
+              ></circle>
+            </svg>
+          </div>
+        )}
         <p className="text-2xl font-medium text-neutral-600 mb-9">현재</p>
         <div className="relative w-[80%] h-[160px] mx-auto mb-10">
           {weatherIcon(dataForFunc("SKY", "SKYI"))}
@@ -284,6 +305,27 @@ function Weather() {
       <div className="w-[60%] grid grid-cols-2 gap-6">
         <div className="grid h-full grid-rows-2 gap-6 px-10 py-6 border rounded-xl border-neutral-400">
           <div className="relative before:absolute before:w-full before:h-px before:bg-neutral-300 before:bottom-0">
+            {result.isLoading && (
+              <div className="absolute z-50 flex items-center justify-center w-full h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
+                <svg
+                  className="spinner"
+                  width="65px"
+                  height="65px"
+                  viewBox="0 0 66 66"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    className="path"
+                    fill="none"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                    cx="33"
+                    cy="33"
+                    r="30"
+                  ></circle>
+                </svg>
+              </div>
+            )}
             <p className="mb-6 text-lg font-medium text-center text-neutral-500">
               내일 오전
             </p>
@@ -302,7 +344,28 @@ function Weather() {
               </p>
             </div>
           </div>
-          <div>
+          <div className="relative ">
+            {result.isLoading && (
+              <div className="absolute z-50 flex items-center justify-center w-full h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
+                <svg
+                  className="spinner"
+                  width="65px"
+                  height="65px"
+                  viewBox="0 0 66 66"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    className="path"
+                    fill="none"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                    cx="33"
+                    cy="33"
+                    r="30"
+                  ></circle>
+                </svg>
+              </div>
+            )}
             <p className="mb-6 text-lg font-medium text-center text-neutral-500">
               내일 오후
             </p>
@@ -324,6 +387,27 @@ function Weather() {
         </div>
         <div className="grid h-full grid-rows-2 gap-6 px-10 py-6 border rounded-xl border-neutral-400">
           <div className="relative before:absolute before:w-full before:h-px before:bg-neutral-300 before:bottom-0">
+            {result.isLoading && (
+              <div className="absolute z-50 flex items-center justify-center w-full h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
+                <svg
+                  className="spinner"
+                  width="65px"
+                  height="65px"
+                  viewBox="0 0 66 66"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    className="path"
+                    fill="none"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                    cx="33"
+                    cy="33"
+                    r="30"
+                  ></circle>
+                </svg>
+              </div>
+            )}
             <p className="mb-6 text-lg font-medium text-center text-neutral-500">
               모레 오전
             </p>
@@ -342,7 +426,28 @@ function Weather() {
               </p>
             </div>
           </div>
-          <div>
+          <div className="relative ">
+            {result.isLoading && (
+              <div className="absolute z-50 flex items-center justify-center w-full h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
+                <svg
+                  className="spinner"
+                  width="65px"
+                  height="65px"
+                  viewBox="0 0 66 66"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    className="path"
+                    fill="none"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                    cx="33"
+                    cy="33"
+                    r="30"
+                  ></circle>
+                </svg>
+              </div>
+            )}
             <p className="mb-6 text-lg font-medium text-center text-neutral-500">
               모레 오후
             </p>
