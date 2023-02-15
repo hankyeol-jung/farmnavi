@@ -20,7 +20,7 @@ import moment from "moment";
 // 안써도 자동으로 한국 시간을 불러온다. 명확하게 하기 위해 import
 import "moment/locale/ko";
 import Clock from "react-live-clock";
-import { useState, useRef, useEffect, useBoolean } from "react";
+import { useState, useRef, useEffect, useBoolean, useCallback } from "react";
 import { Routes, Route, Link, useLocation, HashRouter } from "react-router-dom";
 
 import Environment from "./page/Environment.js";
@@ -31,6 +31,10 @@ import AgriculturalTechnologyCenter from "./page/AgriculturalTechnologyCenter.js
 import AgriculturalMaterials from "./page/AgriculturalMaterials.js";
 import Music from "./page/Music.js";
 import Weather from "./page/Weather.js";
+import Typing, { TypingMultiline } from "react-kr-typing-anim";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import axios from "axios";
+import { useQuery } from "react-query";
 
 let menuContents = [
   {
@@ -326,39 +330,89 @@ function App() {
 
 // 로그인 컴포넌트
 function Login(props) {
-  return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen">
-      <Link to={"/"} className="w-[328px] block mx-auto mb-[120px]">
-        <img src={logo} className="w-full" />
-      </Link>
+  let result = useQuery("작명", () =>
+    axios.get("https://codingapple1.github.io/userdata.json").then((a) => {
+      return a.data;
+    })
+  );
 
-      <form className="">
-        <div className="flex items-center justify-between w-[600px] h-16">
-          <p className="text-4xl font-medium text-neutral-800">ID</p>
-          <input
-            type="text"
-            placeholder="ID를 입력하세요."
-            className="border border-neutral-400 w-[80%] h-full px-3 text-3xl"
-          />
+  const validate = (values) => {
+    const errors = {};
+
+    if (!values.userId) {
+      errors.userId = "아이디를 입력하세요.";
+    }
+    if (!values.userPassword) {
+      errors.userPassword = "비밀번호를 입력하세요.";
+    }
+
+    return errors;
+  };
+
+  const handleSubmit = (values) => {
+    let userValue = JSON.stringify(values, null, 2);
+    console.log(userValue);
+  };
+
+  return (
+    <>
+      <div className="flex flex-col items-center justify-center pb-[120px] w-screen h-screen">
+        {result.data && result.data.name}
+        <div className=" w-[500px]  h-[100px] flex justify-center items-center rounded-[50px]">
+          <Typing
+            Tag="div"
+            preDelay={0}
+            postDelay={0}
+            cursor
+            fixedWidth
+            className="text-2xl font-bold text-gray-500 "
+          >
+            오늘 하루도 힘내세요! ^^
+          </Typing>
         </div>
-        <div className="flex items-center justify-between w-[600px] h-16 mt-6">
-          <p className="text-4xl font-medium text-neutral-800">PW</p>
-          <input
-            type="password"
-            placeholder="비밀번호를 입력하세요."
-            className="border border-neutral-400 w-[80%] h-full px-3 text-3xl"
-          />
-        </div>
-        <div>
-          <span className="block bg-[#2EABE2] text-white font-bold text-4xl text-center mt-12 w-[100%] mx-auto py-5 rounded-xl cursor-pointer">
-            로그인
-          </span>
-        </div>
-      </form>
-      <p className="mt-20 text-4xl font-bold text-neutral-800">
-        오늘 하루도 힘내세요!
-      </p>
-    </div>
+        <Link to={"/"} className="w-[328px] block mx-auto mb-[120px]">
+          <img src={logo} className="w-full" />
+        </Link>
+        <Formik
+          initialValues={{ userId: "", userPassword: "" }}
+          validate={validate}
+          onSubmit={handleSubmit}
+        >
+          <Form>
+            <div className="flex items-center justify-between w-[600px] h-16">
+              <p className="text-4xl font-medium text-neutral-800">ID</p>
+              <Field
+                type="text"
+                name="userId"
+                placeholder="ID를 입력하세요."
+                className="border border-neutral-400 w-[80%] h-full px-3 text-3xl rounded-lg"
+              />
+            </div>
+            <div className="block ml-[120px] mt-3 text-[#DC3545] text-lg">
+              <ErrorMessage name="userId" />
+            </div>
+            <div className="flex items-center justify-between w-[600px] h-16 mt-6">
+              <p className="text-4xl font-medium text-neutral-800">PW</p>
+              <Field
+                type="password"
+                name="userPassword"
+                placeholder="비밀번호를 입력하세요."
+                className="border border-neutral-400 w-[80%] h-full px-3 text-3xl rounded-lg"
+              />
+            </div>
+            <div className="block ml-[120px] mt-3 text-[#DC3545] text-lg">
+              <ErrorMessage name="userPassword" />
+            </div>
+            <button
+              className="block bg-[#2EABE2] text-white font-bold text-4xl text-center mt-12 w-[100%] mx-auto py-5 rounded-xl cursor-pointer"
+              type="submit"
+            >
+              로그인
+            </button>
+          </Form>
+        </Formik>
+      </div>
+    </>
   );
 }
 
