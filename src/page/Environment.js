@@ -61,6 +61,8 @@ function Environment() {
 
   let lastScrollY = 0;
 
+  let [guidedState, setGuidedState] = useState(0);
+
   // 스크롤애니메이션 함수
   let reveal = () => {
     let reveals = document.querySelectorAll(".reveal");
@@ -206,6 +208,204 @@ function Environment() {
                   <p>초세약함</p>
                 </div>
                 <GrowthLineChart />
+              </div>
+            </div>
+          </div>
+          <div
+            className={
+              `${guidedState == 2 ? "h-[60px] mb-6" : "h-0"}` +
+              " relative w-full overflow-hidden transition-all duration-500"
+            }
+          >
+            <div
+              className={
+                "py-3 h-[60px] border-neutral-400 border flex absolute left-1/2 -translate-x-1/2 items-center justify-center w-full overflow-hidden transition-all duration-1000 reveal rounded-xl "
+              }
+            >
+              <p className="text-2xl font-bold text-black">
+                초세가 강하고, 영양생장이 예측됩니다.
+              </p>
+              <span
+                className="bg-[#DC3545] w-10 h-10 rounded-full text-white text-4xl mr-3 ml-6 text-center font-bold cursor-pointer"
+                onClick={() => {
+                  setGuidedState(0);
+                }}
+              >
+                !
+              </span>
+              <p className="text-2xl font-bold text-black">클릭해주세요. </p>
+            </div>
+          </div>
+          <div className="transition duration-1000 reveal h-[324px] flex justify-between items-center mb-6">
+            <div
+              className={
+                `${
+                  guidedState == 2
+                    ? "w-[calc(50%_-_12px)]"
+                    : "w-[calc(30%_-_24px)]"
+                }` +
+                " transition-all duration-300 before:absolute before:w-[2px] before:h-[80%] before:top-1/2 before:-translate-y-1/2 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-400 relative border rounded-xl border-neutral-400 h-full grid grid-cols-2 py-5"
+              }
+            >
+              <div className="flex flex-col items-center justify-end">
+                <div className="w-full">
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                </div>
+                <p className="text-xl font-medium text-neutral-500">
+                  초세 약함
+                </p>
+                <p className="text-2xl font-medium text-neutral-800">
+                  <b className="font-bold text-[32px] text-[#2EABE2]">11</b> /
+                  20
+                </p>
+              </div>
+              <div className="flex flex-col items-center justify-end">
+                <div className="w-full">
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                </div>
+                <p className="text-xl font-medium text-neutral-500">
+                  초세 강함
+                </p>
+                <p className="text-2xl font-medium text-neutral-800">
+                  <b className="font-bold text-[32px] text-[#2EABE2]">9</b> / 20
+                </p>
+              </div>
+            </div>
+
+            <div
+              className={
+                `${
+                  guidedState == 2
+                    ? "h-0 w-0 opacity-0 scale-0"
+                    : "h-full w-[40%] opacity-100"
+                }` + " transition-all duration-500 overflow-hidden"
+              }
+            >
+              <div className="flex items-center justify-center w-full h-full px-8 border rounded-xl border-neutral-400 ">
+                {guidedState == 0 ? (
+                  <div className="">
+                    <p className="font-bold text-[28px] text-black mb-10 text-center">
+                      초세가 강하고, 영양생장이 예측됩니다.
+                      <br /> 생식생장으로 유도 하시겠습니까?
+                    </p>
+                    <div className="flex items-center justify-center">
+                      <span
+                        className="w-[160px] h-[60px] bg-[#0B7BFF] flex justify-center items-center rounded-xl text-white text-2xl font-bold mx-2"
+                        onClick={() => {
+                          setGuidedState(1);
+                        }}
+                      >
+                        예
+                      </span>
+                      <span
+                        className="w-[160px] h-[60px] bg-[#0B7BFF] flex justify-center items-center rounded-xl text-white text-2xl font-bold mx-2"
+                        onClick={() => {
+                          setGuidedState(2);
+                        }}
+                      >
+                        아니요
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="">
+                    <p className="font-bold text-[28px] text-black mb-10 text-center">
+                      생식생장으로 유도중 입니다.
+                    </p>
+                    <div className="flex items-center justify-center">
+                      <div className="z-50 flex items-center justify-center transition-all">
+                        <svg
+                          className="spinner"
+                          width="65px"
+                          height="65px"
+                          viewBox="0 0 66 66"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            className="path"
+                            fill="none"
+                            stroke-width="6"
+                            stroke-linecap="round"
+                            cx="33"
+                            cy="33"
+                            r="30"
+                          ></circle>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div
+              className={
+                `${
+                  guidedState == 2
+                    ? "w-[calc(50%_-_12px)]"
+                    : "w-[calc(30%_-_24px)]"
+                }` +
+                " transition-all duration-300 before:absolute before:w-[2px] before:h-[80%] before:top-1/2 before:-translate-y-1/2 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-400 relative border rounded-xl border-neutral-400 h-full grid grid-cols-2 py-5"
+              }
+            >
+              <div className="flex flex-col items-center justify-end">
+                <div className="w-full">
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                </div>
+                <p className="text-xl font-medium text-neutral-500">
+                  영양 생장
+                </p>
+                <p className="text-2xl font-medium text-neutral-800">
+                  <b className="font-bold text-[32px] text-[#95C121]">15</b> /
+                  20
+                </p>
+              </div>
+              <div className="flex flex-col items-center justify-end">
+                <div className="w-full">
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                </div>
+                <p className="text-xl font-medium text-neutral-500">
+                  생식 생장
+                </p>
+                <p className="text-2xl font-medium text-neutral-800">
+                  <b className="font-bold text-[32px] text-[#95C121]">5</b> / 20
+                </p>
               </div>
             </div>
           </div>

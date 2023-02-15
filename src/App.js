@@ -84,6 +84,18 @@ let menuContents = [
 ];
 
 function App() {
+  useEffect(() => {
+    if (!localStorage.getItem("watched")) {
+      localStorage.setItem("watched", JSON.stringify([]));
+    }
+  }, []);
+
+  let [test, setTest] = useState(
+    menuContents.map((m, i) =>
+      window.location.pathname == "/" + m.enname ? true : false
+    )
+  );
+
   let environmentalForecastingRef = useRef(0);
   let environmentalForecastingRefUp = (text) => {
     environmentalForecastingRef.current.scrollTop =
@@ -192,7 +204,18 @@ function App() {
       {/* 헤더메뉴 */}
       <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
         <div className="w-1/3 cursor-pointer">
-          <img src={logo} className="w-[12.25rem]"></img>
+          <Link
+            to={"/"}
+            className="w-[12.25rem]"
+            onClick={() => {
+              let copy = [...test];
+              test.map((a, i) => (copy[i] = false));
+              copy[0] = true;
+              setTest(copy);
+            }}
+          >
+            <img src={logo} className="w-[12.25rem]"></img>
+          </Link>
         </div>
         <div className="flex items-end justify-center w-1/3">
           <p className="mr-3 text-2xl font-medium text-neutral-600">
@@ -214,6 +237,7 @@ function App() {
       <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7 ">
         <div className="relative h-full col-span-3 bg-white">
           <Routes>
+            <Route path="/" element={menuContents[0].file} />
             {menuContents.map((m, i) => (
               <Route path={"/" + m.enname} element={m.file} />
             ))}
@@ -284,18 +308,20 @@ function App() {
         </div>
       </div>
 
-      <NavigationMenu />
+      <NavigationMenu test={test} setTest={setTest} />
     </div>
   );
 }
 
 // 네비게이션 메뉴 컴포넌트
 function NavigationMenu(props) {
-  let [test, setTest] = useState(
-    menuContents.map((m, i) =>
-      window.location.pathname == "/" + m.enname ? true : false
-    )
-  );
+  useEffect(() => {
+    if (window.location.pathname == "/") {
+      let copy = [...props.test];
+      copy[0] = true;
+      props.setTest(copy);
+    }
+  }, []);
   return (
     <div className="bg-white grid grid-cols-8 h-[108px] bottom-0 fixed w-screen">
       {menuContents.map((m, i) => (
@@ -304,19 +330,19 @@ function NavigationMenu(props) {
           to={"/" + m.enname}
           className=" flex justify-center items-center cursor-pointer relative before:w-[2px] before:h-12 before:bg-neutral-300 before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:translate-x-1/2 last-of-type:before:hidden"
           onClick={() => {
-            let copy = [...test];
+            let copy = [...props.test];
 
-            test.map((a, i) => (copy[i] = false));
+            props.test.map((a, i) => (copy[i] = false));
 
             copy[i] = true;
 
-            setTest(copy);
+            props.setTest(copy);
           }}
         >
           <span
             className={
               `${
-                test[i] == true
+                props.test[i] == true
                   ? "w-40 before:border-[0.75rem]"
                   : "w-0 before:border-[0px]"
               }` +
@@ -327,7 +353,7 @@ function NavigationMenu(props) {
             <div
               className={
                 "text-2xl mb-2 w-10 h-10 flex justify-center items-center transition " +
-                `${test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
+                `${props.test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
               }
             >
               {m.icon}
@@ -335,7 +361,11 @@ function NavigationMenu(props) {
             <p
               className={
                 "text-xl font-medium transition " +
-                `${test[i] == true ? "text-[#2eabe2]" : "text-gray-600"}`
+                `${
+                  props.test[i] == true || (props.test[i] == true) == true
+                    ? "text-[#2eabe2]"
+                    : "text-gray-600"
+                }`
               }
             >
               {m.koname}
