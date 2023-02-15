@@ -13,7 +13,11 @@ import { useRef, useState, useEffect } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import Recommend from "../json/recommend.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCaretDown,
+  faCaretUp,
+  faFire,
+} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 
 function Environment() {
@@ -97,15 +101,22 @@ function Environment() {
       <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
         <div className="flex items-center">
           <p className="mr-6 text-4xl font-bold text-black ">홍길동 농장 A동</p>
-          <span className="px-5 py-1 text-xl font-bold text-black bg-[#ffc107] rounded-xl">
+          <span className="px-5 py-1 text-xl font-bold text-black bg-[#ffc107] rounded-full mr-3">
             내부가 조금 건조해요
           </span>
+          <span className="px-5 py-1 text-xl font-bold border-2 border-[#DC3545] text-[#DC3545] rounded-full">
+            <FontAwesomeIcon icon={faFire} className="mr-2" />
+            최근 3일 열대야 발생
+          </span>
         </div>
-        <div className="flex items-center">
-          <p className=" text-[28px] font-medium mr-5 text-neutral-500 ">
+        <div className="flex items-end">
+          <p className=" text-[28px] font-medium mr-5 text-neutral-500 pb-1 ">
             오늘의 환경점수
           </p>
           <p className=" text-[32px] font-medium text-black ">
+            <small className="mr-2 text-2xl font-medium text-neutral-500">
+              현재
+            </small>
             <b className=" text-[40px] font-bold text-[#28a745]">61</b>점
           </p>
         </div>
@@ -122,7 +133,7 @@ function Environment() {
       >
         <div className="absolute w-full pt-8 px-11 text-neutral-400">
           <div className="transition duration-1000 reveal">
-            <div className="flex items-center justify-between h-[8.75rem] mb-6 ">
+            <div className="flex items-center justify-between h-[9.5rem] mb-6 ">
               <TemperatureHumidity
                 borderColor="border-[#FEC104]"
                 nowTemperature="29.3" //현재온도
@@ -132,13 +143,17 @@ function Environment() {
               ></TemperatureHumidity>
               <SuitableTranspiration
                 title="적합한 증산 진입 예상"
-                time="02시간 50분 후"
+                accumulate=""
+                today="02시간 50분 후"
+                tomorow=""
                 width="w-[20rem]"
                 margin="mx-6"
               />
               <SuitableTranspiration
                 title="적합한 증산활동 시간"
-                time="오늘 02시간 10분 예측"
+                accumulate="오늘 누적 1시간 30분"
+                today="오늘 2시간 10분 예측"
+                tomorow="내일 3시간 25분 예측"
                 width="w-[25rem]"
               />
             </div>
@@ -759,7 +774,7 @@ function TemperatureHumidity(props) {
   return (
     <div
       className={
-        "px-6 py-4 border-4 rounded-xl h-full grid grid-cols-5 w-[40%] " +
+        "px-6 py-4 border-4 rounded-xl h-full grid grid-cols-6  w-[40%] " +
         props.borderColor
       }
     >
@@ -777,16 +792,18 @@ function TemperatureHumidity(props) {
         </div>
       </div>
       <span className="w-px h-16 mx-auto mt-auto bg-slate-200"></span>
-      <div className="flex flex-col justify-between col-span-2">
-        <p className="text-lg font-medium text-neutral-700 ">추천</p>
-        <div className="flex items-center justify-between">
-          <p className="text-xl font-medium text-neutral-500 ">온도</p>
+      <div className="flex flex-col justify-between col-span-3">
+        <span className="text-lg font-bold text-black bg-[#FFC107] flex items-center justify-center w-1/3 rounded-full ">
+          추천
+        </span>
+        <div className="flex items-center justify-between bg-[#FFC107] px-3 rounded-full">
+          <p className="text-xl font-medium text-neutral-700 ">온도</p>
           <p className="text-2xl font-bold text-black ">
             {props.suggestionTemperature}°C
           </p>
         </div>
-        <div className="flex items-center justify-between">
-          <p className="text-xl font-medium text-neutral-500 ">습도</p>
+        <div className="flex items-center justify-between bg-[#FFC107] px-3 rounded-full">
+          <p className="text-xl font-medium text-neutral-700 ">습도</p>
           <p className="text-2xl font-bold text-black ">
             {props.suggestionHumidity}%
           </p>
@@ -807,10 +824,31 @@ function SuitableTranspiration(props) {
         props.margin
       }
     >
-      <p className="text-xl font-medium text-neutral-500">{props.title}</p>
-      <p className=" text-[32px] font-bold text-black text-right">
-        {props.time}
-      </p>
+      <div className="flex flex-wrap justify-between">
+        <p className="text-xl font-medium text-neutral-700">{props.title}</p>
+        {props.accumulate != "" ? (
+          <p className="text-lg font-bold text-right text-neutral-500">
+            ({props.accumulate})
+          </p>
+        ) : null}
+      </div>
+      <div>
+        <p
+          className={
+            `${props.tomorow == "" ? "text-4xl" : "text-3xl"}` +
+            " font-bold text-right text-black "
+          }
+        >
+          {props.today}
+        </p>
+        {props.tomorow != "" ? (
+          <p className="mt-2 text-2xl font-bold text-right text-white">
+            <span className=" bg-[#2EABE2] rounded-full px-4 py-1">
+              {props.tomorow}
+            </span>
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

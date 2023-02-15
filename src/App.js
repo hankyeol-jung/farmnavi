@@ -21,7 +21,7 @@ import moment from "moment";
 import "moment/locale/ko";
 import Clock from "react-live-clock";
 import { useState, useRef, useEffect, useBoolean } from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { Routes, Route, Link, useLocation, HashRouter } from "react-router-dom";
 
 import Environment from "./page/Environment.js";
 import Badge from "./page/Badge.js";
@@ -88,11 +88,14 @@ function App() {
     if (!localStorage.getItem("watched")) {
       localStorage.setItem("watched", JSON.stringify([]));
     }
+    // if (!sessionStorage.getItem("log")) {
+    //   sessionStorage.setItem("log", JSON.stringify([]));
+    // }
   }, []);
 
   let [test, setTest] = useState(
     menuContents.map((m, i) =>
-      window.location.pathname == "/" + m.enname ? true : false
+      window.location.hash == "#/" + m.enname ? true : false
     )
   );
 
@@ -200,115 +203,161 @@ function App() {
   let timeFirst = moment().format("a");
 
   return (
-    <div className="w-screen h-screen App bg-slate-200">
-      {/* 헤더메뉴 */}
-      <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
-        <div className="w-1/3 cursor-pointer">
-          <Link
-            to={"/"}
-            className="w-[12.25rem]"
-            onClick={() => {
-              let copy = [...test];
-              test.map((a, i) => (copy[i] = false));
-              copy[0] = true;
-              setTest(copy);
-            }}
-          >
-            <img src={logo} className="w-[12.25rem]"></img>
-          </Link>
-        </div>
-        <div className="flex items-end justify-center w-1/3">
-          <p className="mr-3 text-2xl font-medium text-neutral-600">
-            {timeFirst == "am" ? "오전" : "오후"}
-          </p>
-          <p className="text-4xl font-bold text-neutral-700">
-            <Clock format="hh:mm" ticking={true}></Clock>
-          </p>
-        </div>
-        <div className="flex items-center justify-end w-1/3">
-          <p className="mr-3 text-xl font-bold text-neutral-700">홍길동님</p>
-          <span className="flex items-center cursor-pointer">
-            <img src={userIcon} className="w-[3.25rem] mr-3"></img>
-            <img src={arrowBottom} className="w-6"></img>
-          </span>
-        </div>
-      </div>
-
-      <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7 ">
-        <div className="relative h-full col-span-3 bg-white">
-          <Routes>
-            <Route path="/" element={menuContents[0].file} />
-            {menuContents.map((m, i) => (
-              <Route path={"/" + m.enname} element={m.file} />
-            ))}
-          </Routes>
-        </div>
-
-        {/* 농장환경예측 */}
-        <div className="relative h-full bg-white">
-          <div className="absolute z-40 top-0 left-0 flex flex-col justify-between w-full h-[200px] border-b px-6 py-8 border-b-neutral-300">
-            <p className="mr-6 text-[28px] font-bold text-black break-keep">
-              {moment().format("MM[월] DD[일]")} 농장 환경 예측
-            </p>
-            <div className="flex items-end justify-between">
-              <p className="mr-1 text-xl font-medium text-neutral-500 break-keep">
-                예측 적용시, 환경 점수
+    <>
+      {!sessionStorage.getItem("log") ? (
+        <Login />
+      ) : (
+        <div className="w-screen h-screen App bg-slate-200">
+          {/* 헤더메뉴 */}
+          <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
+            <div className="w-1/3 cursor-pointer">
+              <Link
+                to={"/"}
+                className="w-[12.25rem]"
+                onClick={() => {
+                  let copy = [...test];
+                  test.map((a, i) => (copy[i] = false));
+                  copy[0] = true;
+                  setTest(copy);
+                }}
+              >
+                <img src={logo} className="w-[12.25rem]"></img>
+              </Link>
+            </div>
+            <div className="flex items-end justify-center w-1/3">
+              <p className="mr-3 text-2xl font-medium text-neutral-600">
+                {timeFirst == "am" ? "오전" : "오후"}
               </p>
-              <div className="flex items-end justify-end">
-                <p className="flex justify-end mr-2 text-5xl font-medium text-black ">
-                  <b className=" font-bold text-[#28a745] underline underline-[#28A745] underline-offset-4 mr-2">
-                    100
-                  </b>
-                  점
+              <p className="text-4xl font-bold text-neutral-700">
+                <Clock format="hh:mm" ticking={true}></Clock>
+              </p>
+            </div>
+            <div className="flex items-center justify-end w-1/3">
+              <p className="mr-3 text-xl font-bold text-neutral-700">
+                홍길동님
+              </p>
+              <span className="flex items-center cursor-pointer">
+                <img src={userIcon} className="w-[3.25rem] mr-3"></img>
+                <img src={arrowBottom} className="w-6"></img>
+              </span>
+            </div>
+          </div>
+
+          <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7 ">
+            <div className="relative h-full col-span-3 bg-white">
+              <Routes>
+                <Route path="/" element={menuContents[0].file} />
+                {menuContents.map((m, i) => (
+                  <Route path={"/" + m.enname} element={m.file} />
+                ))}
+              </Routes>
+            </div>
+
+            {/* 농장환경예측 */}
+            <div className="relative h-full bg-white">
+              <div className="absolute z-40 top-0 left-0 flex flex-col justify-between w-full h-[200px] border-b px-6 py-8 border-b-neutral-300">
+                <p className="mr-6 text-[28px] font-bold text-black break-keep">
+                  {moment().format("MM[월] DD[일]")} 농장 환경 예측
                 </p>
-                <p className="text-xl font-medium text-neutral-600">예측</p>
+                <div className="flex items-end justify-between">
+                  <p className="mr-1 text-xl font-medium text-neutral-500 break-keep">
+                    예측 적용시, 환경 점수
+                  </p>
+                  <div className="flex items-end justify-end">
+                    <p className="flex justify-end mr-2 text-5xl font-medium text-black ">
+                      <b className=" font-bold text-[#28a745] underline underline-[#28A745] underline-offset-4 mr-2">
+                        100
+                      </b>
+                      점
+                    </p>
+                    <p className="text-xl font-medium text-neutral-600">예측</p>
+                  </div>
+                </div>
+              </div>
+              <div className="z-30 absolute top-0 w-full h-[30px] bg-gradient-to-b to-[#ffffff05] from-white mt-[200px]"></div>
+              <div
+                ref={environmentalForecastingRef}
+                className=" h-[calc(100%_-_200px_-_76px)] absolute bottom-[76px] w-full overflow-scroll scroll-smooth"
+                onScroll={() => {
+                  reveal2();
+                }}
+              >
+                <div className="absolute w-full pl-6 pr-8">
+                  {environmentalForecastingData.map((e, i) => {
+                    return (
+                      <EnvironmentalForecasting
+                        time={e.time}
+                        title={e.title}
+                        totalTime={e.totalTime}
+                        yesterdayTime={e.yesterdayTime}
+                        state={e.state}
+                        key={i}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
+              {/* 스크롤무브 버튼 */}
+              <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
+                <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
+                  <FontAwesomeIcon
+                    icon={faCaretUp}
+                    onClick={environmentalForecastingRefUp}
+                    className="mt-1"
+                  />
+                </span>
+                <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
+                  <FontAwesomeIcon
+                    icon={faCaretDown}
+                    onClick={environmentalForecastingRefDown}
+                  />
+                </span>
               </div>
             </div>
           </div>
-          <div className="z-30 absolute top-0 w-full h-[30px] bg-gradient-to-b to-[#ffffff05] from-white mt-[200px]"></div>
-          <div
-            ref={environmentalForecastingRef}
-            className=" h-[calc(100%_-_200px_-_76px)] absolute bottom-[76px] w-full overflow-scroll scroll-smooth"
-            onScroll={() => {
-              reveal2();
-            }}
-          >
-            <div className="absolute w-full pl-6 pr-8">
-              {environmentalForecastingData.map((e, i) => {
-                return (
-                  <EnvironmentalForecasting
-                    time={e.time}
-                    title={e.title}
-                    totalTime={e.totalTime}
-                    yesterdayTime={e.yesterdayTime}
-                    state={e.state}
-                    key={i}
-                  />
-                );
-              })}
-            </div>
-          </div>
-          <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
-          {/* 스크롤무브 버튼 */}
-          <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
-            <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
-              <FontAwesomeIcon
-                icon={faCaretUp}
-                onClick={environmentalForecastingRefUp}
-                className="mt-1"
-              />
-            </span>
-            <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
-              <FontAwesomeIcon
-                icon={faCaretDown}
-                onClick={environmentalForecastingRefDown}
-              />
-            </span>
-          </div>
-        </div>
-      </div>
 
-      <NavigationMenu test={test} setTest={setTest} />
+          <NavigationMenu test={test} setTest={setTest} />
+        </div>
+      )}
+    </>
+  );
+}
+
+// 로그인 컴포넌트
+function Login(props) {
+  return (
+    <div className="flex flex-col items-center justify-center w-screen h-screen">
+      <Link to={"/"} className="w-[328px] block mx-auto mb-[120px]">
+        <img src={logo} className="w-full" />
+      </Link>
+
+      <form className="">
+        <div className="flex items-center justify-between w-[600px] h-16">
+          <p className="text-4xl font-medium text-neutral-800">ID</p>
+          <input
+            type="text"
+            placeholder="ID를 입력하세요."
+            className="border border-neutral-400 w-[80%] h-full px-3 text-3xl"
+          />
+        </div>
+        <div className="flex items-center justify-between w-[600px] h-16 mt-6">
+          <p className="text-4xl font-medium text-neutral-800">PW</p>
+          <input
+            type="password"
+            placeholder="비밀번호를 입력하세요."
+            className="border border-neutral-400 w-[80%] h-full px-3 text-3xl"
+          />
+        </div>
+        <div>
+          <span className="block bg-[#2EABE2] text-white font-bold text-4xl text-center mt-12 w-[100%] mx-auto py-5 rounded-xl cursor-pointer">
+            로그인
+          </span>
+        </div>
+      </form>
+      <p className="mt-20 text-4xl font-bold text-neutral-800">
+        오늘 하루도 힘내세요!
+      </p>
     </div>
   );
 }
@@ -316,12 +365,13 @@ function App() {
 // 네비게이션 메뉴 컴포넌트
 function NavigationMenu(props) {
   useEffect(() => {
-    if (window.location.pathname == "/") {
+    if (window.location.path == "#/" || window.location.path == undefined) {
       let copy = [...props.test];
       copy[0] = true;
       props.setTest(copy);
     }
   }, []);
+
   return (
     <div className="bg-white grid grid-cols-8 h-[108px] bottom-0 fixed w-screen">
       {menuContents.map((m, i) => (
