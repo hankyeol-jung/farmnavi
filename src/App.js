@@ -331,9 +331,13 @@ function App() {
 // 로그인 컴포넌트
 function Login(props) {
   let result = useQuery("작명", () =>
-    axios.get("https://codingapple1.github.io/userdata.json").then((a) => {
-      return a.data;
-    })
+    axios
+      .get(
+        "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json"
+      )
+      .then((a) => {
+        return a.data;
+      })
   );
 
   const validate = (values) => {
@@ -357,7 +361,7 @@ function Login(props) {
   return (
     <>
       <div className="flex flex-col items-center justify-center pb-[120px] w-screen h-screen">
-        {result.data && result.data.name}
+        {result.data && result.data.userId}
         <div className=" w-[500px]  h-[100px] flex justify-center items-center rounded-[50px]">
           <Typing
             Tag="div"
