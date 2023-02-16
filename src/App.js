@@ -42,6 +42,8 @@ import Typing, { TypingMultiline } from "react-kr-typing-anim";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { useSelector, useDispatch } from "react-redux";
+import { userName } from "./store.js";
 
 const appHeight = () => {
   const doc = document.documentElement;
@@ -109,6 +111,11 @@ function App() {
 
   let navigate = useNavigate();
 
+  let data = useSelector((state) => {
+    return state;
+  });
+  let dispatch = useDispatch();
+
   useEffect(() => {
     if (!localStorage.getItem("watched")) {
       localStorage.setItem("watched", JSON.stringify([]));
@@ -125,6 +132,16 @@ function App() {
         sessionLog.userPassword != undefined
       ) {
         setLogState(true);
+        axios
+          .get(
+            "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json"
+          )
+          .then((result) => {
+            dispatch(userName(result.data.userName));
+          })
+          .catch(() => {
+            console.log("실패함");
+          });
       } else {
         setLogState(false);
         navigate("/login");
@@ -366,6 +383,10 @@ function FarmEnvironmentPrediction(props) {
 
 // 헤더 컴포넌트
 function Header(props) {
+  let data = useSelector((state) => {
+    return state;
+  });
+
   return (
     <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
       <div className="w-1/3 cursor-pointer">
@@ -391,7 +412,9 @@ function Header(props) {
         </p>
       </div>
       <div className="flex items-center justify-end w-1/3">
-        <p className="mr-3 text-xl font-bold text-neutral-700">홍길동님</p>
+        <p className="mr-3 text-xl font-bold text-neutral-700">
+          {data.userInfo.name}님
+        </p>
         <span
           className="flex items-center cursor-pointer"
           onClick={() => {
@@ -409,6 +432,8 @@ function Header(props) {
 
 // 로그인 컴포넌트
 function Login(props) {
+  let dispatch = useDispatch();
+
   const validate = (values) => {
     const errors = {};
 
@@ -446,6 +471,10 @@ function Login(props) {
         console.log("실패함");
       });
   };
+
+  let data = useSelector((state) => {
+    return state;
+  });
 
   useEffect(() => {
     if (user.userId != "") {
