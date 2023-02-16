@@ -154,6 +154,16 @@ function Weather() {
 
   let windDirection = Math.floor(parseInt(dataForFunc("VEC", "VECI")));
 
+  // useEffect(()=>{
+  // })
+
+  useEffect(() => {
+    setFade("end");
+    return () => {
+      setFade("");
+    };
+  }, []);
+
   function toTextualWindDescription(degree) {
     if (degree > 337.5) return "북";
     if (degree > 292.5) return "북서";
@@ -175,13 +185,6 @@ function Weather() {
   }
 
   let [fade, setFade] = useState("");
-
-  useEffect(() => {
-    setFade("end");
-    return () => {
-      setFade("");
-    };
-  }, []);
 
   let weatherIcon = (a) => {
     if (a >= 0 && a <= 1) {
@@ -220,8 +223,8 @@ function Weather() {
           <div className="absolute z-20 flex items-center justify-center w-full h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
             <svg
               className="spinner"
-              width="65px"
-              height="65px"
+              width="4.0625rem"
+              height="4.0625rem"
               viewBox="0 0 66 66"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -238,22 +241,22 @@ function Weather() {
           </div>
         )}
         <div className="flex items-center justify-center w-full h-full ">
-          <p className="absolute z-50 text-2xl font-medium top-6 left-10 text-neutral-600 mb-9">
+          <p className="absolute z-50 text-3xl font-medium top-6 left-10 text-neutral-600 mb-9">
             현재
           </p>
           <div className="w-full">
-            <div className="relative w-[80%] h-[160px] mx-auto mb-10">
+            <div className="relative w-[80%] h-[10rem] mx-auto mb-10">
               {weatherIcon(dataForFunc("SKY", "SKYI"))}
-              <p className=" text-[80px] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
+              <p className=" text-[5rem] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
                 {dataForFunc("TMP", "TMPI")}°
               </p>
             </div>
             <div className="flex items-center justify-center mb-6">
-              <p className=" text-[32px] font-medium text-black">
+              <p className=" text-[2rem] font-medium text-black">
                 어제보다 2.2° 높음
               </p>
               <p className="mx-3 text-2xl font-medium text-neutral-400">/</p>
-              <p className=" text-[32px] font-medium text-black">
+              <p className=" text-[2rem] font-medium text-black">
                 {toTextualSky(dataForFunc("SKY", "SKYI"))}
               </p>
             </div>
@@ -285,7 +288,7 @@ function Weather() {
                 </p>
               </div>
             </div>
-            <div className="grid h-20 grid-cols-4 gap-2 mt-7">
+            <div className="grid h-48 grid-cols-2 grid-rows-2 gap-2 mt-16">
               <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
                 <p className="text-lg font-medium text-neutral-700">강수확률</p>
                 <p className="text-[#2AA745] font-bold text-lg">
@@ -311,11 +314,14 @@ function Weather() {
                     ({toTextualWindDescription(windDirection)}풍)
                   </small>
                 </p>
-                <p className="text-[#31ABE2] font-bold text-lg">
-                  <FontAwesomeIcon
-                    icon={faArrowUp}
-                    className={"rotate-[" + windDirection + "deg]"}
-                  />
+                <p
+                  className={
+                    "text-[#31ABE2] font-bold text-lg rotate-[" +
+                    dataForFunc("VEC", "VECI") +
+                    "deg]"
+                  }
+                >
+                  <FontAwesomeIcon icon={faArrowUp} className={""} />
                 </p>
               </div>
             </div>
@@ -329,8 +335,8 @@ function Weather() {
               <div className="absolute z-50 flex items-center justify-center w-[105%] h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
                 <svg
                   className="spinner"
-                  width="65px"
-                  height="65px"
+                  width="4.0625rem"
+                  height="4.0625rem"
                   viewBox="0 0 66 66"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -346,33 +352,43 @@ function Weather() {
                 </svg>
               </div>
             )}
-            <p className="mb-6 text-lg font-medium text-center text-neutral-500">
-              내일 오전
-            </p>
-            <div className="relative w-[80%] h-[100px] mx-auto mb-3">
-              {weatherIcon(tdataForFunc("SKY", "tSKYI", "0800"))}
-              <p className=" text-[40px] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
-                {tdataForFunc("TMP", "tTMPI", "0800")}°
+            <div className="relative flex items-center justify-center w-full h-full">
+              <p className="absolute top-0 z-50 mb-6 text-2xl font-medium text-center -translate-x-1/2 text-neutral-500 left-1/2">
+                내일 오전
               </p>
-            </div>
-            <div className="flex items-end justify-center mx-2">
-              <p className="mr-2 text-lg font-medium text-neutral-500">습도</p>
-              <p className="text-lg font-medium text-black">
-                {tdataForFunc("REH", "tREHI", "0800")}%
-              </p>
-            </div>
-            <div className="grid h-20 grid-cols-2 gap-2 mt-2">
-              <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
-                <p className="text-lg font-medium text-neutral-700">강수확률</p>
-                <p className="text-[#2AA745] font-bold text-lg">
-                  {tdataForFunc("POP", "POPI", "0800")}%
-                </p>
-              </div>
-              <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
-                <p className="text-lg font-medium text-neutral-700">강수량</p>
-                <p className="text-[#2AA745] font-bold text-lg">
-                  {tdataForFunc("PCP", "PCPI", "0800")}
-                </p>
+              <div className="w-full ">
+                <div className="relative w-[80%] h-[6.25rem] mx-auto mb-3">
+                  {weatherIcon(tdataForFunc("SKY", "tSKYI", "0800"))}
+                  <p className=" text-[2.5rem] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
+                    {tdataForFunc("TMP", "tTMPI", "0800")}°
+                  </p>
+                </div>
+                <div className="flex items-end justify-center mx-2 my-5">
+                  <p className="mr-2 text-lg font-medium text-neutral-500">
+                    습도
+                  </p>
+                  <p className="text-lg font-medium text-black">
+                    {tdataForFunc("REH", "tREHI", "0800")}%
+                  </p>
+                </div>
+                <div className="grid h-20 grid-cols-2 gap-2 mt-2">
+                  <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
+                    <p className="text-lg font-medium text-neutral-700">
+                      강수확률
+                    </p>
+                    <p className="text-[#2AA745] font-bold text-lg">
+                      {tdataForFunc("POP", "POPI", "0800")}%
+                    </p>
+                  </div>
+                  <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
+                    <p className="text-lg font-medium text-neutral-700">
+                      강수량
+                    </p>
+                    <p className="text-[#2AA745] font-bold text-lg">
+                      {tdataForFunc("PCP", "PCPI", "0800")}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -381,8 +397,8 @@ function Weather() {
               <div className="absolute z-50 flex items-center justify-center w-[105%] h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
                 <svg
                   className="spinner"
-                  width="65px"
-                  height="65px"
+                  width="4.0625rem"
+                  height="4.0625rem"
                   viewBox="0 0 66 66"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -398,33 +414,43 @@ function Weather() {
                 </svg>
               </div>
             )}
-            <p className="mb-6 text-lg font-medium text-center text-neutral-500">
-              내일 오후
-            </p>
-            <div className="relative w-[80%] h-[100px] mx-auto mb-3">
-              {weatherIcon(tdataForFunc("SKY", "tSKYI", "1400"))}
-              <p className=" text-[40px] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
-                {tdataForFunc("TMP", "tTMPI", "1600")}°
+            <div className="relative flex items-center justify-center w-full h-full">
+              <p className="absolute top-0 z-50 mb-6 text-2xl font-medium text-center -translate-x-1/2 text-neutral-500 left-1/2">
+                내일 오후
               </p>
-            </div>
-            <div className="flex items-end justify-center mx-2">
-              <p className="mr-2 text-lg font-medium text-neutral-500">습도</p>
-              <p className="text-lg font-medium text-black">
-                {tdataForFunc("REH", "tREHI", "1600")}%
-              </p>
-            </div>
-            <div className="grid h-20 grid-cols-2 gap-2 mt-2">
-              <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
-                <p className="text-lg font-medium text-neutral-700">강수확률</p>
-                <p className="text-[#2AA745] font-bold text-lg">
-                  {tdataForFunc("POP", "POPI", "1600")}%
-                </p>
-              </div>
-              <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
-                <p className="text-lg font-medium text-neutral-700">강수량</p>
-                <p className="text-[#2AA745] font-bold text-lg">
-                  {tdataForFunc("PCP", "PCPI", "1600")}
-                </p>
+              <div className="w-full ">
+                <div className="relative w-[80%] h-[6.25rem] mx-auto mb-3">
+                  {weatherIcon(tdataForFunc("SKY", "tSKYI", "1400"))}
+                  <p className=" text-[2.5rem] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
+                    {tdataForFunc("TMP", "tTMPI", "1600")}°
+                  </p>
+                </div>
+                <div className="flex items-end justify-center mx-2 my-5">
+                  <p className="mr-2 text-lg font-medium text-neutral-500">
+                    습도
+                  </p>
+                  <p className="text-lg font-medium text-black">
+                    {tdataForFunc("REH", "tREHI", "1600")}%
+                  </p>
+                </div>
+                <div className="grid h-20 grid-cols-2 gap-2 mt-2">
+                  <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
+                    <p className="text-lg font-medium text-neutral-700">
+                      강수확률
+                    </p>
+                    <p className="text-[#2AA745] font-bold text-lg">
+                      {tdataForFunc("POP", "POPI", "1600")}%
+                    </p>
+                  </div>
+                  <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
+                    <p className="text-lg font-medium text-neutral-700">
+                      강수량
+                    </p>
+                    <p className="text-[#2AA745] font-bold text-lg">
+                      {tdataForFunc("PCP", "PCPI", "1600")}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -435,8 +461,8 @@ function Weather() {
               <div className="absolute z-50 flex items-center justify-center w-[105%] h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
                 <svg
                   className="spinner"
-                  width="65px"
-                  height="65px"
+                  width="4.0625rem"
+                  height="4.0625rem"
                   viewBox="0 0 66 66"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -452,33 +478,43 @@ function Weather() {
                 </svg>
               </div>
             )}
-            <p className="mb-6 text-lg font-medium text-center text-neutral-500">
-              모레 오전
-            </p>
-            <div className="relative w-[80%] h-[100px] mx-auto mb-3">
-              {weatherIcon(ttdataForFunc("SKY", "ttSKYI", "0800"))}
-              <p className=" text-[40px] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
-                {ttdataForFunc("TMP", "ttTMPI", "0800")}°
+            <div className="relative flex items-center justify-center w-full h-full">
+              <p className="absolute top-0 z-50 mb-6 text-2xl font-medium text-center -translate-x-1/2 text-neutral-500 left-1/2">
+                모레 오전
               </p>
-            </div>
-            <div className="flex items-end justify-center mx-2">
-              <p className="mr-2 text-lg font-medium text-neutral-500">습도</p>
-              <p className="text-lg font-medium text-black">
-                {ttdataForFunc("REH", "ttREHI", "0800")}%
-              </p>
-            </div>
-            <div className="grid h-20 grid-cols-2 gap-2 mt-2">
-              <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
-                <p className="text-lg font-medium text-neutral-700">강수확률</p>
-                <p className="text-[#2AA745] font-bold text-lg">
-                  {ttdataForFunc("POP", "POPI", "0800")}%
-                </p>
-              </div>
-              <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
-                <p className="text-lg font-medium text-neutral-700">강수량</p>
-                <p className="text-[#2AA745] font-bold text-lg">
-                  {ttdataForFunc("PCP", "PCPI", "0800")}
-                </p>
+              <div className="w-full">
+                <div className="relative w-[80%] h-[6.25rem] mx-auto mb-3">
+                  {weatherIcon(ttdataForFunc("SKY", "ttSKYI", "0800"))}
+                  <p className=" text-[2.5rem] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
+                    {ttdataForFunc("TMP", "ttTMPI", "0800")}°
+                  </p>
+                </div>
+                <div className="flex items-end justify-center mx-2 my-5">
+                  <p className="mr-2 text-lg font-medium text-neutral-500">
+                    습도
+                  </p>
+                  <p className="text-lg font-medium text-black">
+                    {ttdataForFunc("REH", "ttREHI", "0800")}%
+                  </p>
+                </div>
+                <div className="grid h-20 grid-cols-2 gap-2 mt-2">
+                  <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
+                    <p className="text-lg font-medium text-neutral-700">
+                      강수확률
+                    </p>
+                    <p className="text-[#2AA745] font-bold text-lg">
+                      {ttdataForFunc("POP", "POPI", "0800")}%
+                    </p>
+                  </div>
+                  <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
+                    <p className="text-lg font-medium text-neutral-700">
+                      강수량
+                    </p>
+                    <p className="text-[#2AA745] font-bold text-lg">
+                      {ttdataForFunc("PCP", "PCPI", "0800")}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -487,8 +523,8 @@ function Weather() {
               <div className="absolute z-50 flex items-center justify-center w-[105%] h-full transition-all -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl top-1/2 left-1/2">
                 <svg
                   className="spinner"
-                  width="65px"
-                  height="65px"
+                  width="4.0625rem"
+                  height="4.0625rem"
                   viewBox="0 0 66 66"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -504,33 +540,43 @@ function Weather() {
                 </svg>
               </div>
             )}
-            <p className="mb-6 text-lg font-medium text-center text-neutral-500">
-              모레 오후
-            </p>
-            <div className="relative w-[80%] h-[100px] mx-auto mb-3">
-              {weatherIcon(ttdataForFunc("SKY", "ttSKYI", "1400"))}
-              <p className=" text-[40px] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
-                {ttdataForFunc("TMP", "ttTMPI", "1600")}°
+            <div className="relative flex items-center justify-center w-full h-full">
+              <p className="absolute top-0 z-50 mb-6 text-2xl font-medium text-center -translate-x-1/2 text-neutral-500 left-1/2">
+                모레 오후
               </p>
-            </div>
-            <div className="flex items-end justify-center mx-2">
-              <p className="mr-2 text-lg font-medium text-neutral-500">습도</p>
-              <p className="text-lg font-medium text-black">
-                {ttdataForFunc("REH", "ttREHI", "1600")}%
-              </p>
-            </div>
-            <div className="grid h-20 grid-cols-2 gap-2 mt-2">
-              <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
-                <p className="text-lg font-medium text-neutral-700">강수확률</p>
-                <p className="text-[#2AA745] font-bold text-lg">
-                  {ttdataForFunc("POP", "POPI", "1600")}%
-                </p>
-              </div>
-              <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
-                <p className="text-lg font-medium text-neutral-700">강수량</p>
-                <p className="text-[#2AA745] font-bold text-lg">
-                  {ttdataForFunc("PCP", "PCPI", "1600")}
-                </p>
+              <div className="w-full">
+                <div className="relative w-[80%] h-[6.25rem] mx-auto mb-3">
+                  {weatherIcon(ttdataForFunc("SKY", "ttSKYI", "1400"))}
+                  <p className=" text-[2.5rem] font-bold text-black absolute top-1/2 -translate-y-1/2 left-1/2 translate-x-1/2">
+                    {ttdataForFunc("TMP", "ttTMPI", "1600")}°
+                  </p>
+                </div>
+                <div className="flex items-end justify-center mx-2 my-5">
+                  <p className="mr-2 text-lg font-medium text-neutral-500">
+                    습도
+                  </p>
+                  <p className="text-lg font-medium text-black">
+                    {ttdataForFunc("REH", "ttREHI", "1600")}%
+                  </p>
+                </div>
+                <div className="grid h-20 grid-cols-2 gap-2 mt-2">
+                  <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
+                    <p className="text-lg font-medium text-neutral-700">
+                      강수확률
+                    </p>
+                    <p className="text-[#2AA745] font-bold text-lg">
+                      {ttdataForFunc("POP", "POPI", "1600")}%
+                    </p>
+                  </div>
+                  <div className="border border-[#2AA745] rounded-lg flex flex-col justify-center items-center h-full">
+                    <p className="text-lg font-medium text-neutral-700">
+                      강수량
+                    </p>
+                    <p className="text-[#2AA745] font-bold text-lg">
+                      {ttdataForFunc("PCP", "PCPI", "1600")}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

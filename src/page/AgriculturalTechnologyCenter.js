@@ -76,7 +76,7 @@ function AgriculturalTechnologyCenter(tab) {
         "relative w-full h-full transition duration-[800ms] start " + fade
       }
     >
-      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
+      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
         <div className="flex items-center">
           <p className="mr-6 text-4xl font-bold text-black ">
             청양군 농업 기술센터
@@ -95,11 +95,11 @@ function AgriculturalTechnologyCenter(tab) {
         </div>
       </div>
 
-      <div className="z-30 absolute top-0 w-full h-[60px] bg-gradient-to-b to-[#ffffff05] from-white mt-[100px]"></div>
+      <div className="z-30 absolute top-0 w-full h-[3.75rem] bg-gradient-to-b to-[#ffffff05] from-white mt-[6.25rem]"></div>
 
       <div
         className={
-          "absolute bottom-[60px] px-11 py-8 w-full h-[calc(100%_-_106px_-_60px)] overflow-scroll scroll-smooth transition-all duration-300 start " +
+          "absolute bottom-[3.75rem] px-11 py-8 w-full h-[calc(100%_-_6.625rem_-_3.75rem)] overflow-scroll scroll-smooth transition-all duration-300 start " +
           fade2
         }
         ref={scrollRef}
@@ -149,10 +149,10 @@ function AgriculturalTechnologyCenter(tab) {
           : null}
       </div>
 
-      <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
+      <div className="z-30 absolute bottom-0 w-full h-[3.75rem] bg-gradient-to-t to-[#ffffff05] from-white mb-[3.75rem]"></div>
 
       {/* 스크롤무브 버튼 */}
-      <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
+      <div className=" z-30 bottom-0 absolute w-full h-[3.75rem] bg-white text-center flex justify-center items-center">
         <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
           <FontAwesomeIcon
             icon={faCaretUp}
@@ -228,7 +228,7 @@ function ATcenterList(props) {
             onClick={() => {
               setToggleState(!toggleState);
             }}
-            className="slide-toggle__toggl cursor-pointer ml-6 w-[140px] h-[35px] border border-neutral-500 font-medium text-xl text-neutral-800 rounded-full flex justify-center items-center"
+            className="slide-toggle__toggl cursor-pointer ml-6 w-[8.75rem] h-[2.1875rem] border border-neutral-500 font-medium text-xl text-neutral-800 rounded-full flex justify-center items-center"
           >
             자세히보기
             <FontAwesomeIcon
@@ -349,7 +349,7 @@ function WishATcenterList(props) {
             onClick={() => {
               setToggleState(!toggleState);
             }}
-            className="slide-toggle__toggl cursor-pointer ml-6 w-[140px] h-[35px] border border-neutral-500 font-medium text-xl text-neutral-800 rounded-full flex justify-center items-center"
+            className="slide-toggle__toggl cursor-pointer ml-6 w-[8.75rem] h-[2.1875rem] border border-neutral-500 font-medium text-xl text-neutral-800 rounded-full flex justify-center items-center"
           >
             자세히보기
             <FontAwesomeIcon

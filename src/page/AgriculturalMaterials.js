@@ -85,16 +85,16 @@ function AgriculturalMaterials() {
         "relative w-full h-full transition duration-[800ms] start " + fade
       }
     >
-      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
+      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
         <div className="flex items-center">
           <p className="mr-6 text-4xl font-bold text-black ">농자재 공동구매</p>
         </div>
       </div>
 
-      <div className="z-30 absolute top-0 w-full h-[60px] bg-gradient-to-b to-[#ffffff05] from-white mt-[100px]"></div>
+      <div className="z-30 absolute top-0 w-full h-[3.75rem] bg-gradient-to-b to-[#ffffff05] from-white mt-[6.25rem]"></div>
 
       <div
-        className="absolute bottom-[60px] px-11 py-8 w-full h-[calc(100%_-_106px_-_60px)] overflow-scroll scroll-smooth"
+        className="absolute bottom-[3.75rem] px-11 py-8 w-full h-[calc(100%_-_6.625rem_-_3.75rem)] overflow-scroll scroll-smooth"
         ref={scrollRef}
         onScroll={() => {
           reveal();
@@ -102,7 +102,7 @@ function AgriculturalMaterials() {
       >
         <div className="transition duration-1000 reveal">
           <div className="flex items-center justify-start mb-6">
-            <p className="mr-3 text-[28px] font-medium text-neutral-500 ">
+            <p className="mr-3 text-[1.75rem] font-medium text-neutral-500 ">
               2km이내 곰팡이병 발생, 살충제를 구매하세요.
             </p>
             <span className="font-medium text-xl text-white rounded-full bg-[#2EABE2] px-6 py-1">
@@ -111,7 +111,7 @@ function AgriculturalMaterials() {
           </div>
           <div className="w-full p-6 mb-10 border border-gray-400 rounded-xl">
             <div className="flex items-center justify-start mb-6">
-              <p className="mr-7 text-[28px] font-medium text-neutral-500 ">
+              <p className="mr-7 text-[1.75rem] font-medium text-neutral-500 ">
                 친환경 살충제
               </p>
               <span
@@ -196,7 +196,7 @@ function AgriculturalMaterials() {
         <div className="transition duration-1000 reveal">
           <div className="w-full p-6 mb-10 border border-gray-400 rounded-xl">
             <div className="flex items-center justify-start mb-6">
-              <p className="mr-7 text-[28px] font-medium text-neutral-500 ">
+              <p className="mr-7 text-[1.75rem] font-medium text-neutral-500 ">
                 비료
               </p>
               <span
@@ -280,10 +280,10 @@ function AgriculturalMaterials() {
         </div>
       </div>
 
-      <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
+      <div className="z-30 absolute bottom-0 w-full h-[3.75rem] bg-gradient-to-t to-[#ffffff05] from-white mb-[3.75rem]"></div>
 
       {/* 스크롤무브 버튼 */}
-      <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
+      <div className=" z-30 bottom-0 absolute w-full h-[3.75rem] bg-white text-center flex justify-center items-center">
         <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
           <FontAwesomeIcon
             icon={faCaretUp}
@@ -332,16 +332,11 @@ function ShopCard(props) {
       </p>
       <div className="flex">
         <p className="mb-1 mr-3 text-xl font-bold text-neutral-800">
-          {props.price
-            .toString()
-            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
-          원
+          {props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
         </p>
         <p className="mb-1 mr-2 text-lg font-medium text-neutral-500">
           <FontAwesomeIcon icon={faTruck} className="mr-1" />
-          {props.shippingPrice
-            .toString()
-            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
+          {props.shippingPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
           원
         </p>
       </div>

@@ -21,7 +21,14 @@ import moment from "moment";
 import "moment/locale/ko";
 import Clock from "react-live-clock";
 import { useState, useRef, useEffect, useBoolean, useCallback } from "react";
-import { Routes, Route, Link, useLocation, HashRouter } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Link,
+  useLocation,
+  HashRouter,
+  useNavigate,
+} from "react-router-dom";
 
 import Environment from "./page/Environment.js";
 import Badge from "./page/Badge.js";
@@ -35,6 +42,13 @@ import Typing, { TypingMultiline } from "react-kr-typing-anim";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
 import { useQuery } from "react-query";
+
+const appHeight = () => {
+  const doc = document.documentElement;
+  doc.style.setProperty("--app-height", `${window.innerHeight}px`);
+};
+window.addEventListener("resize", appHeight);
+appHeight();
 
 let menuContents = [
   {
@@ -88,13 +102,34 @@ let menuContents = [
 ];
 
 function App() {
+  let [logState, setLogState] = useState(false);
+
+  let sessionLog = sessionStorage.getItem("log");
+  sessionLog = JSON.parse(sessionLog);
+
+  let navigate = useNavigate();
+
   useEffect(() => {
     if (!localStorage.getItem("watched")) {
       localStorage.setItem("watched", JSON.stringify([]));
     }
-    // if (!sessionStorage.getItem("log")) {
-    //   sessionStorage.setItem("log", JSON.stringify([]));
-    // }
+    if (!sessionStorage.getItem("log")) {
+      sessionStorage.setItem(
+        "log",
+        JSON.stringify([{ userId: "", userPassword: "" }])
+      );
+    }
+    setTimeout(() => {
+      if (
+        sessionLog.userId != undefined &&
+        sessionLog.userPassword != undefined
+      ) {
+        setLogState(true);
+      } else {
+        setLogState(false);
+        navigate("/login");
+      }
+    }, [100]);
   }, []);
 
   let [test, setTest] = useState(
@@ -208,138 +243,172 @@ function App() {
 
   return (
     <>
-      {!sessionStorage.getItem("log") ? (
-        <Login />
-      ) : (
-        <div className="w-screen h-screen App bg-slate-200">
-          {/* 헤더메뉴 */}
-          <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
-            <div className="w-1/3 cursor-pointer">
-              <Link
-                to={"/"}
-                className="w-[12.25rem]"
-                onClick={() => {
-                  let copy = [...test];
-                  test.map((a, i) => (copy[i] = false));
-                  copy[0] = true;
-                  setTest(copy);
-                }}
-              >
-                <img src={logo} className="w-[12.25rem]"></img>
-              </Link>
-            </div>
-            <div className="flex items-end justify-center w-1/3">
-              <p className="mr-3 text-2xl font-medium text-neutral-600">
-                {timeFirst == "am" ? "오전" : "오후"}
-              </p>
-              <p className="text-4xl font-bold text-neutral-700">
-                <Clock format="hh:mm" ticking={true}></Clock>
-              </p>
-            </div>
-            <div className="flex items-center justify-end w-1/3">
-              <p className="mr-3 text-xl font-bold text-neutral-700">
-                홍길동님
-              </p>
-              <span className="flex items-center cursor-pointer">
-                <img src={userIcon} className="w-[3.25rem] mr-3"></img>
-                <img src={arrowBottom} className="w-6"></img>
-              </span>
-            </div>
-          </div>
+      <div className="w-full h-full App bg-slate-200">
+        {logState == false ? null : (
+          // 헤더메뉴
+          <Header setTest={setTest} timeFirst={timeFirst} navigate={navigate} />
+        )}
 
-          <div className="grid h-[calc(100%_-_108px_-_76px)] grid-cols-4 px-6 pb-8 gap-7 pt-7 ">
-            <div className="relative h-full col-span-3 bg-white">
-              <Routes>
-                <Route path="/" element={menuContents[0].file} />
-                {menuContents.map((m, i) => (
-                  <Route path={"/" + m.enname} element={m.file} />
-                ))}
-              </Routes>
-            </div>
-
-            {/* 농장환경예측 */}
-            <div className="relative h-full bg-white">
-              <div className="absolute z-40 top-0 left-0 flex flex-col justify-between w-full h-[200px] border-b px-6 py-8 border-b-neutral-300">
-                <p className="mr-6 text-[28px] font-bold text-black break-keep">
-                  {moment().format("MM[월] DD[일]")} 농장 환경 예측
-                </p>
-                <div className="flex items-end justify-between">
-                  <p className="mr-1 text-xl font-medium text-neutral-500 break-keep">
-                    예측 적용시, 환경 점수
-                  </p>
-                  <div className="flex items-end justify-end">
-                    <p className="flex justify-end mr-2 text-5xl font-medium text-black ">
-                      <b className=" font-bold text-[#28a745] underline underline-[#28A745] underline-offset-4 mr-2">
-                        100
-                      </b>
-                      점
-                    </p>
-                    <p className="text-xl font-medium text-neutral-600">예측</p>
-                  </div>
-                </div>
-              </div>
-              <div className="z-30 absolute top-0 w-full h-[30px] bg-gradient-to-b to-[#ffffff05] from-white mt-[200px]"></div>
-              <div
-                ref={environmentalForecastingRef}
-                className=" h-[calc(100%_-_200px_-_76px)] absolute bottom-[76px] w-full overflow-scroll scroll-smooth"
-                onScroll={() => {
-                  reveal2();
-                }}
-              >
-                <div className="absolute w-full pl-6 pr-8">
-                  {environmentalForecastingData.map((e, i) => {
-                    return (
-                      <EnvironmentalForecasting
-                        time={e.time}
-                        title={e.title}
-                        totalTime={e.totalTime}
-                        yesterdayTime={e.yesterdayTime}
-                        state={e.state}
-                        key={i}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
-              {/* 스크롤무브 버튼 */}
-              <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
-                <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
-                  <FontAwesomeIcon
-                    icon={faCaretUp}
-                    onClick={environmentalForecastingRefUp}
-                    className="mt-1"
+        <div
+          className={`${
+            logState == false
+              ? ""
+              : "grid h-[calc(100%_-_6.75rem_-_4.75rem)] grid-cols-4 px-6 pb-8 gap-7 pt-7 "
+          }`}
+        >
+          <div
+            className={`${
+              logState == false ? "" : "relative h-full col-span-3 bg-white"
+            }`}
+          >
+            <Routes>
+              <Route path="/" element={menuContents[0].file} />
+              {menuContents.map((m, i) => (
+                <Route path={"/" + m.enname} element={m.file} />
+              ))}
+              <Route
+                path="/login"
+                element={
+                  <Login
+                    logState={logState}
+                    setLogState={setLogState}
+                    navigate={navigate}
                   />
-                </span>
-                <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
-                  <FontAwesomeIcon
-                    icon={faCaretDown}
-                    onClick={environmentalForecastingRefDown}
-                  />
-                </span>
-              </div>
-            </div>
+                }
+              />
+            </Routes>
           </div>
-
-          <NavigationMenu test={test} setTest={setTest} />
+          {logState == false ? null : (
+            // 농장환경예측
+            <FarmEnvironmentPrediction
+              environmentalForecastingRef={environmentalForecastingRef}
+              environmentalForecastingData={environmentalForecastingData}
+              environmentalForecastingRefUp={environmentalForecastingRefUp}
+              environmentalForecastingRefDown={environmentalForecastingRefDown}
+              reveal2={reveal2}
+            />
+          )}
         </div>
-      )}
+        {logState == false ? null : (
+          <NavigationMenu test={test} setTest={setTest} />
+        )}
+      </div>
     </>
+  );
+}
+
+// 농장환경예측 컴포넌트
+function FarmEnvironmentPrediction(props) {
+  return (
+    <div className="relative h-full bg-white">
+      <div className="absolute z-40 top-0 left-0 flex flex-col justify-between w-full h-[12.5rem] border-b px-6 py-8 border-b-neutral-300">
+        <p className="mr-6 text-[1.75rem] font-bold text-black break-keep">
+          {moment().format("MM[월] DD[일]")} 농장 환경 예측
+        </p>
+        <div className="flex items-end justify-between">
+          <p className="mr-1 text-xl font-medium text-neutral-500 break-keep">
+            예측 적용시, 환경 점수
+          </p>
+          <div className="flex items-end justify-end">
+            <p className="flex justify-end mr-2 text-5xl font-medium text-black ">
+              <b className=" font-bold text-[#28a745] underline underline-[#28A745] underline-offset-4 mr-2">
+                100
+              </b>
+              점
+            </p>
+            <p className="text-xl font-medium text-neutral-600">예측</p>
+          </div>
+        </div>
+      </div>
+      <div className="z-30 absolute top-0 w-full h-[1.875rem] bg-gradient-to-b to-[#ffffff05] from-white mt-[12.5rem]"></div>
+      <div
+        ref={props.environmentalForecastingRef}
+        className=" h-[calc(100%_-_12.5rem_-_4.75rem)] absolute bottom-[4.75rem] w-full overflow-scroll scroll-smooth"
+        onScroll={() => {
+          props.reveal2();
+        }}
+      >
+        <div className="absolute w-full pl-6 pr-8">
+          {props.environmentalForecastingData.map((e, i) => {
+            return (
+              <EnvironmentalForecasting
+                time={e.time}
+                title={e.title}
+                totalTime={e.totalTime}
+                yesterdayTime={e.yesterdayTime}
+                state={e.state}
+                key={i}
+              />
+            );
+          })}
+        </div>
+      </div>
+      <div className="z-30 absolute bottom-0 w-full h-[3.75rem] bg-gradient-to-t to-[#ffffff05] from-white mb-[3.75rem]"></div>
+      {/* 스크롤무브 버튼 */}
+      <div className=" z-30 bottom-0 absolute w-full h-[3.75rem] bg-white text-center flex justify-center items-center">
+        <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
+          <FontAwesomeIcon
+            icon={faCaretUp}
+            onClick={props.environmentalForecastingRefUp}
+            className="mt-1"
+          />
+        </span>
+        <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
+          <FontAwesomeIcon
+            icon={faCaretDown}
+            onClick={props.environmentalForecastingRefDown}
+          />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// 헤더 컴포넌트
+function Header(props) {
+  return (
+    <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
+      <div className="w-1/3 cursor-pointer">
+        <Link
+          to={"/"}
+          className="w-[12.25rem]"
+          onClick={() => {
+            let copy = [...test];
+            test.map((a, i) => (copy[i] = false));
+            copy[0] = true;
+            props.setTest(copy);
+          }}
+        >
+          <img src={logo} className="w-[12.25rem]"></img>
+        </Link>
+      </div>
+      <div className="flex items-end justify-center w-1/3">
+        <p className="mr-3 text-2xl font-medium text-neutral-600">
+          {props.timeFirst == "am" ? "오전" : "오후"}
+        </p>
+        <p className="text-4xl font-bold text-neutral-700">
+          <Clock format="hh:mm" ticking={true}></Clock>
+        </p>
+      </div>
+      <div className="flex items-center justify-end w-1/3">
+        <p className="mr-3 text-xl font-bold text-neutral-700">홍길동님</p>
+        <span
+          className="flex items-center cursor-pointer"
+          onClick={() => {
+            sessionStorage.setItem("log", JSON.stringify([]));
+            props.navigate("/login");
+          }}
+        >
+          <img src={userIcon} className="w-[3.25rem] mr-3"></img>
+          <img src={arrowBottom} className="w-6"></img>
+        </span>
+      </div>
+    </div>
   );
 }
 
 // 로그인 컴포넌트
 function Login(props) {
-  let result = useQuery("작명", () =>
-    axios
-      .get(
-        "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json"
-      )
-      .then((a) => {
-        return a.data;
-      })
-  );
-
   const validate = (values) => {
     const errors = {};
 
@@ -353,16 +422,51 @@ function Login(props) {
     return errors;
   };
 
+  let [user, setUser] = useState({ userId: "", userPassword: "" });
+
+  let sessionLog = sessionStorage.getItem("log");
+  sessionLog = JSON.parse(sessionLog);
+
   const handleSubmit = (values) => {
     let userValue = JSON.stringify(values, null, 2);
-    console.log(userValue);
+    sessionStorage.setItem("log", userValue);
+    axios
+      .get(
+        "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json"
+      )
+      .then((result) => {
+        setUser((prevState) => ({
+          ...prevState.userId,
+          userId: result.data.userId,
+          ...prevState.userPassword,
+          userPassword: result.data.userPassword,
+        }));
+      })
+      .catch(() => {
+        console.log("실패함");
+      });
   };
+
+  useEffect(() => {
+    if (user.userId != "") {
+      if (
+        user.userId == sessionLog.userId &&
+        user.userPassword == sessionLog.userPassword
+      ) {
+        alert("로그인 성공");
+        props.setLogState(true);
+        props.navigate("/");
+      } else {
+        alert("아이디 또는 비밀번호를 확인해 주세요.");
+        sessionStorage.setItem("log", JSON.stringify([]));
+      }
+    }
+  }, [handleSubmit]);
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center pb-[120px] w-screen h-screen">
-        {result.data && result.data.userId}
-        <div className=" w-[500px]  h-[100px] flex justify-center items-center rounded-[50px]">
+      <div className="flex flex-col items-center justify-center pb-[7.5rem] w-screen h-screen fixed top-0 left-0 bg-white z-50">
+        <div className=" w-[31.25rem]  h-[6.25rem] flex justify-center items-center rounded-[3.125rem]">
           <Typing
             Tag="div"
             preDelay={0}
@@ -374,7 +478,7 @@ function Login(props) {
             오늘 하루도 힘내세요! ^^
           </Typing>
         </div>
-        <Link to={"/"} className="w-[328px] block mx-auto mb-[120px]">
+        <Link to={"/"} className="w-[20.5rem] block mx-auto mb-[7.5rem]">
           <img src={logo} className="w-full" />
         </Link>
         <Formik
@@ -383,7 +487,7 @@ function Login(props) {
           onSubmit={handleSubmit}
         >
           <Form>
-            <div className="flex items-center justify-between w-[600px] h-16">
+            <div className="flex items-center justify-between w-[37.5rem] h-16">
               <p className="text-4xl font-medium text-neutral-800">ID</p>
               <Field
                 type="text"
@@ -392,10 +496,10 @@ function Login(props) {
                 className="border border-neutral-400 w-[80%] h-full px-3 text-3xl rounded-lg"
               />
             </div>
-            <div className="block ml-[120px] mt-3 text-[#DC3545] text-lg">
+            <div className="block ml-[7.5rem] mt-3 text-[#DC3545] text-lg">
               <ErrorMessage name="userId" />
             </div>
-            <div className="flex items-center justify-between w-[600px] h-16 mt-6">
+            <div className="flex items-center justify-between w-[37.5rem] h-16 mt-6">
               <p className="text-4xl font-medium text-neutral-800">PW</p>
               <Field
                 type="password"
@@ -404,7 +508,7 @@ function Login(props) {
                 className="border border-neutral-400 w-[80%] h-full px-3 text-3xl rounded-lg"
               />
             </div>
-            <div className="block ml-[120px] mt-3 text-[#DC3545] text-lg">
+            <div className="block ml-[7.5rem] mt-3 text-[#DC3545] text-lg">
               <ErrorMessage name="userPassword" />
             </div>
             <button
@@ -423,7 +527,7 @@ function Login(props) {
 // 네비게이션 메뉴 컴포넌트
 function NavigationMenu(props) {
   useEffect(() => {
-    if (window.location.path == "#/" || window.location.path == undefined) {
+    if (window.location.path == "#/" || window.location.hash == undefined) {
       let copy = [...props.test];
       copy[0] = true;
       props.setTest(copy);
@@ -431,12 +535,12 @@ function NavigationMenu(props) {
   }, []);
 
   return (
-    <div className="bg-white grid grid-cols-8 h-[108px] bottom-0 fixed w-screen">
+    <div className="bg-white grid grid-cols-8 h-[6.75rem] bottom-0 fixed w-screen">
       {menuContents.map((m, i) => (
         <Link
           key={m.enname + i}
           to={"/" + m.enname}
-          className=" flex justify-center items-center cursor-pointer relative before:w-[2px] before:h-12 before:bg-neutral-300 before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:translate-x-1/2 last-of-type:before:hidden"
+          className=" flex justify-center items-center cursor-pointer relative before:w-[0.125rem] before:h-12 before:bg-neutral-300 before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:translate-x-1/2 last-of-type:before:hidden"
           onClick={() => {
             let copy = [...props.test];
 
@@ -452,7 +556,7 @@ function NavigationMenu(props) {
               `${
                 props.test[i] == true
                   ? "w-40 before:border-[0.75rem]"
-                  : "w-0 before:border-[0px]"
+                  : "w-0 before:border-[0rem]"
               }` +
               " before:transition-[0.5s] before:absolute before:top-0 before:left-1/2 before:-translate-x-1/2 before:w-0 before:h-0 before:border-b-transparent before:border-t-[#2eabe2] before:border-r-transparent before:border-l-transparent h-1 bg-[#2eabe2] transition-[0.5s] absolute top-0"
             }
@@ -507,7 +611,7 @@ function EnvironmentalForecasting(props) {
       <div
         className={
           stateColor() +
-          " w-full py-6 pl-6 h-[143px] flex justify-between flex-col before:w-3 before:h-[94px] before:absolute relative before:left-0 before:top-1/2 before:-translate-y-1/2 "
+          " w-full py-6 pl-6 h-[8.9375rem] flex justify-between flex-col before:w-3 before:h-[5.875rem] before:absolute relative before:left-0 before:top-1/2 before:-translate-y-1/2 "
         }
       >
         <div className="flex items-center justify-between w-full">

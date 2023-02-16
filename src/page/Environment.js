@@ -98,7 +98,7 @@ function Environment() {
 
   return (
     <div className={"transition duration-[800ms] start " + fade}>
-      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
+      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
         <div className="flex items-center">
           <p className="mr-6 text-4xl font-bold text-black ">홍길동 농장 A동</p>
           <span className="px-5 py-1 text-xl font-bold text-black bg-[#ffc107] rounded-full mr-3">
@@ -110,22 +110,22 @@ function Environment() {
           </span>
         </div>
         <div className="flex items-end">
-          <p className=" text-[28px] font-medium mr-5 text-neutral-500 pb-1 ">
+          <p className=" text-[1.75rem] font-medium mr-5 text-neutral-500 pb-1 ">
             오늘의 환경점수
           </p>
-          <p className=" text-[32px] font-medium text-black ">
+          <p className=" text-[2rem] font-medium text-black ">
             <small className="mr-2 text-2xl font-medium text-neutral-500">
               현재
             </small>
-            <b className=" text-[40px] font-bold text-[#28a745]">61</b>점
+            <b className=" text-[2.5rem] font-bold text-[#28a745]">61</b>점
           </p>
         </div>
       </div>
 
-      <div className="z-30 absolute top-0 w-full h-[60px] bg-gradient-to-b to-[#ffffff05] from-white mt-[100px]"></div>
+      <div className="z-30 absolute top-0 w-full h-[3.75rem] bg-gradient-to-b to-[#ffffff05] from-white mt-[6.25rem]"></div>
 
       <div
-        className="absolute bottom-[60px] w-full h-[calc(100%_-_106px_-_60px)] overflow-scroll scroll-smooth"
+        className="absolute bottom-[3.75rem] w-full h-[calc(100%_-_6.625rem_-_3.75rem)] overflow-scroll scroll-smooth"
         ref={scrollRef}
         onScroll={() => {
           reveal();
@@ -154,7 +154,7 @@ function Environment() {
                 accumulate="오늘 누적 1시간 30분"
                 today="오늘 2시간 10분 예측"
                 tomorow="내일 3시간 25분 예측"
-                width="w-[25rem]"
+                width="w-[30rem]"
               />
             </div>
           </div>
@@ -181,13 +181,13 @@ function Environment() {
                   title={"1시간 간격 보기"}
                 />
               </div>
-              <div className="h-[300px] w-full">
+              <div className="h-[18.75rem] w-full">
                 <SuggestionBarChart timeValue={timeValue} />
               </div>
             </div>
           </div>
           <div className="transition duration-1000 reveal">
-            <div className=" mb-6 after:absolute after:w-px after:h-[90px] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[90px] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 h-[8.75rem] w-full border rounded-xl border-neutral-400 px-6 py-4">
+            <div className=" mb-6 after:absolute after:w-px after:h-[5.625rem] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[5.625rem] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 w-full border rounded-xl border-neutral-400 px-6 py-4">
               <Suggestion
                 title="관수 권장"
                 today="10:32"
@@ -213,8 +213,8 @@ function Environment() {
               <p className="text-2xl font-medium text-neutral-500">
                 환경에 의한 초세/생장 추이
               </p>
-              <div className=" z-10 before:-z-10 before:absolute before:w-full before:h-px before:top-[calc(50%_+_5px)] before:-translate-y-1/2 before:bg-neutral-400 h-[240px] w-full relative">
-                <p className=" -z-10 absolute top-[calc(50%_-_20px)] text-neutral-500 text-base">
+              <div className=" z-10 before:-z-10 before:absolute before:w-full before:h-px before:top-[calc(50%_+_0.3125rem)] before:-translate-y-1/2 before:bg-neutral-400 h-[15rem] w-full relative">
+                <p className=" -z-10 absolute top-[calc(50%_-_1.25rem)] text-neutral-500 text-base">
                   영양
                 </p>
                 <div className=" -z-10 absolute flex flex-col items-center justify-between h-full text-base -translate-x-1/2 left-1/2 text-[#28A745]">
@@ -228,13 +228,13 @@ function Environment() {
           </div>
           <div
             className={
-              `${guidedState == 2 ? "h-[60px] mb-6" : "h-0"}` +
+              `${guidedState == 2 ? "h-[3.75rem] mb-6" : "h-0"}` +
               " relative w-full overflow-hidden transition-all duration-500"
             }
           >
             <div
               className={
-                "py-3 h-[60px] border-neutral-400 border flex absolute left-1/2 -translate-x-1/2 items-center justify-center w-full overflow-hidden transition-all duration-1000 reveal rounded-xl "
+                "py-3 h-[3.75rem] border-neutral-400 border flex absolute left-1/2 -translate-x-1/2 items-center justify-center w-full overflow-hidden transition-all duration-1000 reveal rounded-xl "
               }
             >
               <p className="text-2xl font-bold text-black">
@@ -251,56 +251,56 @@ function Environment() {
               <p className="text-2xl font-bold text-black">클릭해주세요. </p>
             </div>
           </div>
-          <div className="transition duration-1000 reveal h-[324px] flex justify-between items-center mb-6">
+          <div className="transition duration-1000 reveal h-[20.25rem] flex justify-between items-center mb-6">
             <div
               className={
                 `${
                   guidedState == 2
-                    ? "w-[calc(50%_-_12px)]"
-                    : "w-[calc(30%_-_24px)]"
+                    ? "w-[calc(50%_-_0.75rem)]"
+                    : "w-[calc(30%_-_1.5rem)]"
                 }` +
-                " transition-all duration-300 before:absolute before:w-[2px] before:h-[80%] before:top-1/2 before:-translate-y-1/2 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-400 relative border rounded-xl border-neutral-400 h-full grid grid-cols-2 py-5"
+                " transition-all duration-300 before:absolute before:w-[0.125rem] before:h-[80%] before:top-1/2 before:-translate-y-1/2 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-400 relative border rounded-xl border-neutral-400 h-full grid grid-cols-2 py-5"
               }
             >
               <div className="flex flex-col items-center justify-end">
                 <div className="w-full">
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
                 </div>
                 <p className="text-xl font-medium text-neutral-500">
                   초세 약함
                 </p>
                 <p className="text-2xl font-medium text-neutral-800">
-                  <b className="font-bold text-[32px] text-[#2EABE2]">11</b> /
+                  <b className="font-bold text-[2rem] text-[#2EABE2]">11</b> /
                   20
                 </p>
               </div>
               <div className="flex flex-col items-center justify-end">
                 <div className="w-full">
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#2EABE2] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#2EABE2] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
                 </div>
                 <p className="text-xl font-medium text-neutral-500">
                   초세 강함
                 </p>
                 <p className="text-2xl font-medium text-neutral-800">
-                  <b className="font-bold text-[32px] text-[#2EABE2]">9</b> / 20
+                  <b className="font-bold text-[2rem] text-[#2EABE2]">9</b> / 20
                 </p>
               </div>
             </div>
@@ -317,13 +317,13 @@ function Environment() {
               <div className="flex items-center justify-center w-full h-full px-8 border rounded-xl border-neutral-400 ">
                 {guidedState == 0 ? (
                   <div className="">
-                    <p className="font-bold text-[28px] text-black mb-10 text-center">
+                    <p className="font-bold text-[1.75rem] text-black mb-10 text-center">
                       초세가 강하고, 영양생장이 예측됩니다.
                       <br /> 생식생장으로 유도 하시겠습니까?
                     </p>
                     <div className="flex items-center justify-center">
                       <span
-                        className="w-[160px] h-[60px] bg-[#0B7BFF] flex justify-center items-center rounded-xl text-white text-2xl font-bold mx-2"
+                        className="w-[10rem] h-[3.75rem] bg-[#0B7BFF] flex justify-center items-center rounded-xl text-white text-2xl font-bold mx-2"
                         onClick={() => {
                           setGuidedState(1);
                         }}
@@ -331,7 +331,7 @@ function Environment() {
                         예
                       </span>
                       <span
-                        className="w-[160px] h-[60px] bg-[#0B7BFF] flex justify-center items-center rounded-xl text-white text-2xl font-bold mx-2"
+                        className="w-[10rem] h-[3.75rem] bg-[#0B7BFF] flex justify-center items-center rounded-xl text-white text-2xl font-bold mx-2"
                         onClick={() => {
                           setGuidedState(2);
                         }}
@@ -342,15 +342,15 @@ function Environment() {
                   </div>
                 ) : (
                   <div className="">
-                    <p className="font-bold text-[28px] text-black mb-10 text-center">
+                    <p className="font-bold text-[1.75rem] text-black mb-10 text-center">
                       생식생장으로 유도중 입니다.
                     </p>
                     <div className="flex items-center justify-center">
                       <div className="z-50 flex items-center justify-center transition-all">
                         <svg
                           className="spinner"
-                          width="65px"
-                          height="65px"
+                          width="4.0625rem"
+                          height="4.0625rem"
                           viewBox="0 0 66 66"
                           xmlns="http://www.w3.org/2000/svg"
                         >
@@ -375,51 +375,51 @@ function Environment() {
               className={
                 `${
                   guidedState == 2
-                    ? "w-[calc(50%_-_12px)]"
-                    : "w-[calc(30%_-_24px)]"
+                    ? "w-[calc(50%_-_0.75rem)]"
+                    : "w-[calc(30%_-_1.5rem)]"
                 }` +
-                " transition-all duration-300 before:absolute before:w-[2px] before:h-[80%] before:top-1/2 before:-translate-y-1/2 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-400 relative border rounded-xl border-neutral-400 h-full grid grid-cols-2 py-5"
+                " transition-all duration-300 before:absolute before:w-[0.125rem] before:h-[80%] before:top-1/2 before:-translate-y-1/2 before:left-1/2 before:-translate-x-1/2 before:bg-neutral-400 relative border rounded-xl border-neutral-400 h-full grid grid-cols-2 py-5"
               }
             >
               <div className="flex flex-col items-center justify-end">
                 <div className="w-full">
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
                 </div>
                 <p className="text-xl font-medium text-neutral-500">
                   영양 생장
                 </p>
                 <p className="text-2xl font-medium text-neutral-800">
-                  <b className="font-bold text-[32px] text-[#95C121]">15</b> /
+                  <b className="font-bold text-[2rem] text-[#95C121]">15</b> /
                   20
                 </p>
               </div>
               <div className="flex flex-col items-center justify-end">
                 <div className="w-full">
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
-                  <span className="block bg-[#95C121] h-[9px] w-[70%] mb-[2px] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
+                  <span className="block bg-[#95C121] h-[0.5625rem] w-[70%] mb-[0.125rem] mx-auto"></span>
                 </div>
                 <p className="text-xl font-medium text-neutral-500">
                   생식 생장
                 </p>
                 <p className="text-2xl font-medium text-neutral-800">
-                  <b className="font-bold text-[32px] text-[#95C121]">5</b> / 20
+                  <b className="font-bold text-[2rem] text-[#95C121]">5</b> / 20
                 </p>
               </div>
             </div>
@@ -449,9 +449,9 @@ function Environment() {
         </div>
       </div>
 
-      <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
+      <div className="z-30 absolute bottom-0 w-full h-[3.75rem] bg-gradient-to-t to-[#ffffff05] from-white mb-[3.75rem]"></div>
       {/* 스크롤무브 버튼 */}
-      <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
+      <div className=" z-30 bottom-0 absolute w-full h-[3.75rem] bg-white text-center flex justify-center items-center">
         <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
           <FontAwesomeIcon
             icon={faCaretUp}
@@ -545,12 +545,12 @@ function TemperatureGraph(props) {
   };
 
   return (
-    <div className=" flex items-center h-[300px] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400 ">
-      <div className="w-[334px] h-full flex flex-col justify-between mr-5">
+    <div className=" flex items-center h-[18.75rem] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400 ">
+      <div className="w-[20.875rem] h-full flex flex-col justify-between mr-5">
         <div>
           <p className="text-xl font-bold text-neutral-500">{props.title}</p>
         </div>
-        <div className="px-10 bg-[#2EABE2] w-full h-[152px] text-white text-2xl font-bold rounded-2xl flex justify-center items-center text-center">
+        <div className="px-10 bg-[#2EABE2] w-full h-[9.5rem] text-white text-2xl font-bold rounded-2xl flex justify-center items-center text-center">
           <p className=" break-keep">{props.advice}</p>
         </div>
       </div>
@@ -561,7 +561,7 @@ function TemperatureGraph(props) {
               return (
                 <div
                   key={i}
-                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[150px] before:bg-neutral-400 h-full"
+                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[9.375rem] before:bg-neutral-400 h-full"
                 >
                   <div className="flex flex-col items-center justify-between h-full">
                     <p className="block text-center ">{l.label}</p>
@@ -755,10 +755,10 @@ function SuggestionBarChart(props) {
 // 관수 & 환기 & 진입 권장 컴포넌트
 function Suggestion(props) {
   return (
-    <div className="flex flex-col justify-between h-full mx-auto w-[15.625rem]">
+    <div className="flex flex-col justify-between w-full h-full px-10 mx-auto">
       <p className="text-xl font-medium text-neutral-500">{props.title}</p>
       <div>
-        <p className="mb-1 text-2xl font-medium text-black">
+        <p className="mt-4 mb-1 text-2xl font-medium text-black">
           오늘 {props.today} (어제 {props.yesterday})
         </p>
         <span className="px-4 py-1 bg-[#2eabe2] rounded-full text-xl font-medium text-white">

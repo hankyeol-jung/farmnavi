@@ -149,16 +149,16 @@ function Badge() {
         "relative w-full h-full transition duration-[800ms] start " + fade
       }
     >
-      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[106px] border-b px-11 border-b-neutral-300">
+      <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
         <div className="flex items-center">
           <p className="mr-6 text-4xl font-bold text-black ">홍길동 농장 A동</p>
         </div>
       </div>
 
-      <div className="z-30 absolute top-0 w-full h-[60px] bg-gradient-to-b to-[#ffffff05] from-white mt-[100px]"></div>
+      <div className="z-30 absolute top-0 w-full h-[3.75rem] bg-gradient-to-b to-[#ffffff05] from-white mt-[6.25rem]"></div>
 
       <div
-        className="absolute bottom-[60px] w-full h-[calc(100%_-_106px_-_60px)] overflow-scroll scroll-smooth"
+        className="absolute bottom-[3.75rem] w-full h-[calc(100%_-_6.625rem_-_3.75rem)] overflow-scroll scroll-smooth"
         ref={scrollRef}
         onScroll={() => {
           reveal();
@@ -210,10 +210,10 @@ function Badge() {
         </div>
       </div>
 
-      <div className="z-30 absolute bottom-0 w-full h-[60px] bg-gradient-to-t to-[#ffffff05] from-white mb-[60px]"></div>
+      <div className="z-30 absolute bottom-0 w-full h-[3.75rem] bg-gradient-to-t to-[#ffffff05] from-white mb-[3.75rem]"></div>
 
       {/* 스크롤무브 버튼 */}
-      <div className=" z-30 bottom-0 absolute w-full h-[60px] bg-white text-center flex justify-center items-center">
+      <div className=" z-30 bottom-0 absolute w-full h-[3.75rem] bg-white text-center flex justify-center items-center">
         <span className="w-12 h-12 mx-3 text-5xl cursor-pointer text-neutral-400">
           <FontAwesomeIcon
             icon={faCaretUp}
@@ -309,8 +309,8 @@ function MoistureContentGraph(props) {
   };
 
   return (
-    <div className=" flex items-center h-[300px] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400">
-      <div className="w-[334px] h-full flex flex-col justify-between mr-5">
+    <div className=" flex items-center h-[18.75rem] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400">
+      <div className="w-[20.875rem] h-full flex flex-col justify-between mr-5">
         <div>
           <p className="text-xl font-bold text-neutral-500">{props.title}</p>
         </div>
@@ -330,7 +330,7 @@ function MoistureContentGraph(props) {
               return (
                 <div
                   key={i}
-                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[150px] before:bg-neutral-400 h-full"
+                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[9.375rem] before:bg-neutral-400 h-full"
                 >
                   <div className="flex flex-col items-center justify-between h-full">
                     <div></div>
@@ -429,16 +429,16 @@ function ECchangeGraph(props) {
   };
 
   return (
-    <div className=" flex items-center h-[300px] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400 ">
-      <div className="w-[334px] h-full flex flex-col justify-between mr-5">
+    <div className=" flex items-center h-[18.75rem] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400 ">
+      <div className="w-[20.875rem] h-full flex flex-col justify-between mr-5">
         <div>
           <p className="text-xl font-bold text-neutral-500">{props.title}</p>
         </div>
         <div>
-          <div className="px-5 bg-[#2EABE2] w-full h-[67px] mb-3 text-white text-2xl font-bold rounded-2xl flex justify-center items-center text-center">
+          <div className="px-5 bg-[#2EABE2] w-full h-[4.1875rem] mb-3 text-white text-2xl font-bold rounded-2xl flex justify-center items-center text-center">
             <p className=" break-keep">{props.advice}</p>
           </div>
-          <div className="p-4 border-[#2EABE2] border-[3px] w-full h-[110px] rounded-2xl flex justify-between items-start text-center">
+          <div className="p-4 border-[#2EABE2] border-[0.1875rem] w-full h-[6.875rem] rounded-2xl flex justify-between items-start text-center">
             <p className="text-xl font-bold text-neutral-600 break-keep">
               시뮬레이션
             </p>
@@ -466,7 +466,7 @@ function ECchangeGraph(props) {
               return (
                 <div
                   key={i}
-                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[150px] before:bg-neutral-400 h-full"
+                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[9.375rem] before:bg-neutral-400 h-full"
                 >
                   <div className="flex flex-col items-center justify-between h-full">
                     <div></div>
@@ -565,12 +565,12 @@ function BadgeWeightGraph(props) {
   };
 
   return (
-    <div className=" flex items-center h-[300px] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400 ">
-      <div className="w-[334px] h-full flex flex-col justify-between mr-5">
+    <div className=" flex items-center h-[18.75rem] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400 ">
+      <div className="w-[20.875rem] h-full flex flex-col justify-between mr-5">
         <div>
           <p className="text-xl font-bold text-neutral-500">{props.title}</p>
         </div>
-        <div className="px-5 bg-[#2EABE2] w-full h-[152px] text-white text-2xl font-bold rounded-2xl flex justify-center items-center text-center">
+        <div className="px-5 bg-[#2EABE2] w-full h-[9.5rem] text-white text-2xl font-bold rounded-2xl flex justify-center items-center text-center">
           <p className=" break-keep">{props.advice}</p>
         </div>
       </div>
@@ -581,7 +581,7 @@ function BadgeWeightGraph(props) {
               return (
                 <div
                   key={i}
-                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[150px] before:bg-neutral-400 h-full"
+                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[9.375rem] before:bg-neutral-400 h-full"
                 >
                   <div className="flex flex-col items-center justify-between h-full">
                     <div></div>
@@ -646,12 +646,12 @@ function SupplywaterTime(props) {
 // 급액 배액 시간 컴포넌트
 function SupplyDrainage(props) {
   return (
-    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[160px]">
+    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[10rem]">
       <div>
         <p className="text-xl font-medium text-neutral-500">{props.title}</p>
       </div>
       <div className="flex flex-col items-end">
-        <p className="text-right text-[28px] font-bold">
+        <p className="text-right text-[1.75rem] font-bold">
           <small className="text-xl font-bold">오늘</small> {props.today}
           <small className="ml-2 text-xl font-medium text-neutral-500">
             (어제 {props.yesterday})
