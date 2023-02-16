@@ -1,6 +1,6 @@
 {
   "userId": "admin",
   "userPassword": "1234",
-  "userName": "홍길동",
+  "name": "홍길동",
   "farm": "A동"
 }

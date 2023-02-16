@@ -43,7 +43,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
-import { userName } from "./store.js";
+import { userName, userFarm } from "./store.js";
 
 const appHeight = () => {
   const doc = document.documentElement;
@@ -137,7 +137,8 @@ function App() {
             "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json"
           )
           .then((result) => {
-            dispatch(userName(result.data.userName));
+            dispatch(userName(result.data.name));
+            dispatch(userFarm(result.data.farm));
           })
           .catch(() => {
             console.log("실패함");
