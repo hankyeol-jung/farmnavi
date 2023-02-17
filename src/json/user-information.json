@@ -84,5 +84,91 @@
         }
       ]
     }
+  },
+  {
+    "userId": "gksruf",
+    "userPassword": "1234",
+    "name": "정한결",
+    "farm": "B동",
+
+    "FarmEnvironmentPrediction": {
+      "title": "농장 환경 예측",
+      "score": [
+        100, 87, 73, 54, 68, 89, 91, 92, 94, 63, 75, 87, 99, 29, 45, 36, 47, 53,
+        97, 33, 21, 55, 66, 77, 83
+      ],
+      "contents": [
+        {
+          "state": "보통",
+          "time": "12시 00분",
+          "title": "첫 적합한 증산 진입",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "경고",
+          "time": "12시 40분",
+          "title": "첫 많은 증산 진입",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "위험",
+          "time": "14시 30분",
+          "title": "첫 심각한 증산 진입",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "위험",
+          "time": "15시 30분",
+          "title": "배지 수분율 최저 25% 예상",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "위험",
+          "time": "15시 52분",
+          "title": "금일 최고온도 35.6°C 예상",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "보통",
+          "time": "12시 00분",
+          "title": "첫 적합한 증산 진입",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "경고",
+          "time": "12시 40분",
+          "title": "첫 많은 증산 진입",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "위험",
+          "time": "14시 30분",
+          "title": "첫 심각한 증산 진입",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "위험",
+          "time": "15시 30분",
+          "title": "배지 수분율 최저 25% 예상",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        },
+        {
+          "state": "위험",
+          "time": "15시 52분",
+          "title": "금일 최고온도 35.6°C 예상",
+          "totalTime": "0시간 40분",
+          "yesterdayTime": "2시간 10분"
+        }
+      ]
+    }
   }
 ]

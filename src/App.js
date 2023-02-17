@@ -45,15 +45,6 @@ import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
 import { userName, userFarm } from "./store.js";
 
-// let sessionLog = sessionStorage.getItem("log");
-// sessionLog = JSON.parse(sessionLog);
-
-// if (logState == true) {
-//   window.location.replace("/");
-// } else {
-//   window.location.replace("/login");
-// }
-
 const appHeight = () => {
   const doc = document.documentElement;
   doc.style.setProperty("--app-height", `${window.innerHeight}px`);
@@ -112,13 +103,24 @@ let menuContents = [
   },
 ];
 
+const userUrl =
+  "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
+
 function App(tab) {
+  let result = useQuery("data", () =>
+    axios.get(userUrl).then((a) => {
+      return a.data;
+    })
+  );
+  useEffect(() => {
+    let normalData = result.data && result.data;
+  }, []);
+  console.log(result.data && result.data[0].userId);
+
   let [logState, setLogState] = useState();
 
   let sessionLog = sessionStorage.getItem("log");
   sessionLog = JSON.parse(sessionLog);
-
-  // let [logState, setLogState] = useState();
 
   let navigate = useNavigate();
 
