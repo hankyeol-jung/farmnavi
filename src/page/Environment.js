@@ -19,8 +19,11 @@ import {
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { userName, userFarm } from ".././store.js";
 
-function Environment() {
+function Environment(tab) {
   let [timeValue, setTimeValue] = useState(1);
 
   let scrollRef = useRef(0);
@@ -96,11 +99,33 @@ function Environment() {
     };
   }, []);
 
+  let sessionLog = sessionStorage.getItem("log");
+  sessionLog = JSON.parse(sessionLog);
+
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (
+        sessionLog.userId == undefined &&
+        sessionLog.userPassword == undefined
+      ) {
+        navigate("/login");
+      }
+    }, [100]);
+  }, [tab]);
+
+  let data = useSelector((state) => {
+    return state;
+  });
+
   return (
     <div className={"transition duration-[800ms] start " + fade}>
       <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
         <div className="flex items-center">
-          <p className="mr-6 text-4xl font-bold text-black ">홍길동 농장 A동</p>
+          <p className="mr-6 text-4xl font-bold text-black ">
+            {data.userInfo.name} 농장 {data.userInfo.farm}
+          </p>
           <span className="px-5 py-1 text-xl font-bold text-black bg-[#ffc107] rounded-full mr-3">
             내부가 조금 건조해요
           </span>

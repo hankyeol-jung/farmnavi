@@ -45,6 +45,15 @@ import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
 import { userName, userFarm } from "./store.js";
 
+// let sessionLog = sessionStorage.getItem("log");
+// sessionLog = JSON.parse(sessionLog);
+
+// if (logState == true) {
+//   window.location.replace("/");
+// } else {
+//   window.location.replace("/login");
+// }
+
 const appHeight = () => {
   const doc = document.documentElement;
   doc.style.setProperty("--app-height", `${window.innerHeight}px`);
@@ -103,11 +112,13 @@ let menuContents = [
   },
 ];
 
-function App() {
-  let [logState, setLogState] = useState(false);
+function App(tab) {
+  let [logState, setLogState] = useState();
 
   let sessionLog = sessionStorage.getItem("log");
   sessionLog = JSON.parse(sessionLog);
+
+  // let [logState, setLogState] = useState();
 
   let navigate = useNavigate();
 
@@ -126,6 +137,7 @@ function App() {
         JSON.stringify([{ userId: "", userPassword: "" }])
       );
     }
+
     setTimeout(() => {
       if (
         sessionLog.userId != undefined &&
@@ -145,10 +157,15 @@ function App() {
           });
       } else {
         setLogState(false);
-        navigate("/login");
       }
     }, [100]);
-  }, []);
+    setTimeout(() => {
+      if (logState == false || logState == undefined) {
+        navigate("/login");
+      }
+      console.log(logState);
+    }, [200]);
+  }, [tab]);
 
   let [test, setTest] = useState(
     menuContents.map((m, i) =>
@@ -289,7 +306,7 @@ function App() {
                 element={
                   <Login
                     logState={logState}
-                    setLogState={setLogState}
+                    // setLogState={setLogState}
                     navigate={navigate}
                   />
                 }
@@ -477,6 +494,8 @@ function Login(props) {
     return state;
   });
 
+  let navigate = useNavigate();
+
   useEffect(() => {
     if (user.userId != "") {
       if (
@@ -484,12 +503,21 @@ function Login(props) {
         user.userPassword == sessionLog.userPassword
       ) {
         alert("로그인 성공");
-        props.setLogState(true);
+        // props.setLogState(true);
         props.navigate("/");
       } else {
         alert("아이디 또는 비밀번호를 확인해 주세요.");
         sessionStorage.setItem("log", JSON.stringify([]));
       }
+    }
+    if (
+      sessionLog.userId != undefined &&
+      sessionLog.userPassword != undefined
+    ) {
+      // props.setLogState(true);
+      navigate("/");
+    } else {
+      // props.setLogState(false);
     }
   }, [handleSubmit]);
 

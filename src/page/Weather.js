@@ -7,6 +7,7 @@ import clouds from "../images/clouds.png";
 import manyclouds from "../images/manyclouds.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const key =
   "vsZWuLpwRcENy8q7VDSrgrduHvo8sZyau8MAEP%2FMC%2F%2FVCKZKIcUD6THLXGjmDz8X%2BNgwooBbSdWAn53UixF%2Few%3D%3D";
@@ -14,7 +15,23 @@ const key =
 const nx = 68;
 const ny = 100;
 
-function Weather() {
+function Weather(tab) {
+  let sessionLog = sessionStorage.getItem("log");
+  sessionLog = JSON.parse(sessionLog);
+
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (
+        sessionLog.userId == undefined &&
+        sessionLog.userPassword == undefined
+      ) {
+        navigate("/login");
+      }
+    }, [100]);
+  }, [tab]);
+
   let ymdNow = moment().format("YYYYMMDD");
   let tomorrow = moment().add(1, "days").format("YYYYMMDD");
   let ttomorrow = moment().add(2, "days").format("YYYYMMDD");
