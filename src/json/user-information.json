@@ -99,7 +99,7 @@
       "anticipationOfEntry": "02시간 50분",
       "activityTime": {
         "accumulate": "1시간 30분",
-        "today": "2시간 10분 예측",
+        "today": "2시간 10분",
         "tomorow": "3시간 25분"
       },
       "temperatureHumidityGraph": [
@@ -32162,7 +32162,7 @@
       "anticipationOfEntry": "02시간 50분",
       "activityTime": {
         "accumulate": "1시간 30분",
-        "today": "2시간 10분 예측",
+        "today": "2시간 10분",
         "tomorow": "3시간 25분"
       },
       "temperatureHumidityGraph": [

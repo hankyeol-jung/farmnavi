@@ -197,9 +197,20 @@ function Environment(tab) {
               />
               <SuitableTranspiration
                 title="적합한 증산활동 시간"
-                accumulate="오늘 누적 1시간 30분"
-                today="오늘 2시간 10분 예측"
-                tomorow="내일 3시간 25분 예측"
+                accumulate={
+                  "오늘 누적 " +
+                  (result.data && data().environment.activityTime.accumulate)
+                }
+                today={
+                  "오늘 " +
+                  (result.data && data().environment.activityTime.today) +
+                  " 예측"
+                }
+                tomorow={
+                  "내일 " +
+                  (result.data && data().environment.activityTime.today) +
+                  " 예측"
+                }
                 width="w-[30rem]"
               />
             </div>
