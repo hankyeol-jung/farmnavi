@@ -17297,7 +17297,22 @@
           "humidity": 96,
           "y": 0.4
         }
-      ]
+      ],
+      "irrigation": {
+        "yesterday": "10:37",
+        "today": "10:32",
+        "tomorow": "10:22"
+      },
+      "ventilation": {
+        "yesterday": "11:43",
+        "today": "11:23",
+        "tomorow": "11:36"
+      },
+      "Entering": {
+        "yesterday": "12:25",
+        "today": "12:35",
+        "tomorow": "12:43"
+      }
     }
   },
   {
@@ -34598,7 +34613,22 @@
           "humidity": 96,
           "y": 0.4
         }
-      ]
+      ],
+      "irrigation": {
+        "yesterday": "10:37",
+        "today": "10:32",
+        "tomorow": "10:22"
+      },
+      "ventilation": {
+        "yesterday": "11:43",
+        "today": "11:23",
+        "tomorow": "11:36"
+      },
+      "Entering": {
+        "yesterday": "12:25",
+        "today": "12:35",
+        "tomorow": "12:43"
+      }
     }
   }
 ]

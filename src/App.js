@@ -132,15 +132,11 @@ function App(tab) {
     return result.data[index];
   };
 
-  // result.data && data()
-  // props.result.data && props.data()
-
   let navigate = useNavigate();
 
   let dispatch = useDispatch();
 
   useEffect(() => {
-    // location.reload();
     if (!localStorage.getItem("watched")) {
       localStorage.setItem("watched", JSON.stringify([]));
     }

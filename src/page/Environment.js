@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
+import useInterval from "../useinterval";
 
 const userUrl =
   "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
@@ -136,6 +137,14 @@ function Environment(tab) {
     }, [100]);
   }, [tab]);
 
+  let scoreLength = result.data && data().environment.score.length;
+
+  let [scoreIndex, setScoreIndex] = useState(0);
+  useInterval(() => {
+    setScoreIndex(scoreIndex + 1);
+    if (scoreIndex >= scoreLength - 1) setScoreIndex(0);
+  }, 60000);
+
   return (
     <div className={"transition duration-[800ms] start " + fade}>
       <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
@@ -159,7 +168,10 @@ function Environment(tab) {
             <small className="mr-2 text-2xl font-medium text-neutral-500">
               현재
             </small>
-            <b className=" text-[2.5rem] font-bold text-[#28a745]">61</b>점
+            <b className=" text-[2.5rem] font-bold text-[#28a745]">
+              {result.data && data().environment.score[scoreIndex]}
+            </b>
+            점
           </p>
         </div>
       </div>
