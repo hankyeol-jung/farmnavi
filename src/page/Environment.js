@@ -22,7 +22,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
-import { result, data } from "../hook/result";
 
 const userUrl =
   "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
@@ -136,8 +135,6 @@ function Environment(tab) {
     }, [100]);
   }, [tab]);
 
-  console.log(result.data && data().environment);
-
   return (
     <div className={"transition duration-[800ms] start " + fade}>
       <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
@@ -180,10 +177,23 @@ function Environment(tab) {
             <div className="flex items-center justify-between h-[9.5rem] mb-6 ">
               <TemperatureHumidity
                 borderColor="border-[#FEC104]"
-                nowTemperature="29.3" //현재온도
-                nowHumidity="48.8" //현재습도
-                suggestionTemperature="28.5" //추천온도
-                suggestionHumidity="52.5" //추천습도
+                nowTemperature={
+                  result.data &&
+                  data().environment.temperatureHumidity.today.temperatureay
+                } //현재온도
+                nowHumidity={
+                  result.data &&
+                  data().environment.temperatureHumidity.today.humidity
+                } //현재습도
+                suggestionTemperature={
+                  result.data &&
+                  data().environment.temperatureHumidity.suggestion
+                    .temperatureay
+                } //추천온도
+                suggestionHumidity={
+                  result.data &&
+                  data().environment.temperatureHumidity.suggestion.humidity
+                } //추천습도
               ></TemperatureHumidity>
               <SuitableTranspiration
                 title="적합한 증산 진입 예상"
@@ -239,7 +249,11 @@ function Environment(tab) {
                 />
               </div>
               <div className="h-[18.75rem] w-full">
-                <SuggestionBarChart timeValue={timeValue} />
+                <SuggestionBarChart
+                  timeValue={timeValue}
+                  result={result}
+                  data={data}
+                />
               </div>
             </div>
           </div>
@@ -739,17 +753,27 @@ function GrowthLineChart(props) {
 
 // 관수 & 환기 & 진입 오늘/내일 그래프 컴포넌트
 function SuggestionBarChart(props) {
-  let [recommend, setRecommend] = useState(Recommend);
+  let recommend =
+    props.result.data && props.data().environment.temperatureHumidityGraph;
+
+  console.log(
+    props.result.data && props.data().environment.temperatureHumidityGraph
+  );
 
   // 배열 총 개수
-  let maxValue = recommend.length;
+  let maxValue =
+    props.result.data &&
+    props.data().environment.temperatureHumidityGraph.length;
 
   let recommendTest = [];
   // 10분 단위로 출력
   function timeChoice(num) {
     for (let i = 0; i < maxValue; i++) {
       if (i % num == 0) {
-        recommendTest.push(recommend[i]);
+        recommendTest.push(
+          props.result.data &&
+            props.data().environment.temperatureHumidityGraph[i]
+        );
       }
     }
   }
@@ -758,7 +782,7 @@ function SuggestionBarChart(props) {
 
   let recommendColor = recommendTest.map((recommend, i) => {
     const { x, ...copy } = recommend;
-    if (copy.y <= 1) {
+    if (copy.hd <= 1) {
       return "#0069D9";
     } else if (1 < copy.y && copy.y <= 3) {
       return "#58AAFF";
@@ -768,6 +792,8 @@ function SuggestionBarChart(props) {
       return "#FFD75E";
     }
   });
+
+  console.log(recommend);
 
   const data = {
     datasets: [
