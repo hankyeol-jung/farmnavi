@@ -44,7 +44,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
-import { userName, userFarm } from "./store.js";
+import { userChange } from "./store.js";
 
 const appHeight = () => {
   const doc = document.documentElement;
@@ -112,6 +112,8 @@ function App(tab) {
   sessionLog = JSON.parse(sessionLog);
   let logState = sessionStorage.getItem("log");
   logState = JSON.parse(logState);
+  let userData = sessionStorage.getItem("userData");
+  userData = JSON.parse(userData);
 
   let result = useQuery("data", () =>
     axios.get(userUrl).then((a) => {
@@ -135,6 +137,8 @@ function App(tab) {
 
   let navigate = useNavigate();
 
+  let dispatch = useDispatch();
+
   useEffect(() => {
     // location.reload();
     if (!localStorage.getItem("watched")) {
@@ -149,10 +153,19 @@ function App(tab) {
     if (!sessionStorage.getItem("logState")) {
       sessionStorage.setItem("logState", JSON.stringify(false));
     }
+    if (!sessionStorage.getItem("userData")) {
+      sessionStorage.setItem("userData", JSON.stringify([]));
+    }
     if (logState == false || logState == null) {
       navigate("/login");
     }
   }, [tab]);
+
+  useEffect(() => {
+    if (logState == true) {
+      sessionStorage.setItem("userData", JSON.stringify(result.data && data()));
+    }
+  }, [result.data]);
 
   let [test, setTest] = useState(
     menuContents.map((m, i) =>
@@ -229,6 +242,7 @@ function App(tab) {
                 element={
                   <Login
                     result={result}
+                    data={data}
                     navigate={navigate}
                     logState={logState}
                   />
@@ -369,6 +383,7 @@ function Header(props) {
           onClick={() => {
             sessionStorage.setItem("log", JSON.stringify([]));
             sessionStorage.setItem("logState", false);
+            sessionStorage.setItem("userData", JSON.stringify([]));
             props.navigate("/login");
           }}
         >
@@ -408,7 +423,19 @@ function Login(props) {
     setLogState(true);
   };
 
+  let data = () => {
+    let index = 0;
+    for (let i = 0; i < (props.result.data && props.result.data.length); i++) {
+      if (props.result.data[i].userId == sessionLog.userId) {
+        index = i;
+        break;
+      }
+    }
+    return props.result.data[index];
+  };
+
   useEffect(() => {
+    props.result.data && data();
     if (logState == true) {
       let index = 0;
       for (
@@ -434,6 +461,10 @@ function Login(props) {
       ) {
         setLogState(false);
         sessionStorage.setItem("logState", true);
+        sessionStorage.setItem(
+          "userData",
+          JSON.stringify(props.result.data && data())
+        );
         return navigate("/");
       } else {
         setLogState(false);
@@ -441,6 +472,16 @@ function Login(props) {
       }
     }
   }, [logState]);
+
+  // let dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   if (logState == true) {
+  //     if (props.result.data) {
+  //       props.result.data && dispatch(userChange(props.data()));
+  //     }
+  //   }
+  // }, [logState]);
 
   return (
     <>

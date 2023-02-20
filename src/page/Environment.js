@@ -22,6 +22,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { useSelector, useDispatch } from "react-redux";
 
 const userUrl =
   "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
@@ -228,33 +229,11 @@ function Environment(tab) {
 
           <div className="transition duration-1000 reveal ">
             <div className="w-full px-6 py-4 mb-6 border rounded-xl border-neutral-400 ">
-              <div className="grid grid-cols-3 gap-5 mb-5">
-                <TimeViewButton
-                  functionValue={1}
-                  timeValue={timeValue}
-                  setTimeValue={setTimeValue}
-                  title={"1분 간격 보기"}
-                />
-                <TimeViewButton
-                  functionValue={10}
-                  timeValue={timeValue}
-                  setTimeValue={setTimeValue}
-                  title={"10분 간격 보기"}
-                />
-                <TimeViewButton
-                  functionValue={60}
-                  timeValue={timeValue}
-                  setTimeValue={setTimeValue}
-                  title={"1시간 간격 보기"}
-                />
-              </div>
-              <div className="h-[18.75rem] w-full">
-                <SuggestionBarChart
-                  timeValue={timeValue}
-                  result={result}
-                  data={data}
-                />
-              </div>
+              <SuggestionBarChart
+                timeValue={timeValue}
+                result={result}
+                data={data}
+              />
             </div>
           </div>
           <div className="transition duration-1000 reveal">
@@ -658,13 +637,13 @@ function TimeViewButton(props) {
       className={
         "px-4 py-2 text-xl text-center rounded-full cursor-pointer transition " +
         `${
-          props.timeValue == props.functionValue
+          props.recommendState == props.functionValue
             ? "bg-[#2EABE2] text-white font-bold"
             : "bg-slate-200 text-black font-medium"
         }`
       }
       onClick={() => {
-        props.setTimeValue(props.functionValue);
+        props.setRecommendState(props.functionValue);
       }}
     >
       {props.title}
@@ -753,55 +732,112 @@ function GrowthLineChart(props) {
 
 // 관수 & 환기 & 진입 오늘/내일 그래프 컴포넌트
 function SuggestionBarChart(props) {
-  let recommend =
-    props.result.data && props.data().environment.temperatureHumidityGraph;
-
-  console.log(
-    props.result.data && props.data().environment.temperatureHumidityGraph
-  );
+  let userData = sessionStorage.getItem("userData");
+  userData = JSON.parse(userData);
 
   // 배열 총 개수
-  let maxValue =
-    props.result.data &&
-    props.data().environment.temperatureHumidityGraph.length;
+  // let maxValue =
+  //   props.result.data &&
+  //   props.data().environment.temperatureHumidityGraph.length;
+  let maxValue = userData.environment.temperatureHumidityGraph.length;
 
-  let recommendTest = [];
-  // 10분 단위로 출력
-  function timeChoice(num) {
+  useEffect(() => {
     for (let i = 0; i < maxValue; i++) {
-      if (i % num == 0) {
-        recommendTest.push(
-          props.result.data &&
-            props.data().environment.temperatureHumidityGraph[i]
-        );
-      }
+      let graphData = userData.environment.temperatureHumidityGraph;
+      let date = new Date(graphData[i].x);
+
+      let hour = date.getHours(); // 시, 10
+      let min = date.getMinutes(); // 분, 35
+
+      date = hour + ":" + min;
+
+      graphData[i].x = date;
+    }
+  }, [userData]);
+
+  let totalTimeData = [];
+  let todayTimeData = [];
+  let tomorowTimeData = [];
+
+  let [dataValue, setDataValue] = useState();
+
+  function totalTimeDivision() {
+    for (let i = 0; i < maxValue; i++) {
+      totalTimeData.push(userData.environment.temperatureHumidityGraph[i]);
+
+      let date = new Date(totalTimeData[i].x);
+
+      let hour = date.getHours(); // 시, 10
+      let min = date.getMinutes(); // 분, 35
+
+      date = hour + ":" + min;
+
+      totalTimeData[i].x = date;
+    }
+  }
+  totalTimeDivision();
+
+  let aaa = [
+    { id: "2023-02-14 00:00", x: "123" },
+    { id: "2023-02-14 01:00", x: "1233" },
+    { id: "2023-02-14 02:00", x: "1235" },
+  ];
+
+  function todayTimeDivision() {
+    for (let i = 0; i < maxValue / 2; i++) {
+      todayTimeData.push(userData.environment.temperatureHumidityGraph[i]);
+    }
+  }
+  todayTimeDivision();
+  function tomorowTimeDivision() {
+    for (let i = maxValue / 2; i < maxValue; i++) {
+      i = i.toFixed();
+      tomorowTimeData.push(userData.environment.temperatureHumidityGraph[i]);
     }
   }
 
-  timeChoice(props.timeValue);
+  tomorowTimeDivision();
 
-  let recommendColor = recommendTest.map((recommend, i) => {
-    const { x, ...copy } = recommend;
-    if (copy.hd <= 1) {
-      return "#0069D9";
-    } else if (1 < copy.y && copy.y <= 3) {
-      return "#58AAFF";
-    } else if (3 < copy.y && copy.y <= 6) {
-      return "#28A745";
-    } else if (6 < copy.y && copy.y <= 13) {
-      return "#FFD75E";
-    }
+  let recommendTest;
+
+  let [recommendState, setRecommendState] = useState(1);
+
+  if (recommendState == 0) {
+    recommendTest = totalTimeData;
+  } else if (recommendState == 1) {
+    recommendTest = todayTimeData;
+  } else if (recommendState == 2) {
+    recommendTest = tomorowTimeData;
+  }
+
+  let recommendColor =
+    props.result.data &&
+    props.data().environment.temperatureHumidityGraph.map((recommend, i) => {
+      const { x, ...copy } = recommend;
+      if (0 <= copy.y && copy.y < 1.1) {
+        return "#0270C0";
+      } else if (1.1 <= copy.y && copy.y < 2.8) {
+        return "#00B0F0";
+      } else if (2.8 <= copy.y && copy.y < 6) {
+        return "#92D050";
+      } else if (6 <= copy.y && copy.y < 11) {
+        return "#FFFE04";
+      } else if (11 <= copy.y && copy.y < 15) {
+        return "#F79646";
+      } else if (15 <= copy.y) {
+        return "#FF0201";
+      }
+    });
+
+  let dataLabels = recommendTest.map((a) => {
+    return a.x;
   });
-
-  console.log(recommendTest);
-
   const data = {
+    labels: dataLabels,
     datasets: [
       {
-        backgroundColor: "#0069D9",
-        data:
-          props.result.data &&
-          props.data().environment.temperatureHumidityGraph,
+        backgroundColor: recommendColor,
+        data: recommendTest,
         borderWidth: 0,
       },
     ],
@@ -834,7 +870,57 @@ function SuggestionBarChart(props) {
   };
 
   ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
-  return <Bar data={data} options={options} />;
+  return (
+    <>
+      <div className="grid grid-cols-3 gap-5 mb-5">
+        <TimeViewButton
+          functionValue={1}
+          setRecommendState={setRecommendState}
+          recommendState={recommendState}
+          title={"오늘보기"}
+        />
+        <TimeViewButton
+          functionValue={2}
+          setRecommendState={setRecommendState}
+          recommendState={recommendState}
+          title={"내일보기"}
+        />
+        <TimeViewButton
+          functionValue={0}
+          setRecommendState={setRecommendState}
+          recommendState={recommendState}
+          title={"모두보기"}
+        />
+      </div>
+      <div className="h-[18.75rem] w-full relative ">
+        <div
+          className={
+            "absolute w-[calc(100%_/_" +
+            `${todayTimeData.length}` +
+            "_*_360)] h-[85%] bg-[#dddddd50] left-[1.7rem] top-[0.5rem] before:absolute before:w-px before:h-full before:bg-neutral-600 before:right-0"
+          }
+        >
+          <div className="text-base font-medium bg-white text-neutral-800 w-[70px] rounded-lg border border-neutral-600 text-center absolute right-0 translate-x-1/2">
+            <p>일출</p>
+            <p>06:00</p>
+          </div>
+        </div>
+        <Bar data={data} options={options} />
+        <div
+          className={
+            "absolute w-[calc(100%_/_" +
+            `${todayTimeData.length}` +
+            "_*_360)] h-[85%] bg-[#dddddd50] right-[0.7rem] top-[0.5rem] before:absolute before:w-px before:h-full before:bg-neutral-600 before:left-0"
+          }
+        >
+          <div className="text-base font-medium bg-white text-neutral-800 w-[70px] rounded-lg border border-neutral-600 text-center absolute left-0 -translate-x-1/2">
+            <p>일몰</p>
+            <p>18:00</p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
 // 관수 & 환기 & 진입 권장 컴포넌트
