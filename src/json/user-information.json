@@ -104,7 +104,7 @@
       },
       "temperatureHumidityGraph": [
         {
-          "day": "02/14/2023 0:00",
+          "day": "2023-02-14 00:00",
           "temperature": 12.9,
           "humidity": 99,
           "hd": 0.1
@@ -32167,7 +32167,7 @@
       },
       "temperatureHumidityGraph": [
         {
-          "day": "02/14/2023 0:00",
+          "day": "2023-02-14 00:00",
           "temperature": 12.9,
           "humidity": 99,
           "hd": 0.1
