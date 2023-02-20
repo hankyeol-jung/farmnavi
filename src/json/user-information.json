@@ -86,7 +86,22 @@
     },
 
     "environment": {
-      "anticipationOfEntry": "02시간 50분"
+      "temperatureHumidity": {
+        "today": {
+          "temperatureay": 29.3,
+          "humidity": 48.8
+        },
+        "suggestion": {
+          "temperatureay": 28.5,
+          "humidity": 52.5
+        }
+      },
+      "anticipationOfEntry": "02시간 50분",
+      "activityTime": {
+        "accumulate": "1시간 30분",
+        "today": "2시간 10분 예측",
+        "tomorow": "3시간 25분"
+      }
     }
   },
   {
@@ -176,7 +191,22 @@
     },
 
     "environment": {
-      "anticipationOfEntry": "02시간 50분"
+      "temperatureHumidity": {
+        "today": {
+          "temperatureay": 29.3,
+          "humidity": 48.8
+        },
+        "suggestion": {
+          "temperatureay": 28.5,
+          "humidity": 52.5
+        }
+      },
+      "anticipationOfEntry": "02시간 50분",
+      "activityTime": {
+        "accumulate": "1시간 30분",
+        "today": "2시간 10분 예측",
+        "tomorow": "3시간 25분"
+      }
     }
   }
 ]
