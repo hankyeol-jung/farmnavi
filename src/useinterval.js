@@ -1,20 +1,23 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-export default function useInterval(callback, delay) {
+function useInterval(callback, delay) {
   const savedCallback = useRef();
 
+  // Remember the latest callback.
   useEffect(() => {
-    // useEffect에 매개변수로 받은 콜백을 현재 Ref로 선언해준다.
     savedCallback.current = callback;
-  });
+  }, [callback]);
 
+  // Set up the interval.
   useEffect(() => {
     function tick() {
       savedCallback.current();
     }
-    // useEffect에 Ref의 current를 setInterval를 delay 시간동안 해준다.
-    let id = setInterval(tick, delay);
-    // 언마운트되기전 clearInterval을 해준다.
-    return () => clearInterval(id);
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
   }, [delay]);
 }
+
+export default useInterval;

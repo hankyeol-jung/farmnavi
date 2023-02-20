@@ -169,6 +169,10 @@
           "yesterdayTime": "2시간 10분"
         }
       ]
+    },
+
+    "environment": {
+      "anticipation-of-entry": "02시간 50분"
     }
   }
 ]

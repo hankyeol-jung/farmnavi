@@ -29,6 +29,7 @@ import {
   HashRouter,
   useNavigate,
 } from "react-router-dom";
+import useInterval from "./useinterval";
 
 import Environment from "./page/Environment.js";
 import Badge from "./page/Badge.js";
@@ -107,29 +108,35 @@ const userUrl =
   "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
 
 function App(tab) {
+  let sessionLog = sessionStorage.getItem("log");
+  sessionLog = JSON.parse(sessionLog);
+  let logState = sessionStorage.getItem("log");
+  logState = JSON.parse(logState);
+
   let result = useQuery("data", () =>
     axios.get(userUrl).then((a) => {
       return a.data;
     })
   );
-  useEffect(() => {
-    let normalData = result.data && result.data;
-  }, []);
-  console.log(result.data && result.data[0].userId);
 
-  let [logState, setLogState] = useState();
+  let data = () => {
+    let index = 0;
+    for (let i = 0; i < (result.data && result.data.length); i++) {
+      if (result.data[i].userId == sessionLog.userId) {
+        index = i;
+        break;
+      }
+    }
+    return result.data[index];
+  };
 
-  let sessionLog = sessionStorage.getItem("log");
-  sessionLog = JSON.parse(sessionLog);
+  // result.data && data()
+  // props.result.data && props.data()
 
   let navigate = useNavigate();
 
-  let data = useSelector((state) => {
-    return state;
-  });
-  let dispatch = useDispatch();
-
   useEffect(() => {
+    // location.reload();
     if (!localStorage.getItem("watched")) {
       localStorage.setItem("watched", JSON.stringify([]));
     }
@@ -139,34 +146,12 @@ function App(tab) {
         JSON.stringify([{ userId: "", userPassword: "" }])
       );
     }
-
-    setTimeout(() => {
-      if (
-        sessionLog.userId != undefined &&
-        sessionLog.userPassword != undefined
-      ) {
-        setLogState(true);
-        axios
-          .get(
-            "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json"
-          )
-          .then((result) => {
-            dispatch(userName(result.data.name));
-            dispatch(userFarm(result.data.farm));
-          })
-          .catch(() => {
-            console.log("실패함");
-          });
-      } else {
-        setLogState(false);
-      }
-    }, [100]);
-    setTimeout(() => {
-      if (logState == false || logState == undefined) {
-        navigate("/login");
-      }
-      console.log(logState);
-    }, [200]);
+    if (!sessionStorage.getItem("logState")) {
+      sessionStorage.setItem("logState", JSON.stringify(false));
+    }
+    if (logState == false || logState == null) {
+      navigate("/login");
+    }
   }, [tab]);
 
   let [test, setTest] = useState(
@@ -184,78 +169,7 @@ function App(tab) {
     environmentalForecastingRef.current.scrollTop =
       environmentalForecastingRef.current.scrollTop + 144;
   };
-  let [environmentalForecastingData] = useState([
-    {
-      state: "보통",
-      time: "12시 00분",
-      title: "첫 적합한 증산 진입",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "경고",
-      time: "12시 40분",
-      title: "첫 많은 증산 진입",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "위험",
-      time: "14시 30분",
-      title: "첫 심각한 증산 진입",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "위험",
-      time: "15시 30분",
-      title: "배지 수분율 최저 25% 예상",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "위험",
-      time: "15시 52분",
-      title: "금일 최고온도 35.6°C 예상",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "보통",
-      time: "12시 00분",
-      title: "첫 적합한 증산 진입",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "경고",
-      time: "12시 40분",
-      title: "첫 많은 증산 진입",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "위험",
-      time: "14시 30분",
-      title: "첫 심각한 증산 진입",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "위험",
-      time: "15시 30분",
-      title: "배지 수분율 최저 25% 예상",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-    {
-      state: "위험",
-      time: "15시 52분",
-      title: "금일 최고온도 35.6°C 예상",
-      totalTime: "0시간 40분",
-      yesterdayTime: "2시간 10분",
-    },
-  ]);
+
   let reveal2 = () => {
     let reveals = document.querySelectorAll(".reveal2");
 
@@ -271,9 +185,10 @@ function App(tab) {
       });
     });
 
-    environmentalForecastingData.map((e, i) => {
-      observer.observe(reveals[i]);
-    });
+    result.data &&
+      data().FarmEnvironmentPrediction.contents.map((e, i) => {
+        observer.observe(reveals[i]);
+      });
   };
 
   let timeFirst = moment().format("a");
@@ -283,7 +198,13 @@ function App(tab) {
       <div className="w-full h-full App bg-slate-200">
         {logState == false ? null : (
           // 헤더메뉴
-          <Header setTest={setTest} timeFirst={timeFirst} navigate={navigate} />
+          <Header
+            setTest={setTest}
+            timeFirst={timeFirst}
+            navigate={navigate}
+            data={data}
+            result={result}
+          />
         )}
 
         <div
@@ -307,9 +228,9 @@ function App(tab) {
                 path="/login"
                 element={
                   <Login
-                    logState={logState}
-                    // setLogState={setLogState}
+                    result={result}
                     navigate={navigate}
+                    logState={logState}
                   />
                 }
               />
@@ -319,10 +240,11 @@ function App(tab) {
             // 농장환경예측
             <FarmEnvironmentPrediction
               environmentalForecastingRef={environmentalForecastingRef}
-              environmentalForecastingData={environmentalForecastingData}
               environmentalForecastingRefUp={environmentalForecastingRefUp}
               environmentalForecastingRefDown={environmentalForecastingRefDown}
               reveal2={reveal2}
+              result={result}
+              data={data}
             />
           )}
         </div>
@@ -336,6 +258,15 @@ function App(tab) {
 
 // 농장환경예측 컴포넌트
 function FarmEnvironmentPrediction(props) {
+  let scoreLength =
+    props.result.data && props.data().FarmEnvironmentPrediction.score.length;
+
+  let [scoreIndex, setScoreIndex] = useState(0);
+  useInterval(() => {
+    setScoreIndex(scoreIndex + 1);
+    if (scoreIndex >= scoreLength - 1) setScoreIndex(0);
+  }, 60000);
+
   return (
     <div className="relative h-full bg-white">
       <div className="absolute z-40 top-0 left-0 flex flex-col justify-between w-full h-[12.5rem] border-b px-6 py-8 border-b-neutral-300">
@@ -349,7 +280,8 @@ function FarmEnvironmentPrediction(props) {
           <div className="flex items-end justify-end">
             <p className="flex justify-end mr-2 text-5xl font-medium text-black ">
               <b className=" font-bold text-[#28a745] underline underline-[#28A745] underline-offset-4 mr-2">
-                100
+                {props.result.data &&
+                  props.data().FarmEnvironmentPrediction.score[scoreIndex]}
               </b>
               점
             </p>
@@ -366,18 +298,19 @@ function FarmEnvironmentPrediction(props) {
         }}
       >
         <div className="absolute w-full pl-6 pr-8">
-          {props.environmentalForecastingData.map((e, i) => {
-            return (
-              <EnvironmentalForecasting
-                time={e.time}
-                title={e.title}
-                totalTime={e.totalTime}
-                yesterdayTime={e.yesterdayTime}
-                state={e.state}
-                key={i}
-              />
-            );
-          })}
+          {props.result.data &&
+            props.data().FarmEnvironmentPrediction.contents.map((e, i) => {
+              return (
+                <EnvironmentalForecasting
+                  time={e.time}
+                  title={e.title}
+                  totalTime={e.totalTime}
+                  yesterdayTime={e.yesterdayTime}
+                  state={e.state}
+                  key={i}
+                />
+              );
+            })}
         </div>
       </div>
       <div className="z-30 absolute bottom-0 w-full h-[3.75rem] bg-gradient-to-t to-[#ffffff05] from-white mb-[3.75rem]"></div>
@@ -403,10 +336,6 @@ function FarmEnvironmentPrediction(props) {
 
 // 헤더 컴포넌트
 function Header(props) {
-  let data = useSelector((state) => {
-    return state;
-  });
-
   return (
     <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
       <div className="w-1/3 cursor-pointer">
@@ -414,8 +343,8 @@ function Header(props) {
           to={"/"}
           className="w-[12.25rem]"
           onClick={() => {
-            let copy = [...test];
-            test.map((a, i) => (copy[i] = false));
+            let copy = [...props.test];
+            props.test.map((a, i) => (copy[i] = false));
             copy[0] = true;
             props.setTest(copy);
           }}
@@ -433,12 +362,13 @@ function Header(props) {
       </div>
       <div className="flex items-center justify-end w-1/3">
         <p className="mr-3 text-xl font-bold text-neutral-700">
-          {data.userInfo.name}님
+          {props.result.data && props.data().name}님
         </p>
         <span
           className="flex items-center cursor-pointer"
           onClick={() => {
             sessionStorage.setItem("log", JSON.stringify([]));
+            sessionStorage.setItem("logState", false);
             props.navigate("/login");
           }}
         >
@@ -452,7 +382,8 @@ function Header(props) {
 
 // 로그인 컴포넌트
 function Login(props) {
-  let dispatch = useDispatch();
+  let sessionLog = sessionStorage.getItem("log");
+  sessionLog = JSON.parse(sessionLog);
 
   const validate = (values) => {
     const errors = {};
@@ -467,61 +398,49 @@ function Login(props) {
     return errors;
   };
 
-  let [user, setUser] = useState({ userId: "", userPassword: "" });
-
-  let sessionLog = sessionStorage.getItem("log");
-  sessionLog = JSON.parse(sessionLog);
-
-  const handleSubmit = (values) => {
-    let userValue = JSON.stringify(values, null, 2);
-    sessionStorage.setItem("log", userValue);
-    axios
-      .get(
-        "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json"
-      )
-      .then((result) => {
-        setUser((prevState) => ({
-          ...prevState.userId,
-          userId: result.data.userId,
-          ...prevState.userPassword,
-          userPassword: result.data.userPassword,
-        }));
-      })
-      .catch(() => {
-        console.log("실패함");
-      });
-  };
-
-  let data = useSelector((state) => {
-    return state;
-  });
-
   let navigate = useNavigate();
 
+  let [logState, setLogState] = useState(false);
+
+  let handleSubmit = (values) => {
+    let userValue = JSON.stringify(values, null, 2);
+    sessionStorage.setItem("log", userValue);
+    setLogState(true);
+  };
+
   useEffect(() => {
-    if (user.userId != "") {
-      if (
-        user.userId == sessionLog.userId &&
-        user.userPassword == sessionLog.userPassword
+    if (logState == true) {
+      let index = 0;
+      for (
+        let i = 0;
+        i < (props.result.data && props.result.data.length);
+        i++
       ) {
-        alert("로그인 성공");
-        // props.setLogState(true);
-        props.navigate("/");
+        if (
+          (props.result.data && props.result.data[i].userId) ==
+            sessionLog.userId &&
+          (props.result.data && props.result.data[i].userPassword) ==
+            sessionLog.userPassword
+        ) {
+          index = i;
+          break;
+        }
+      }
+      if (
+        (props.result.data && props.result.data[index].userId) ==
+          sessionLog.userId &&
+        (props.result.data && props.result.data[index].userPassword) ==
+          sessionLog.userPassword
+      ) {
+        setLogState(false);
+        sessionStorage.setItem("logState", true);
+        return navigate("/");
       } else {
-        alert("아이디 또는 비밀번호를 확인해 주세요.");
-        sessionStorage.setItem("log", JSON.stringify([]));
+        setLogState(false);
+        return alert("아이디 또는 비밀번호를 확인해주세요.");
       }
     }
-    if (
-      sessionLog.userId != undefined &&
-      sessionLog.userPassword != undefined
-    ) {
-      // props.setLogState(true);
-      navigate("/");
-    } else {
-      // props.setLogState(false);
-    }
-  }, [handleSubmit]);
+  }, [logState]);
 
   return (
     <>

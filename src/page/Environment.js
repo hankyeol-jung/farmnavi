@@ -19,11 +19,32 @@ import {
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { userName, userFarm } from ".././store.js";
+import axios from "axios";
+import { useQuery } from "react-query";
+import { result, data } from "../hook/result";
+
+const userUrl =
+  "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
 
 function Environment(tab) {
+  let result = useQuery("data", () =>
+    axios.get(userUrl).then((a) => {
+      return a.data;
+    })
+  );
+
+  let data = () => {
+    let index = 0;
+    for (let i = 0; i < (result.data && result.data.length); i++) {
+      if (result.data[i].userId == sessionLog.userId) {
+        index = i;
+        break;
+      }
+    }
+    return result.data[index];
+  };
+
   let [timeValue, setTimeValue] = useState(1);
 
   let scrollRef = useRef(0);
@@ -115,16 +136,12 @@ function Environment(tab) {
     }, [100]);
   }, [tab]);
 
-  let data = useSelector((state) => {
-    return state;
-  });
-
   return (
     <div className={"transition duration-[800ms] start " + fade}>
       <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
         <div className="flex items-center">
           <p className="mr-6 text-4xl font-bold text-black ">
-            {data.userInfo.name} 농장 {data.userInfo.farm}
+            {result.data && data().name}님 농장 {result.data && data().farm}
           </p>
           <span className="px-5 py-1 text-xl font-bold text-black bg-[#ffc107] rounded-full mr-3">
             내부가 조금 건조해요
@@ -169,7 +186,7 @@ function Environment(tab) {
               <SuitableTranspiration
                 title="적합한 증산 진입 예상"
                 accumulate=""
-                today="02시간 50분 후"
+                today={result.data && data().environment.anticipationOfEntry}
                 tomorow=""
                 width="w-[20rem]"
                 margin="mx-6"
