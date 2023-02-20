@@ -793,13 +793,15 @@ function SuggestionBarChart(props) {
     }
   });
 
-  console.log(recommend);
+  console.log(recommendTest);
 
   const data = {
     datasets: [
       {
-        backgroundColor: recommendColor,
-        data: recommendTest,
+        backgroundColor: "#0069D9",
+        data:
+          props.result.data &&
+          props.data().environment.temperatureHumidityGraph,
         borderWidth: 0,
       },
     ],
