@@ -86,6 +86,10 @@
     },
 
     "environment": {
+      "score": [
+        100, 67, 23, 73, 45, 67, 99, 32, 87, 49, 23, 82, 91, 53, 43, 21, 12, 79,
+        57, 37, 80, 61, 73, 70, 40
+      ],
       "temperatureHumidity": {
         "today": {
           "temperatureay": 29.3,
