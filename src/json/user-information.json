@@ -83,6 +83,10 @@
           "yesterdayTime": "2시간 10분"
         }
       ]
+    },
+
+    "environment": {
+      "anticipationOfEntry": "02시간 50분"
     }
   },
   {
@@ -172,7 +176,7 @@
     },
 
     "environment": {
-      "anticipation-of-entry": "02시간 50분"
+      "anticipationOfEntry": "02시간 50분"
     }
   }
 ]
