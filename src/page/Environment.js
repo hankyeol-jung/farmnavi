@@ -136,7 +136,7 @@ function Environment(tab) {
     }, [100]);
   }, [tab]);
 
-  console.log(result.data && data());
+  console.log(result.data && data().environment);
 
   return (
     <div className={"transition duration-[800ms] start " + fade}>
@@ -188,7 +188,9 @@ function Environment(tab) {
               <SuitableTranspiration
                 title="적합한 증산 진입 예상"
                 accumulate=""
-                today=""
+                today={
+                  result.data && data().environment.anticipationOfEntry + " 후"
+                }
                 tomorow=""
                 width="w-[20rem]"
                 margin="mx-6"
