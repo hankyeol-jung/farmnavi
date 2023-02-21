@@ -116,23 +116,40 @@ function FertilizedBee() {
               <div className="grid grid-cols-2 grid-rows-2 gap-6">
                 <BeeInOut
                   title="현재 수정벌 OUT 횟수"
-                  today={result.data && data().badge.difference.today}
-                  yesterday={result.data && data().badge.difference.yesterday}
+                  today={result.data && data().fertilizedBee.beeOut.today}
+                  yesterday={
+                    result.data && data().fertilizedBee.beeOut.yesterday
+                  }
                 />
                 <BeeInOut
                   title="현재 수정벌 IN 횟수"
-                  today={result.data && data().badge.difference.today}
-                  yesterday={result.data && data().badge.difference.yesterday}
+                  today={result.data && data().fertilizedBee.beeIn.today}
+                  yesterday={
+                    result.data && data().fertilizedBee.beeIn.yesterday
+                  }
                 />
                 <BeeInOut
                   title="비정상 활동 벌"
-                  today={result.data && data().badge.difference.today}
-                  yesterday={result.data && data().badge.difference.yesterday}
+                  today={result.data && data().fertilizedBee.unusual.today}
+                  yesterday={
+                    result.data && data().fertilizedBee.unusual.yesterday
+                  }
                 />
                 <Flowerpot
                   title="화분 분석(화분양 많음/적음)"
-                  today={result.data && data().badge.difference.today}
-                  yesterday={result.data && data().badge.difference.yesterday}
+                  todayFirst={
+                    result.data && data().fertilizedBee.flowerpot.today.first
+                  }
+                  todayLast={
+                    result.data && data().fertilizedBee.flowerpot.today.last
+                  }
+                  yesterdayFirst={
+                    result.data &&
+                    data().fertilizedBee.flowerpot.yesterday.first
+                  }
+                  yesterdayLast={
+                    result.data && data().fertilizedBee.flowerpot.yesterday.last
+                  }
                 />
               </div>
             </div>
@@ -188,12 +205,12 @@ function Flowerpot(props) {
       </div>
       <div className="flex flex-col items-end">
         <p className="text-right text-[1.75rem] font-bold">
-          <small className="text-xl font-bold">오늘 </small> {props.today}회 /{" "}
-          {props.today}회
+          <small className="text-xl font-bold">오늘 </small> {props.todayFirst}
+          회 / {props.todayLast}회
         </p>
         <p className="text-right text-[1.75rem] font-bold">
           <small className="ml-2 text-xl font-medium text-neutral-500">
-            (어제 {props.yesterday}회 / {props.yesterday}회)
+            (어제 {props.yesterdayFirst}회 / {props.yesterdayLast}회)
           </small>
         </p>
       </div>
