@@ -3,6 +3,7 @@ import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState, useEffect } from "react";
 import {
   Chart as ChartJS,
+  BarElement,
   LineElement,
   PointElement,
   CategoryScale,
@@ -11,7 +12,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
+import axios from "axios";
+import { useQuery } from "react-query";
 
 let supplywaterTimeData = [
   {
@@ -71,28 +74,29 @@ let moistureContentData = [
   { time: "10/1", value: 68 },
   { time: "10/2 예측", value: 48 },
 ];
+const userUrl =
+  "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
 
 function Badge() {
-  let supplyDrainageData = [
-    {
-      title: "첫 급액 시각",
-      today: "오전 10:32",
-      yesterday: "오전09:30",
-      tomorow: "",
-    },
-    {
-      title: "첫 배액 시각",
-      today: "오전 11:34",
-      yesterday: "오전09:45",
-      tomorow: "오전 10:28",
-    },
-    {
-      title: "마지마 배액 시각",
-      today: "오전 11:34",
-      yesterday: "오전09:45",
-      tomorow: "오전 10:28",
-    },
-  ];
+  let sessionLog = sessionStorage.getItem("log");
+  sessionLog = JSON.parse(sessionLog);
+
+  let result = useQuery("data", () =>
+    axios.get(userUrl).then((a) => {
+      return a.data;
+    })
+  );
+
+  let data = () => {
+    let index = 0;
+    for (let i = 0; i < (result.data && result.data.length); i++) {
+      if (result.data[i].userId == sessionLog.userId) {
+        index = i;
+        break;
+      }
+    }
+    return result.data[index];
+  };
 
   let scrollRef = useRef(0);
 
@@ -167,18 +171,74 @@ function Badge() {
         <div className="absolute w-full pt-8 px-11">
           <div className="transition duration-1000 reveal">
             <div className="grid grid-cols-3 gap-6 mb-6">
-              {supplyDrainageData.map((s, i) => {
-                return (
-                  <SupplyDrainage
-                    title={s.title}
-                    today={s.today}
-                    yesterday={s.yesterday}
-                    tomorow={s.tomorow}
-                    key={s + i}
-                  />
-                );
-              })}
+              <SupplyDrainage
+                title="급액 시각"
+                todayFirst={result.data && data().badge.supplyWater.today.first}
+                todayLast={result.data && data().badge.supplyWater.today.last}
+                yesterdayFirst={
+                  result.data && data().badge.supplyWater.yesterday.first
+                }
+                yesterdayLast={
+                  result.data && data().badge.supplyWater.yesterday.last
+                }
+              />
+              <SupplyDrainage
+                title="배액 시각"
+                todayFirst={result.data && data().badge.Drainage.today.first}
+                todayLast={result.data && data().badge.Drainage.today.last}
+                yesterdayFirst={
+                  result.data && data().badge.Drainage.yesterday.first
+                }
+                yesterdayLast={
+                  result.data && data().badge.Drainage.yesterday.last
+                }
+              />
+              <Light
+                todayFirst={result.data && data().badge.light.today.first}
+                todayLast={result.data && data().badge.light.today.last}
+                yesterdayFirst={
+                  result.data && data().badge.light.yesterday.first
+                }
+                yesterdayLast={result.data && data().badge.light.yesterday.last}
+              />
             </div>
+          </div>
+          <div className="transition duration-1000 reveal">
+            <div className="grid grid-cols-3 gap-6 mb-6">
+              <TotalSupplyTime
+                title="총 급액양/횟수"
+                todayAmount={
+                  result.data && data().badge.supplyWater.today.amount
+                }
+                todayNum={result.data && data().badge.supplyWater.today.num}
+                yesterdayAmount={
+                  result.data && data().badge.supplyWater.yesterday.amount
+                }
+                yesterdayNum={
+                  result.data && data().badge.supplyWater.yesterday.num
+                }
+              />
+              <TotalSupplyTime
+                title="총 배액양(배액율)"
+                todayAmount={result.data && data().badge.Drainage.today.amount}
+                todayNum={result.data && data().badge.Drainage.today.num}
+                yesterdayAmount={
+                  result.data && data().badge.Drainage.yesterday.amount
+                }
+                yesterdayNum={
+                  result.data && data().badge.Drainage.yesterday.num
+                }
+              />
+              <TotalLightTime
+                title="배지 편차(전날마지막급액시-일출)"
+                today={result.data && data().badge.difference.today}
+                yesterday={result.data && data().badge.difference.yesterday}
+              />
+            </div>
+          </div>
+
+          <div className="transition duration-1000 reveal">
+            <HDgraph data={data} result={result} />
           </div>
 
           <div className="transition duration-1000 reveal">
@@ -226,6 +286,254 @@ function Badge() {
         </span>
       </div>
     </div>
+  );
+}
+
+// 증산량 그래프 컴포넌트
+function HDgraph(props) {
+  let totalTimeData =
+    props.result.data &&
+    props.data().environment.temperatureHumidityGraph.map((a, i) => {
+      return a;
+    });
+
+  let todayTimeData = [];
+  let tomorowTimeData = [];
+
+  function todayTimeDivision() {
+    for (
+      let i = 0;
+      i < props.data().environment.temperatureHumidityGraph.length / 2;
+      i++
+    ) {
+      todayTimeData.push(props.data().environment.temperatureHumidityGraph[i]);
+    }
+  }
+  function tomorowTimeDivision() {
+    for (
+      let i = props.data().environment.temperatureHumidityGraph.length / 2;
+      i < props.data().environment.temperatureHumidityGraph.length;
+      i++
+    ) {
+      i = i.toFixed();
+      tomorowTimeData.push(
+        props.data().environment.temperatureHumidityGraph[i]
+      );
+    }
+  }
+
+  props.result.data && todayTimeDivision();
+  props.result.data && tomorowTimeDivision();
+
+  let recommendTest;
+
+  let [recommendState, setRecommendState] = useState(1);
+
+  if (recommendState == 0) {
+    recommendTest = totalTimeData;
+  } else if (recommendState == 1) {
+    recommendTest = todayTimeData;
+  } else if (recommendState == 2) {
+    recommendTest = tomorowTimeData;
+  }
+
+  const data = {
+    datasets: [
+      {
+        type: "line",
+        label: "hd",
+        borderColor: "rgb(54, 162, 235)",
+        borderWidth: 1,
+        data: recommendTest,
+        yAxisID: "y_sub",
+        pointRadius: 0,
+        lineTension: 0,
+      },
+      {
+        type: "bar",
+        label: "증산",
+        backgroundColor: "rgb(255, 99, 132)",
+        data: recommendTest,
+        borderColor: "red",
+        borderWidth: 2,
+      },
+    ],
+  };
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    spanGaps: true,
+    maxBarThickness: 30,
+    grouped: true,
+    interaction: {
+      mode: "index",
+    },
+    plugins: {
+      legend: {
+        labels: {
+          usePointStyle: true,
+          padding: 10,
+          font: {
+            family: "'Noto Sans KR', 'serif'",
+            lineHeight: 1,
+          },
+        },
+      },
+      tooltip: {
+        backgroundColor: "rgba(124, 35, 35, 0.4)",
+        padding: 10,
+        bodySpacing: 5,
+        bodyFont: {
+          font: {
+            family: "'Noto Sans KR', sans-serif",
+          },
+        },
+        usePointStyle: true,
+        filter: (item) => item.parsed.y !== null,
+        callbacks: {
+          title: (context) => context[0].label,
+          label: (context) => {
+            let label = context.dataset.label + "" || "";
+
+            return context.parsed.y !== null
+              ? label + ": " + context.parsed.y
+              : null;
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        afterTickToLabelConversion: function (scaleInstance) {
+          const ticks = scaleInstance.ticks;
+
+          const newTicks = ticks.map((tick) => {
+            let timeTick = new Date(tick.label);
+            let hour = timeTick.getHours(); // 시, 10
+            let min = timeTick.getMinutes(); // 분, 35
+
+            timeTick = hour + ":" + min;
+
+            return {
+              ...tick,
+              label: timeTick,
+            };
+          });
+
+          scaleInstance.ticks = newTicks;
+        },
+        grid: {
+          display: false,
+          drawTicks: true,
+          tickLength: 4,
+          color: "#E2E2E230",
+        },
+        axis: "x",
+        position: "bottom",
+        ticks: {
+          minRotation: 45,
+          padding: 5,
+        },
+      },
+      y: {
+        type: "linear",
+        grid: {
+          color: "#E2E2E230",
+        },
+        axis: "y",
+        display: true,
+        position: "left",
+        title: {
+          display: true,
+          align: "end",
+          color: "#808080",
+          font: {
+            size: 12,
+            family: "'Noto Sans KR', sans-serif",
+            weight: 300,
+          },
+          // text: "단위: 배",
+        },
+        max: 120,
+        min: 0,
+        ticks: {
+          beginAtZero: true, // 0부터 시작하게 합니다.
+          stepSize: 20, // 20 씩 증가하도록 설정합니다.
+        },
+      },
+      y_sub: {
+        position: "right",
+        title: {
+          display: true,
+          align: "end",
+          color: "#808080",
+          font: {
+            size: 12,
+            family: "'Noto Sans KR', sans-serif",
+            weight: 300,
+          },
+          // text: "단위: 배",
+        },
+        max: 15,
+        min: 0,
+        ticks: {
+          beginAtZero: true, // 0부터 시작하게 합니다.
+          stepSize: 0.5, // 10 씩 증가하도록 설정합니다.
+        },
+      },
+    },
+  };
+
+  ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+  return (
+    <div className="px-10 pt-6 mb-6 bg-white border pb-9 rounded-xl border-neutral-400">
+      <p className="mb-5 text-2xl font-bold text-neutral-500">증산량 그래프</p>
+      <div className="grid grid-cols-3 gap-5 mb-5">
+        <TimeViewButton
+          functionValue={1}
+          setRecommendState={setRecommendState}
+          recommendState={recommendState}
+          title={"오늘보기"}
+        />
+        <TimeViewButton
+          functionValue={2}
+          setRecommendState={setRecommendState}
+          recommendState={recommendState}
+          title={"내일보기"}
+        />
+        <TimeViewButton
+          functionValue={0}
+          setRecommendState={setRecommendState}
+          recommendState={recommendState}
+          title={"모두보기"}
+        />
+      </div>
+      <div className="h-[300px]">
+        <Line type="line" data={data} options={options} className="" />
+      </div>
+    </div>
+  );
+}
+
+// 1분&10분&1시간 간격 보기 버튼
+function TimeViewButton(props) {
+  return (
+    <span
+      className={
+        "px-4 py-2 text-xl text-center rounded-full cursor-pointer transition " +
+        `${
+          props.recommendState == props.functionValue
+            ? "bg-[#2EABE2] text-white font-bold"
+            : "bg-slate-200 text-black font-medium"
+        }`
+      }
+      onClick={() => {
+        props.setRecommendState(props.functionValue);
+      }}
+    >
+      {props.title}
+    </span>
   );
 }
 
@@ -643,6 +951,47 @@ function SupplywaterTime(props) {
   );
 }
 
+// 배지 편차 컴포넌트
+function TotalLightTime(props) {
+  return (
+    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[8rem]">
+      <div>
+        <p className="text-xl font-medium text-neutral-500">{props.title}</p>
+      </div>
+      <div className="flex flex-col items-end">
+        <p className="text-right text-[1.75rem] font-bold">
+          <small className="text-xl font-bold">오늘</small> {props.today}%
+          <small className="ml-2 text-xl font-medium text-neutral-500">
+            (어제 {props.yesterday}%)
+          </small>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// 총 급액 시간 컴포넌트
+function TotalSupplyTime(props) {
+  return (
+    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[8rem]">
+      <div>
+        <p className="text-xl font-medium text-neutral-500">{props.title}</p>
+      </div>
+      <div className="flex flex-col items-end">
+        <p className="text-2xl font-bold text-right">
+          <small className="text-xl font-bold">오늘</small> {props.todayAmount}g
+          / {props.todayNum}
+        </p>
+        <p className="text-right text-[1.75rem] font-bold">
+          <small className="ml-2 text-xl font-medium text-neutral-500">
+            (어제 {props.yesterdayAmount}g / {props.yesterdayNum})
+          </small>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // 급액 배액 시간 컴포넌트
 function SupplyDrainage(props) {
   return (
@@ -652,14 +1001,47 @@ function SupplyDrainage(props) {
       </div>
       <div className="flex flex-col items-end">
         <p className="text-right text-[1.75rem] font-bold">
-          <small className="text-xl font-bold">오늘</small> {props.today}
+          <small className="text-xl font-bold">처음 오늘</small>{" "}
+          {props.todayFirst}
           <small className="ml-2 text-xl font-medium text-neutral-500">
-            (어제 {props.yesterday})
+            (어제 {props.yesterdayFirst})
           </small>
         </p>
         {props.tomorow == "" ? null : (
           <p className="mt-2 text-2xl font-medium text-right text-neutral-500">
-            내일 {props.tomorow} 예측
+            <small className="text-xl font-bold">마지막 오늘</small>
+            {props.todayLast}
+            <small className="ml-2 text-xl font-medium text-neutral-500">
+              (어제 {props.yesterdayLast})
+            </small>
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// 누적광량 컴포넌트
+function Light(props) {
+  return (
+    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[10rem]">
+      <div>
+        <p className="text-xl font-medium text-neutral-500">
+          누적광량{" "}
+          <small className="text-lg font-medium text-neutral-500">
+            (전날마지막급액시/첫급액 직전)
+          </small>
+        </p>
+      </div>
+      <div className="flex flex-col items-end">
+        <p className="text-right text-[1.75rem] font-bold">
+          <small className="text-xl font-bold">오늘</small> {props.todayFirst}W
+          / {props.todayLast}W
+        </p>
+        {props.tomorow == "" ? null : (
+          <p className="mt-2 text-2xl font-medium text-right text-neutral-500">
+            (<small className="text-xl font-bold">어제</small>{" "}
+            {props.yesterdayFirst}W / {props.yesterdayLast}W)
           </p>
         )}
       </div>

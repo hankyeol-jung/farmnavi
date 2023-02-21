@@ -17358,6 +17358,31 @@
         "today": 7.53,
         "yesterday": 7.7
       }
+    },
+
+    "fertilizedBee": {
+      "beeOut": {
+        "today": 40,
+        "yesterday": 100
+      },
+      "beeIn": {
+        "today": 26,
+        "yesterday": 89
+      },
+      "unusual": {
+        "today": 3,
+        "yesterday": 2
+      },
+      "flowerpot": {
+        "today": {
+          "first": 50,
+          "last": 20
+        },
+        "yesterday": {
+          "first": 65,
+          "last": 37
+        }
+      }
     }
   },
   {
@@ -34718,6 +34743,31 @@
       "difference": {
         "today": 7.53,
         "yesterday": 7.7
+      }
+    },
+
+    "fertilizedBee": {
+      "beeOut": {
+        "today": 40,
+        "yesterday": 100
+      },
+      "beeIn": {
+        "today": 26,
+        "yesterday": 89
+      },
+      "unusual": {
+        "today": 3,
+        "yesterday": 2
+      },
+      "flowerpot": {
+        "today": {
+          "first": 50,
+          "last": 20
+        },
+        "yesterday": {
+          "first": 65,
+          "last": 37
+        }
       }
     }
   }
