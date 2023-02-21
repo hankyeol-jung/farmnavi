@@ -17313,6 +17313,51 @@
         "today": "12:35",
         "tomorow": "12:43"
       }
+    },
+
+    "badge": {
+      "supplyWater": {
+        "today": {
+          "first": "오전 10:30",
+          "last": "오후 1:30",
+          "amount": 800,
+          "num": "4회"
+        },
+        "yesterday": {
+          "first": "09:45",
+          "last": "16:40",
+          "amount": 2720,
+          "num": "8회"
+        }
+      },
+      "Drainage": {
+        "today": {
+          "first": "오전 11:30",
+          "last": "오후 2:31",
+          "amount": 100,
+          "num": "12.5%"
+        },
+        "yesterday": {
+          "first": "10:45",
+          "last": "18:40",
+          "amount": 520,
+          "num": "19%"
+        }
+      },
+      "light": {
+        "today": {
+          "first": 528.0,
+          "last": 110.0
+        },
+        "yesterday": {
+          "first": 309.4,
+          "last": 29.8
+        }
+      },
+      "difference": {
+        "today": 7.53,
+        "yesterday": 7.7
+      }
     }
   },
   {
@@ -34628,6 +34673,51 @@
         "yesterday": "12:25",
         "today": "12:35",
         "tomorow": "12:43"
+      }
+    },
+
+    "badge": {
+      "supplyWater": {
+        "today": {
+          "first": "오전 10:30",
+          "last": "오후 1:30",
+          "amount": 800,
+          "num": "4회"
+        },
+        "yesterday": {
+          "first": "09:45",
+          "last": "16:40",
+          "amount": 2720,
+          "num": "8회"
+        }
+      },
+      "Drainage": {
+        "today": {
+          "first": "오전 11:30",
+          "last": "오후 2:31",
+          "amount": 100,
+          "num": "12.5%"
+        },
+        "yesterday": {
+          "first": "10:45",
+          "last": "18:40",
+          "amount": 520,
+          "num": "19%"
+        }
+      },
+      "light": {
+        "today": {
+          "first": 528.0,
+          "last": 110.0
+        },
+        "yesterday": {
+          "first": 309.4,
+          "last": 29.8
+        }
+      },
+      "difference": {
+        "today": 7.53,
+        "yesterday": 7.7
       }
     }
   }

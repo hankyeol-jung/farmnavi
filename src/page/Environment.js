@@ -747,35 +747,33 @@ function SuggestionBarChart(props) {
   let userData = sessionStorage.getItem("userData");
   userData = JSON.parse(userData);
 
+  userData =
+    userData == undefined ? [] : userData.environment.temperatureHumidityGraph;
+
   // 배열 총 개수
-  // let maxValue =
-  //   props.result.data &&
-  //   props.data().environment.temperatureHumidityGraph.length;
-  let maxValue = userData.environment.temperatureHumidityGraph.length;
+  let maxValue = userData == undefined ? 0 : userData.length;
 
-  useEffect(() => {
-    for (let i = 0; i < maxValue; i++) {
-      let graphData = userData.environment.temperatureHumidityGraph;
-      let date = new Date(graphData[i].x);
+  // useEffect(() => {
+  //   for (let i = 0; i < maxValue; i++) {
+  //     let graphData = userData.environment.temperatureHumidityGraph;
+  //     let date = new Date(graphData[i].x);
 
-      let hour = date.getHours(); // 시, 10
-      let min = date.getMinutes(); // 분, 35
+  //     let hour = date.getHours(); // 시, 10
+  //     let min = date.getMinutes(); // 분, 35
 
-      date = hour + ":" + min;
+  //     date = hour + ":" + min;
 
-      graphData[i].x = date;
-    }
-  }, [userData]);
+  //     graphData[i].x = date;
+  //   }
+  // }, [userData]);
 
   let totalTimeData = [];
   let todayTimeData = [];
   let tomorowTimeData = [];
 
-  let [dataValue, setDataValue] = useState();
-
   function totalTimeDivision() {
     for (let i = 0; i < maxValue; i++) {
-      totalTimeData.push(userData.environment.temperatureHumidityGraph[i]);
+      totalTimeData.push(userData[i]);
 
       let date = new Date(totalTimeData[i].x);
 
@@ -787,27 +785,21 @@ function SuggestionBarChart(props) {
       totalTimeData[i].x = date;
     }
   }
-  totalTimeDivision();
-
-  let aaa = [
-    { id: "2023-02-14 00:00", x: "123" },
-    { id: "2023-02-14 01:00", x: "1233" },
-    { id: "2023-02-14 02:00", x: "1235" },
-  ];
 
   function todayTimeDivision() {
     for (let i = 0; i < maxValue / 2; i++) {
-      todayTimeData.push(userData.environment.temperatureHumidityGraph[i]);
+      todayTimeData.push(userData[i]);
     }
   }
-  todayTimeDivision();
   function tomorowTimeDivision() {
     for (let i = maxValue / 2; i < maxValue; i++) {
       i = i.toFixed();
-      tomorowTimeData.push(userData.environment.temperatureHumidityGraph[i]);
+      tomorowTimeData.push(userData[i]);
     }
   }
 
+  totalTimeDivision();
+  todayTimeDivision();
   tomorowTimeDivision();
 
   let recommendTest;
@@ -822,24 +814,22 @@ function SuggestionBarChart(props) {
     recommendTest = tomorowTimeData;
   }
 
-  let recommendColor =
-    props.result.data &&
-    props.data().environment.temperatureHumidityGraph.map((recommend, i) => {
-      const { x, ...copy } = recommend;
-      if (0 <= copy.y && copy.y < 1.1) {
-        return "#0270C0";
-      } else if (1.1 <= copy.y && copy.y < 2.8) {
-        return "#00B0F0";
-      } else if (2.8 <= copy.y && copy.y < 6) {
-        return "#92D050";
-      } else if (6 <= copy.y && copy.y < 11) {
-        return "#FFFE04";
-      } else if (11 <= copy.y && copy.y < 15) {
-        return "#F79646";
-      } else if (15 <= copy.y) {
-        return "#FF0201";
-      }
-    });
+  let recommendColor = userData.map((recommend, i) => {
+    const { x, ...copy } = recommend;
+    if (0 <= copy.y && copy.y < 1.1) {
+      return "#0270C0";
+    } else if (1.1 <= copy.y && copy.y < 2.8) {
+      return "#00B0F0";
+    } else if (2.8 <= copy.y && copy.y < 6) {
+      return "#92D050";
+    } else if (6 <= copy.y && copy.y < 11) {
+      return "#FFFE04";
+    } else if (11 <= copy.y && copy.y < 15) {
+      return "#F79646";
+    } else if (15 <= copy.y) {
+      return "#FF0201";
+    }
+  });
 
   let dataLabels = recommendTest.map((a) => {
     return a.x;
