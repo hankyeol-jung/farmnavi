@@ -325,7 +325,7 @@ function ShopCard(props) {
           </p>
         ) : null}
       </div>
-      <p className="mb-2 text-xl font-bold text-black">
+      <p className="mb-2 text-xl font-bold text-black break-keep">
         {props.title.length >= 33
           ? props.title.substr(0, 33) + "..."
           : props.title}

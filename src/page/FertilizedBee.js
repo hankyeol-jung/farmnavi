@@ -15,11 +15,12 @@ import {
 import { Line, Bar } from "react-chartjs-2";
 import axios from "axios";
 import { useQuery } from "react-query";
-
-const userUrl =
-  "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
+import farmMedia from "../media/팜커넥트_수정벌_AI인식모니터링영상.mp4";
 
 function FertilizedBee() {
+  let userUrl =
+    "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
+
   let sessionLog = sessionStorage.getItem("log");
   sessionLog = JSON.parse(sessionLog);
 
@@ -152,8 +153,16 @@ function FertilizedBee() {
                   }
                 />
               </div>
+              <div className="overflow-hidden bg-white border rounded-xl border-neutral-400">
+                <iframe
+                  src={farmMedia}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+              </div>
             </div>
           </div>
+          <div className="transition duration-1000 reveal"></div>
         </div>
       </div>
 

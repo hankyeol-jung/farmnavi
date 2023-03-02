@@ -560,6 +560,14 @@ function MoistureContentGraph(props) {
   });
 
   const options = {
+    elements: {
+      point: {
+        hoverRadius: 10, // 클릭하면 hover 애니메이션을 제거할 반지름 값 설정
+        hitRadius: 10, // 클릭 가능한 반지름 값 설정
+        hoverBackgroundColor: "#ffffff",
+        hoverBorderWidth: 3,
+      },
+    },
     responsive: true,
     plugins: {
       legend: {
@@ -680,6 +688,14 @@ function ECchangeGraph(props) {
   });
 
   const options = {
+    elements: {
+      point: {
+        hoverRadius: 10, // 클릭하면 hover 애니메이션을 제거할 반지름 값 설정
+        hitRadius: 10, // 클릭 가능한 반지름 값 설정
+        hoverBackgroundColor: "#ffffff",
+        hoverBorderWidth: 3,
+      },
+    },
     responsive: true,
     plugins: {
       legend: {
@@ -816,6 +832,14 @@ function BadgeWeightGraph(props) {
   });
 
   const options = {
+    elements: {
+      point: {
+        hoverRadius: 10, // 클릭하면 hover 애니메이션을 제거할 반지름 값 설정
+        hitRadius: 10, // 클릭 가능한 반지름 값 설정
+        hoverBackgroundColor: "#ffffff",
+        hoverBorderWidth: 3,
+      },
+    },
     responsive: true,
     plugins: {
       legend: {
@@ -954,13 +978,17 @@ function SupplywaterTime(props) {
 // 배지 편차 컴포넌트
 function TotalLightTime(props) {
   return (
-    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[8rem]">
+    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400">
       <div>
-        <p className="text-xl font-medium text-neutral-500">{props.title}</p>
+        <p className="text-xl font-medium text-neutral-500 break-keep">
+          {props.title}
+        </p>
       </div>
       <div className="flex flex-col items-end">
-        <p className="text-right text-[1.75rem] font-bold">
-          <small className="text-xl font-bold">오늘</small> {props.today}%
+        <p className="text-right text-[1.75rem] font-bold flex justify-end items-center flex-wrap">
+          <div>
+            <small className="text-xl font-bold">오늘</small> {props.today}%
+          </div>
           <small className="ml-2 text-xl font-medium text-neutral-500">
             (어제 {props.yesterday}%)
           </small>
@@ -973,11 +1001,13 @@ function TotalLightTime(props) {
 // 총 급액 시간 컴포넌트
 function TotalSupplyTime(props) {
   return (
-    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[8rem]">
+    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400">
       <div>
-        <p className="text-xl font-medium text-neutral-500">{props.title}</p>
+        <p className="text-xl font-medium text-neutral-500 break-keep">
+          {props.title}
+        </p>
       </div>
-      <div className="flex flex-col items-end">
+      <div className="flex flex-col flex-wrap items-end">
         <p className="text-2xl font-bold text-right">
           <small className="text-xl font-bold">오늘</small> {props.todayAmount}g
           / {props.todayNum}
@@ -995,22 +1025,26 @@ function TotalSupplyTime(props) {
 // 급액 배액 시간 컴포넌트
 function SupplyDrainage(props) {
   return (
-    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[10rem]">
+    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400">
       <div>
         <p className="text-xl font-medium text-neutral-500">{props.title}</p>
       </div>
       <div className="flex flex-col items-end">
-        <p className="text-right text-[1.75rem] font-bold">
-          <small className="text-xl font-bold">처음 오늘</small>{" "}
-          {props.todayFirst}
+        <p className="text-right text-[1.75rem] font-bold flex justify-end flex-wrap items-center">
+          <div>
+            <small className="text-xl font-bold">처음 오늘</small>{" "}
+            {props.todayFirst}
+          </div>
           <small className="ml-2 text-xl font-medium text-neutral-500">
             (어제 {props.yesterdayFirst})
           </small>
         </p>
         {props.tomorow == "" ? null : (
-          <p className="mt-2 text-2xl font-medium text-right text-neutral-500">
-            <small className="text-xl font-bold">마지막 오늘</small>
-            {props.todayLast}
+          <p className="flex flex-wrap items-center justify-end mt-2 text-2xl font-medium text-right text-neutral-500">
+            <div>
+              <small className="text-xl font-bold">마지막 오늘</small>
+              {props.todayLast}
+            </div>
             <small className="ml-2 text-xl font-medium text-neutral-500">
               (어제 {props.yesterdayLast})
             </small>
@@ -1024,9 +1058,9 @@ function SupplyDrainage(props) {
 // 누적광량 컴포넌트
 function Light(props) {
   return (
-    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400 h-[10rem]">
+    <div className="flex flex-col justify-between px-6 py-4 bg-white border rounded-xl border-neutral-400">
       <div>
-        <p className="text-xl font-medium text-neutral-500">
+        <p className="text-xl font-medium text-neutral-500 break-keep">
           누적광량{" "}
           <small className="text-lg font-medium text-neutral-500">
             (전날마지막급액시/첫급액 직전)

@@ -140,6 +140,9 @@ function App(tab) {
     if (!localStorage.getItem("watched")) {
       localStorage.setItem("watched", JSON.stringify([]));
     }
+    if (!localStorage.getItem("regist")) {
+      localStorage.setItem("regist", JSON.stringify([]));
+    }
     if (!sessionStorage.getItem("log")) {
       sessionStorage.setItem(
         "log",
@@ -295,7 +298,9 @@ function FarmEnvironmentPrediction(props) {
               </b>
               점
             </p>
-            <p className="text-xl font-medium text-neutral-600">예측</p>
+            <p className="text-xl font-medium text-neutral-600 break-keep">
+              예측
+            </p>
           </div>
         </div>
       </div>
