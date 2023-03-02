@@ -115,6 +115,8 @@ function AgriculturalTechnologyCenter(tab) {
     setMyState(localWish);
   };
 
+  let { registMax } = localRegist.length;
+
   return (
     <div
       className={
@@ -126,34 +128,52 @@ function AgriculturalTechnologyCenter(tab) {
           <p className="mr-6 text-4xl font-bold text-black ">
             청양군 농업 기술센터
           </p>
-          <div>
+          <div className="flex items-center justify-center">
             <span
               className={
                 `${
                   wish == true ? "text-white bg-[#2EABE2]" : "text-[#2EABE2]"
                 }` +
-                " text-2xl px-10 py-1 border-2 font-bold border-[#2EABE2] rounded-full cursor-pointer transition-all"
+                " text-2xl px-10 py-1 border-2 font-bold border-[#2EABE2] rounded-full cursor-pointer transition-all flex items-center justify-center"
               }
               onClick={() => {
                 wishFunc();
                 handleChange();
               }}
             >
-              {wish == true ? "전체 보기" : "즐겨찾기 보기"}
+              {wish == true ? (
+                "전체 보기"
+              ) : (
+                <>
+                  {"즐겨찾기 "}
+                  <span className=" text-white bg-[#2EABE2] rounded-full w-8 h-8 flex justify-center items-center ml-2 font-medium">
+                    {localWish.length}
+                  </span>
+                </>
+              )}
             </span>
             <span
               className={
                 `${
                   regist == true ? "text-white bg-[#2EABE2]" : "text-[#2EABE2]"
                 }` +
-                " ml-4 text-2xl px-10 py-1 border-2 font-bold border-[#2EABE2] rounded-full cursor-pointer transition-all"
+                " ml-4 text-2xl px-10 py-1 border-2 font-bold border-[#2EABE2] rounded-full cursor-pointer transition-all flex items-center justify-center"
               }
               onClick={() => {
                 registFunc();
                 handleChange();
               }}
             >
-              {regist == true ? "전제 보기" : "신청하기 보기"}
+              {regist == true ? (
+                "전제 보기"
+              ) : (
+                <>
+                  {"신청하기 "}
+                  <span className=" text-white bg-[#2EABE2] rounded-full w-8 h-8 flex justify-center items-center ml-2 font-medium">
+                    {localRegist.length}
+                  </span>
+                </>
+              )}
             </span>
           </div>
         </div>

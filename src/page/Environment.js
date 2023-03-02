@@ -128,10 +128,7 @@ function Environment(tab) {
 
   useEffect(() => {
     setTimeout(() => {
-      if (
-        sessionLog.userId == undefined &&
-        sessionLog.userPassword == undefined
-      ) {
+      if (sessionLog.userId == undefined) {
         navigate("/login");
       }
     }, [100]);
@@ -586,6 +583,7 @@ function Environment(tab) {
 // 온도 그래프 컴포넌트
 function TemperatureGraph(props) {
   ChartJS.register(
+    LineElement,
     CategoryScale,
     LinearScale,
     PointElement,
@@ -707,6 +705,7 @@ function TemperatureGraph(props) {
 // 환경에 의한 초세/생장 추이 그래프
 function GrowthLineChart(props) {
   ChartJS.register(
+    LineElement,
     CategoryScale,
     LinearScale,
     PointElement,
@@ -1123,7 +1122,7 @@ function TodayGraph(props) {
 
   return (
     <div className="h-[250px]">
-      <Line
+      <Bar
         ref={myChartRef}
         type="line"
         data={data}
@@ -1403,7 +1402,7 @@ function TomorowGraph(props) {
 
   return (
     <div className="h-[250px]">
-      <Line
+      <Bar
         ref={myChartRef}
         type="line"
         data={data}
@@ -1723,7 +1722,7 @@ function AllGraph(props) {
 
   return (
     <div className="h-[250px]">
-      <Line
+      <Bar
         ref={myChartRef}
         type="line"
         data={data}

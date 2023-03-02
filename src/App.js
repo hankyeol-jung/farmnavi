@@ -20,6 +20,7 @@ import moment from "moment";
 // 안써도 자동으로 한국 시간을 불러온다. 명확하게 하기 위해 import
 import "moment/locale/ko";
 import Clock from "react-live-clock";
+
 import { useState, useRef, useEffect, useBoolean, useCallback } from "react";
 import {
   Routes,
@@ -473,16 +474,6 @@ function Login(props) {
       }
     }
   }, [logState]);
-
-  // let dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   if (logState == true) {
-  //     if (props.result.data) {
-  //       props.result.data && dispatch(userChange(props.data()));
-  //     }
-  //   }
-  // }, [logState]);
 
   return (
     <>
