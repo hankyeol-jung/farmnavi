@@ -151,6 +151,18 @@ function Environment(tab) {
     return setGuideAnimat(1);
   }, [guidedState]);
 
+  let todayCrownWater = "10:22";
+  let yesterdayCrownWater = "09:30";
+  let tomorrowCrownWater = "10:12";
+
+  let todayVentilation = "10:30";
+  let yesterdayVentilation = "09:28";
+  let tomorrowVentilation = "10:43";
+
+  let todayEntering = "10:40";
+  let yesterdayEntering = "09:45";
+  let tomorrowEntering = "10:21";
+
   return (
     <div className={"transition duration-[800ms] start " + fade}>
       <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
@@ -220,7 +232,7 @@ function Environment(tab) {
                 today={
                   result.data && data().environment.anticipationOfEntry + " 후"
                 }
-                tomorow=""
+                tomorrow=""
                 width="w-[20rem]"
                 margin="mx-6"
               />
@@ -235,7 +247,7 @@ function Environment(tab) {
                   (result.data && data().environment.activityTime.today) +
                   " 예측"
                 }
-                tomorow={
+                tomorrow={
                   "내일 " +
                   (result.data && data().environment.activityTime.today) +
                   " 예측"
@@ -246,27 +258,37 @@ function Environment(tab) {
           </div>
 
           <div className="transition duration-1000 reveal ">
-            <HDgraph timeValue={timeValue} result={result} data={data} />
+            <HDgraph
+              timeValue={timeValue}
+              result={result}
+              data={data}
+              todayCrownWater={todayCrownWater}
+              todayVentilation={todayVentilation}
+              todayEntering={todayEntering}
+              tomorrowCrownWater={tomorrowCrownWater}
+              tomorrowVentilation={tomorrowVentilation}
+              tomorrowEntering={tomorrowEntering}
+            />
           </div>
           <div className="transition duration-1000 reveal">
             <div className=" mb-6 after:absolute after:w-px after:h-[5.625rem] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[5.625rem] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 w-full border rounded-xl border-neutral-400 px-6 py-4">
               <Suggestion
                 title="관수 권장"
-                today="10:32"
-                yesterday="09:30"
-                tomorrow="10:12"
+                today={todayCrownWater}
+                yesterday={yesterdayCrownWater}
+                tomorrow={tomorrowCrownWater}
               />
               <Suggestion
                 title="환기 권장"
-                today="10:32"
-                yesterday="09:30"
-                tomorrow="10:12"
+                today={todayVentilation}
+                yesterday={yesterdayVentilation}
+                tomorrow={tomorrowVentilation}
               />
               <Suggestion
                 title="진입 권장"
-                today="10:32"
-                yesterday="09:30"
-                tomorrow="10:12"
+                today={todayEntering}
+                yesterday={yesterdayEntering}
+                tomorrow={tomorrowEntering}
               />
             </div>
           </div>
@@ -794,7 +816,7 @@ function TimeViewButton(props) {
   return (
     <span
       className={
-        "px-4 py-2 text-xl text-center rounded-full cursor-pointer transition " +
+        "px-10 py-2 text-xl text-center rounded-full cursor-pointer transition ml-3 " +
         `${
           props.recommendState == props.functionValue
             ? "bg-[#2EABE2] text-white font-bold"
@@ -820,33 +842,53 @@ function HDgraph(props) {
 
   return (
     <div className="px-10 pt-6 mb-6 bg-white border pb-9 rounded-xl border-neutral-400">
-      <p className="mb-5 text-2xl font-bold text-neutral-500">증산량 그래프</p>
-      <div className="grid grid-cols-3 gap-5 mb-5">
-        <TimeViewButton
-          functionValue={1}
-          title={"오늘보기"}
-          thisClick={thisClick}
-          recommendState={recommendState}
-        />
-        <TimeViewButton
-          functionValue={2}
-          title={"내일보기"}
-          thisClick={thisClick}
-          recommendState={recommendState}
-        />
-        <TimeViewButton
-          functionValue={0}
-          title={"모두보기"}
-          thisClick={thisClick}
-          recommendState={recommendState}
-        />
+      <div className="flex items-center justify-between mb-5">
+        <p className="text-2xl font-bold text-neutral-500">증산량 그래프</p>
+        <div className="flex items-center justify-center">
+          <TimeViewButton
+            functionValue={1}
+            title={"오늘보기"}
+            thisClick={thisClick}
+            recommendState={recommendState}
+          />
+          <TimeViewButton
+            functionValue={2}
+            title={"내일보기"}
+            thisClick={thisClick}
+            recommendState={recommendState}
+          />
+          <TimeViewButton
+            functionValue={0}
+            title={"모두보기"}
+            thisClick={thisClick}
+            recommendState={recommendState}
+          />
+        </div>
       </div>
       {recommendState == 1 ? (
-        <TodayGraph recommendState={recommendState} />
+        <TodayGraph
+          recommendState={recommendState}
+          todayCrownWater={props.todayCrownWater}
+          todayVentilation={props.todayVentilation}
+          todayEntering={props.todayEntering}
+        />
       ) : recommendState == 2 ? (
-        <TomorowGraph recommendState={recommendState} />
+        <TomorrowGraph
+          recommendState={recommendState}
+          tomorrowCrownWater={props.tomorrowCrownWater}
+          tomorrowVentilation={props.tomorrowVentilation}
+          tomorrowEntering={props.tomorrowEntering}
+        />
       ) : (
-        <AllGraph recommendState={recommendState} />
+        <AllGraph
+          recommendState={recommendState}
+          todayCrownWater={props.todayCrownWater}
+          todayVentilation={props.todayVentilation}
+          todayEntering={props.todayEntering}
+          tomorrowCrownWater={props.tomorrowCrownWater}
+          tomorrowVentilation={props.tomorrowVentilation}
+          tomorrowEntering={props.tomorrowEntering}
+        />
       )}
     </div>
   );
@@ -862,20 +904,20 @@ function TodayGraph(props) {
   });
 
   let todayTimeData = [];
-  let tomorowTimeData = [];
+  let tomorrowTimeData = [];
 
   function todayTimeDivision() {
     for (let i = 0; i < graphData.length / 2; i++) {
       todayTimeData.push(graphData[i]);
     }
   }
-  function tomorowTimeDivision() {
+  function tomorrowTimeDivision() {
     for (let i = graphData.length / 2; i < graphData.length; i++) {
       i = i.toFixed();
-      tomorowTimeData.push(graphData[i]);
+      tomorrowTimeData.push(graphData[i]);
     }
   }
-  tomorowTimeDivision();
+  tomorrowTimeDivision();
   todayTimeDivision();
 
   let recommendColor = graphData.map((recommend, i) => {
@@ -901,8 +943,8 @@ function TodayGraph(props) {
 
   let todaySunrise = "6:21";
   let todaySunset = "19:11";
-  let tomorowSunrise = "7:27";
-  let tomorowSunset = "19:23";
+  let tomorrowSunrise = "6:39";
+  let tomorrowSunset = "19:23";
 
   function timeChange(t) {
     var num = t.split(":");
@@ -945,12 +987,12 @@ function TodayGraph(props) {
         } = chart;
         ctx.save();
 
-        function roundRect(x, y, w, h, radius) {
+        function roundRect(x, y, w, h, radius, bg, stroke) {
           const r = x + w;
           const b = y + h;
           ctx.beginPath();
-          ctx.fillStyle = "#ffffff";
-          ctx.strokeStyle = "#000000";
+          ctx.fillStyle = bg;
+          ctx.strokeStyle = stroke;
           ctx.moveTo(x + radius, y);
           ctx.lineTo(r - radius, y);
           ctx.quadraticCurveTo(r, y, r, y + radius);
@@ -960,37 +1002,134 @@ function TodayGraph(props) {
           ctx.quadraticCurveTo(x, b, x, b - radius);
           ctx.lineTo(x, y + radius);
           ctx.quadraticCurveTo(x, y, x + radius, y);
+          ctx.setLineDash([]);
           ctx.fill();
           ctx.stroke();
         }
 
         function textLabel(label, x, y) {
-          ctx.font = "1.2rem Arial";
-          ctx.fillStyle = "#000000";
+          ctx.font = "12px Arial";
+          ctx.fillStyle = "#222222";
           ctx.fillText(label, x, y);
         }
 
         chart.data.datasets.forEach((dataset, i) => {
           chart.getDatasetMeta(i).data.forEach((datapoint, index) => {
+            function line(x, y, x2, y2) {
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(x2, y2);
+              ctx.strokeStyle = "#999999";
+              ctx.lineWidth = 1; // 라인 두께 설정
+              ctx.setLineDash([5, 5]); // 대쉬 패턴 설정
+              ctx.lineDashOffset = 0; // 대쉬 패턴 시작 위치 설정
+              ctx.stroke();
+            }
+
             if (index == timeChange(todaySunrise)) {
+              ctx.textAlign = "center";
               const { x, y } = datapoint.tooltipPosition(index);
               // ctx.fillStyle = "#000000";
               let title = "일출";
               const textWidtth = ctx.measureText(todaySunrise).width;
 
-              roundRect(x - (textWidtth + 20) / 2, 50, textWidtth + 20, 40, 5);
-              textLabel(title, x - textWidtth / 2, 50 + 12);
-              textLabel(todaySunrise, x - textWidtth / 2, 50 + 30);
+              roundRect(
+                x - (textWidtth + 10) / 2,
+                18,
+                textWidtth + 10,
+                40,
+                5,
+                "#eeeeee",
+                "#666666"
+              );
+              textLabel(title, x, 20 + 15);
+              textLabel(todaySunrise, x, 20 + 30);
             }
             if (index == timeChange(todaySunset)) {
               const { x, y } = datapoint.tooltipPosition(index);
-              // ctx.fillStyle = "#000000";
               let title = "일몰";
               const textWidtth = ctx.measureText(todaySunset).width;
 
-              roundRect(x - (textWidtth + 20) / 2, 50, textWidtth + 20, 40, 5);
-              textLabel(title, x - textWidtth / 2 + 3, 50 + 12);
-              textLabel(todaySunset, x - textWidtth / 2, 50 + 30);
+              roundRect(
+                x - (textWidtth + 10) / 2,
+                18,
+                textWidtth + 10,
+                40,
+                5,
+                "#eeeeee",
+                "#666666"
+              );
+              textLabel(title, x, 20 + 15);
+              textLabel(todaySunset, x, 20 + 30);
+            }
+            if (index == timeChange(props.todayCrownWater)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              let title = "관수추천";
+              const textWidtth = ctx.measureText(props.todayCrownWater).width;
+              roundRect(
+                (width + left) / 2 - 80,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 2 - 55, 60, x, y);
+
+              textLabel(title, (width + left) / 2 - 55, 40 - 2);
+              textLabel(
+                props.todayCrownWater,
+                (width + left) / 2 - 55,
+                40 + 12
+              );
+            }
+            if (index == timeChange(props.todayVentilation)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              // ctx.fillStyle = "#000000";
+              let title = "환기추천";
+              const textWidtth = ctx.measureText(props.todayVentilation).width;
+
+              roundRect(
+                (width + left) / 2,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 2 + 25, 60, x, y);
+
+              textLabel(title, (width + left) / 2 + 25, 40 - 2);
+              textLabel(
+                props.todayCrownWater,
+                (width + left) / 2 + 25,
+                40 + 12
+              );
+            }
+            if (index == timeChange(props.todayEntering)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              // ctx.fillStyle = "#000000";
+              let title = "진입추천";
+              const textWidtth = ctx.measureText(props.todayEntering).width;
+
+              roundRect(
+                (width + left) / 2 + 80,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 2 + 105, 60, x, y);
+
+              textLabel(title, (width + left) / 2 + 105, 40 - 2);
+              textLabel(props.todayEntering, (width + left) / 2 + 105, 40 + 12);
             }
           });
         });
@@ -1134,7 +1273,7 @@ function TodayGraph(props) {
   );
 }
 //내일 그래프
-function TomorowGraph(props) {
+function TomorrowGraph(props) {
   ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
   let graphData = UserInfo[0].environment.temperatureHumidityGraph;
@@ -1143,20 +1282,20 @@ function TomorowGraph(props) {
   });
 
   let todayTimeData = [];
-  let tomorowTimeData = [];
+  let tomorrowTimeData = [];
 
   function todayTimeDivision() {
     for (let i = 0; i < graphData.length / 2; i++) {
       todayTimeData.push(graphData[i]);
     }
   }
-  function tomorowTimeDivision() {
+  function tomorrowTimeDivision() {
     for (let i = graphData.length / 2; i < graphData.length; i++) {
       i = i.toFixed();
-      tomorowTimeData.push(graphData[i]);
+      tomorrowTimeData.push(graphData[i]);
     }
   }
-  tomorowTimeDivision();
+  tomorrowTimeDivision();
   todayTimeDivision();
 
   let recommendColor = graphData.map((recommend, i) => {
@@ -1182,8 +1321,8 @@ function TomorowGraph(props) {
 
   let todaySunrise = "6:21";
   let todaySunset = "19:11";
-  let tomorowSunrise = "7:27";
-  let tomorowSunset = "19:23";
+  let tomorrowSunrise = "6:39";
+  let tomorrowSunset = "19:23";
 
   function timeChange(t) {
     var num = t.split(":");
@@ -1205,13 +1344,13 @@ function TomorowGraph(props) {
         ctx.fillRect(
           left,
           top,
-          (width / x._addedLabels.length) * timeChange(tomorowSunrise),
+          (width / x._addedLabels.length) * timeChange(tomorrowSunrise),
           height
         );
 
         ctx.fillStyle = "#dddddd70";
         ctx.fillRect(
-          (width / x._addedLabels.length) * timeChange(tomorowSunset) + left,
+          (width / x._addedLabels.length) * timeChange(tomorrowSunset) + left,
           top,
           width,
           height
@@ -1225,12 +1364,12 @@ function TomorowGraph(props) {
         } = chart;
         ctx.save();
 
-        function roundRect(x, y, w, h, radius) {
+        function roundRect(x, y, w, h, radius, bg, stroke) {
           const r = x + w;
           const b = y + h;
           ctx.beginPath();
-          ctx.fillStyle = "#ffffff";
-          ctx.strokeStyle = "#000000";
+          ctx.fillStyle = bg;
+          ctx.strokeStyle = stroke;
           ctx.moveTo(x + radius, y);
           ctx.lineTo(r - radius, y);
           ctx.quadraticCurveTo(r, y, r, y + radius);
@@ -1240,37 +1379,142 @@ function TomorowGraph(props) {
           ctx.quadraticCurveTo(x, b, x, b - radius);
           ctx.lineTo(x, y + radius);
           ctx.quadraticCurveTo(x, y, x + radius, y);
+          ctx.setLineDash([]);
           ctx.fill();
           ctx.stroke();
         }
 
         function textLabel(label, x, y) {
-          ctx.font = "1.2rem Arial";
-          ctx.fillStyle = "#000000";
+          ctx.font = "12px Arial";
+          ctx.fillStyle = "#222222";
           ctx.fillText(label, x, y);
         }
 
         chart.data.datasets.forEach((dataset, i) => {
           chart.getDatasetMeta(i).data.forEach((datapoint, index) => {
-            if (index == timeChange(tomorowSunrise)) {
+            function line(x, y, x2, y2) {
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(x2, y2);
+              ctx.strokeStyle = "#999999";
+              ctx.lineWidth = 1; // 라인 두께 설정
+              ctx.setLineDash([5, 5]); // 대쉬 패턴 설정
+              ctx.lineDashOffset = 0; // 대쉬 패턴 시작 위치 설정
+              ctx.stroke();
+            }
+
+            if (index == timeChange(tomorrowSunrise)) {
+              ctx.textAlign = "center";
               const { x, y } = datapoint.tooltipPosition(index);
               // ctx.fillStyle = "#000000";
               let title = "일출";
-              const textWidtth = ctx.measureText(tomorowSunrise).width;
+              const textWidtth = ctx.measureText(tomorrowSunrise).width;
 
-              roundRect(x - (textWidtth + 20) / 2, 50, textWidtth + 20, 40, 5);
-              textLabel(title, x - textWidtth / 2, 50 + 12);
-              textLabel(tomorowSunrise, x - textWidtth / 2, 50 + 30);
+              roundRect(
+                x - (textWidtth + 10) / 2,
+                18,
+                textWidtth + 10,
+                40,
+                5,
+                "#eeeeee",
+                "#666666"
+              );
+              textLabel(title, x, 20 + 15);
+              textLabel(tomorrowSunrise, x, 20 + 30);
             }
-            if (index == timeChange(tomorowSunset)) {
+            if (index == timeChange(tomorrowSunset)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              let title = "일몰";
+              const textWidtth = ctx.measureText(tomorrowSunset).width;
+
+              roundRect(
+                x - (textWidtth + 10) / 2,
+                18,
+                textWidtth + 10,
+                40,
+                5,
+                "#eeeeee",
+                "#666666"
+              );
+              textLabel(title, x, 20 + 15);
+              textLabel(tomorrowSunset, x, 20 + 30);
+            }
+            if (index == timeChange(props.tomorrowCrownWater)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              let title = "관수추천";
+              const textWidtth = ctx.measureText(
+                props.tomorrowCrownWater
+              ).width;
+              roundRect(
+                (width + left) / 2 - 80,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 2 - 55, 60, x, y);
+
+              textLabel(title, (width + left) / 2 - 55, 40 - 2);
+              textLabel(
+                props.tomorrowCrownWater,
+                (width + left) / 2 - 55,
+                40 + 12
+              );
+            }
+            if (index == timeChange(props.tomorrowVentilation)) {
               const { x, y } = datapoint.tooltipPosition(index);
               // ctx.fillStyle = "#000000";
-              let title = "일몰";
-              const textWidtth = ctx.measureText(tomorowSunset).width;
+              let title = "환기추천";
+              const textWidtth = ctx.measureText(
+                props.tomorrowVentilation
+              ).width;
 
-              roundRect(x - (textWidtth + 20) / 2, 50, textWidtth + 20, 40, 5);
-              textLabel(title, x - textWidtth / 2 + 3, 50 + 12);
-              textLabel(tomorowSunset, x - textWidtth / 2, 50 + 30);
+              roundRect(
+                (width + left) / 2,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 2 + 25, 60, x, y);
+
+              textLabel(title, (width + left) / 2 + 25, 40 - 2);
+              textLabel(
+                props.tomorrowCrownWater,
+                (width + left) / 2 + 25,
+                40 + 12
+              );
+            }
+            if (index == timeChange(props.tomorrowEntering)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              // ctx.fillStyle = "#000000";
+              let title = "진입추천";
+              const textWidtth = ctx.measureText(props.tomorrowEntering).width;
+
+              roundRect(
+                (width + left) / 2 + 80,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 2 + 105, 60, x, y);
+
+              textLabel(title, (width + left) / 2 + 105, 40 - 2);
+              textLabel(
+                props.tomorrowEntering,
+                (width + left) / 2 + 105,
+                40 + 12
+              );
             }
           });
         });
@@ -1284,7 +1528,7 @@ function TomorowGraph(props) {
         type: "bar",
         label: "",
         backgroundColor: recommendColor,
-        data: tomorowTimeData,
+        data: tomorrowTimeData,
         borderColor: recommendColor,
         borderWidth: 2,
       },
@@ -1423,20 +1667,20 @@ function AllGraph(props) {
   });
 
   let todayTimeData = [];
-  let tomorowTimeData = [];
+  let tomorrowTimeData = [];
 
   function todayTimeDivision() {
     for (let i = 0; i < graphData.length / 2; i++) {
       todayTimeData.push(graphData[i]);
     }
   }
-  function tomorowTimeDivision() {
+  function tomorrowTimeDivision() {
     for (let i = graphData.length / 2; i < graphData.length; i++) {
       i = i.toFixed();
-      tomorowTimeData.push(graphData[i]);
+      tomorrowTimeData.push(graphData[i]);
     }
   }
-  tomorowTimeDivision();
+  tomorrowTimeDivision();
   todayTimeDivision();
 
   let recommendColor = graphData.map((recommend, i) => {
@@ -1463,8 +1707,8 @@ function AllGraph(props) {
 
   let todaySunrise = "6:21";
   let todaySunset = "19:11";
-  let tomorowSunrise = "7:27";
-  let tomorowSunset = "19:23";
+  let tomorrowSunrise = "6:39";
+  let tomorrowSunset = "19:23";
 
   function timeChange(t) {
     var num = t.split(":");
@@ -1496,7 +1740,7 @@ function AllGraph(props) {
           top,
           width / 2 -
             (width / x._addedLabels.length) * timeChange(todaySunset) +
-            (width / x._addedLabels.length) * timeChange(tomorowSunrise),
+            (width / x._addedLabels.length) * timeChange(tomorrowSunrise),
           height
         );
 
@@ -1504,7 +1748,7 @@ function AllGraph(props) {
         ctx.fillRect(
           width / 2 +
             left +
-            (width / x._addedLabels.length) * timeChange(tomorowSunset),
+            (width / x._addedLabels.length) * timeChange(tomorrowSunset),
           top,
           right,
           height
@@ -1518,12 +1762,12 @@ function AllGraph(props) {
         } = chart;
         ctx.save();
 
-        function roundRect(x, y, w, h, radius) {
+        function roundRect(x, y, w, h, radius, bg, stroke) {
           const r = x + w;
           const b = y + h;
           ctx.beginPath();
-          ctx.fillStyle = "#ffffff";
-          ctx.strokeStyle = "#000000";
+          ctx.fillStyle = bg;
+          ctx.strokeStyle = stroke;
           ctx.moveTo(x + radius, y);
           ctx.lineTo(r - radius, y);
           ctx.quadraticCurveTo(r, y, r, y + radius);
@@ -1533,27 +1777,50 @@ function AllGraph(props) {
           ctx.quadraticCurveTo(x, b, x, b - radius);
           ctx.lineTo(x, y + radius);
           ctx.quadraticCurveTo(x, y, x + radius, y);
+          ctx.setLineDash([]);
           ctx.fill();
           ctx.stroke();
         }
 
         function textLabel(label, x, y) {
-          ctx.font = "1.2rem Arial";
-          ctx.fillStyle = "#000000";
+          ctx.font = "10px Arial";
+          ctx.fillStyle = "#222222";
           ctx.fillText(label, x, y);
         }
 
+        ctx.fillStyle = "#ffffff70";
+        ctx.fillRect(width / 2 + left, top, right, height);
+
         chart.data.datasets.forEach((dataset, i) => {
           chart.getDatasetMeta(i).data.forEach((datapoint, index) => {
+            function line(x, y, x2, y2) {
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(x2, y2);
+              ctx.strokeStyle = "#999999";
+              ctx.lineWidth = 1; // 라인 두께 설정
+              ctx.setLineDash([5, 5]); // 대쉬 패턴 설정
+              ctx.lineDashOffset = 0; // 대쉬 패턴 시작 위치 설정
+              ctx.stroke();
+            }
             if (index == timeChange(todaySunrise)) {
+              ctx.textAlign = "center";
               const { x, y } = datapoint.tooltipPosition(index);
               // ctx.fillStyle = "#000000";
               let title = "일출";
               const textWidtth = ctx.measureText(todaySunrise).width;
 
-              roundRect(x - (textWidtth + 20) / 2, 50, textWidtth + 20, 40, 5);
-              textLabel(title, x - textWidtth / 2, 50 + 15);
-              textLabel(todaySunrise, x - textWidtth / 2, 50 + 30);
+              roundRect(
+                x - (textWidtth + 10) / 2,
+                70,
+                textWidtth + 10,
+                40,
+                5,
+                "#eeeeee",
+                "#666666"
+              );
+              textLabel(title, x, 70 + 15);
+              textLabel(todaySunrise, x, 70 + 30);
             }
             if (index == timeChange(todaySunset)) {
               const { x, y } = datapoint.tooltipPosition(index);
@@ -1561,36 +1828,215 @@ function AllGraph(props) {
               let title = "일몰";
               const textWidtth = ctx.measureText(todaySunset).width;
 
-              roundRect(x - (textWidtth + 20) / 2, 50, textWidtth + 20, 40, 5);
-              textLabel(title, x - textWidtth / 2 + 3, 50 + 15);
-              textLabel(todaySunset, x - textWidtth / 2, 50 + 30);
+              roundRect(
+                x - (textWidtth + 10) / 2,
+                70,
+                textWidtth + 10,
+                40,
+                5,
+                "#eeeeee",
+                "#666666"
+              );
+              textLabel(title, x, 70 + 15);
+              textLabel(todaySunset, x, 70 + 30);
             }
 
             let dataValue = recommendTest.length / 2;
             dataValue = eval(dataValue.toFixed());
-            let sunriseValue = timeChange(tomorowSunrise);
-            let sunsetValue = timeChange(tomorowSunset);
+            let sunriseValue = timeChange(tomorrowSunrise);
+            let sunsetValue = timeChange(tomorrowSunset);
             sunriseValue = eval(sunriseValue);
+
             if (index == dataValue + sunriseValue) {
               const { x, y } = datapoint.tooltipPosition(index);
               // ctx.fillStyle = "#000000";
               let title = "일출";
-              const textWidtth = ctx.measureText(tomorowSunrise).width;
+              const textWidtth = ctx.measureText(tomorrowSunrise).width;
 
-              roundRect(x - (textWidtth + 20) / 2, 50, textWidtth + 20, 40, 5);
-              textLabel(title, x - textWidtth / 2, 50 + 15);
-              textLabel(tomorowSunrise, x - textWidtth / 2, 50 + 30);
+              roundRect(
+                x - (textWidtth + 10) / 2,
+                70,
+                textWidtth + 10,
+                40,
+                5,
+                "#eeeeee",
+                "#666666"
+              );
+              textLabel(title, x, 70 + 15);
+              textLabel(tomorrowSunrise, x, 70 + 30);
             }
-
             if (index == dataValue + sunsetValue) {
               const { x, y } = datapoint.tooltipPosition(index);
               // ctx.fillStyle = "#000000";
               let title = "일몰";
-              const textWidtth = ctx.measureText(tomorowSunset).width;
+              const textWidtth = ctx.measureText(tomorrowSunset).width;
 
-              roundRect(x - (textWidtth + 20) / 2, 50, textWidtth + 20, 40, 5);
-              textLabel(title, x - textWidtth / 2 + 3, 50 + 15);
-              textLabel(tomorowSunset, x - textWidtth / 2, 50 + 30);
+              roundRect(
+                x - (textWidtth + 10) / 2,
+                70,
+                textWidtth + 10,
+                40,
+                5,
+                "#eeeeee",
+                "#666666"
+              );
+              textLabel(title, x, 70 + 15);
+              textLabel(tomorrowSunset, x, 70 + 30);
+            }
+
+            if (index == timeChange(props.todayCrownWater)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              let title = "관수추천";
+              const textWidtth = ctx.measureText(props.todayCrownWater).width;
+              roundRect(
+                (width + left) / 4 - 50,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 4 - 27, 60, x, y);
+
+              textLabel(title, (width + left) / 4 - 27, 40 - 2);
+              textLabel(
+                props.todayCrownWater,
+                (width + left) / 4 - 27,
+                40 + 12
+              );
+            }
+            if (index == timeChange(props.todayVentilation)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              // ctx.fillStyle = "#000000";
+              let title = "환기추천";
+              const textWidtth = ctx.measureText(props.todayVentilation).width;
+
+              roundRect(
+                (width + left) / 4,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 4 + 23, 60, x, y);
+
+              textLabel(title, (width + left) / 4 + 23, 40 - 2);
+              textLabel(
+                props.todayCrownWater,
+                (width + left) / 4 + 23,
+                40 + 12
+              );
+            }
+            if (index == timeChange(props.todayEntering)) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              // ctx.fillStyle = "#000000";
+              let title = "진입추천";
+              const textWidtth = ctx.measureText(props.todayEntering).width;
+
+              roundRect(
+                (width + left) / 4 + 50,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line((width + left) / 4 + 73, 60, x, y);
+
+              textLabel(title, (width + left) / 4 + 73, 40 - 2);
+              textLabel(props.todayEntering, (width + left) / 4 + 73, 40 + 12);
+            }
+
+            let tomorrowCrownWater = timeChange(props.tomorrowCrownWater);
+            tomorrowCrownWater = eval(tomorrowCrownWater);
+            let tomorrowVentilation = timeChange(props.tomorrowVentilation);
+            tomorrowVentilation = eval(tomorrowVentilation);
+            let tomorrowEntering = timeChange(props.tomorrowEntering);
+            tomorrowEntering = eval(tomorrowEntering);
+
+            if (index == dataValue + tomorrowCrownWater) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              let title = "관수예측";
+              const textWidtth = ctx.measureText(
+                props.tomorrowCrownWater
+              ).width;
+              roundRect(
+                ((width + left) / 4) * 3 - 50,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line(((width + left) / 4) * 3 - 27, 60, x, y);
+
+              textLabel(title, ((width + left) / 4) * 3 - 27, 40 - 2);
+              textLabel(
+                props.tomorrowCrownWater,
+                ((width + left) / 4) * 3 - 27,
+                40 + 12
+              );
+            }
+            if (index == dataValue + tomorrowCrownWater) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              // ctx.fillStyle = "#000000";
+              let title = "환기예측";
+              const textWidtth = ctx.measureText(
+                props.tomorrowVentilation
+              ).width;
+
+              roundRect(
+                ((width + left) / 4) * 3,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line(((width + left) / 4) * 3 + 23, 60, x, y);
+
+              textLabel(title, ((width + left) / 4) * 3 + 23, 40 - 2);
+              textLabel(
+                props.tomorrowCrownWater,
+                ((width + left) / 4) * 3 + 23,
+                40 + 12
+              );
+            }
+            if (index == dataValue + tomorrowCrownWater) {
+              const { x, y } = datapoint.tooltipPosition(index);
+              // ctx.fillStyle = "#000000";
+              let title = "진입예측";
+              const textWidtth = ctx.measureText(props.tomorrowEntering).width;
+
+              roundRect(
+                ((width + left) / 4) * 3 + 50,
+                20,
+                textWidtth + 20,
+                40,
+                5,
+                "#ffffff",
+                "#666666"
+              );
+
+              line(((width + left) / 4) * 3 + 73, 60, x, y);
+
+              textLabel(title, ((width + left) / 4) * 3 + 73, 40 - 2);
+              textLabel(
+                props.tomorrowEntering,
+                ((width + left) / 4) * 3 + 73,
+                40 + 12
+              );
             }
           });
         });
@@ -1825,16 +2271,16 @@ function SuitableTranspiration(props) {
       <div>
         <p
           className={
-            `${props.tomorow == "" ? "text-3xl" : "text-3xl"}` +
+            `${props.tomorrow == "" ? "text-3xl" : "text-3xl"}` +
             " font-bold text-right text-black break-keep"
           }
         >
           {props.today}
         </p>
-        {props.tomorow != "" ? (
+        {props.tomorrow != "" ? (
           <p className="mt-2 text-2xl font-bold text-right text-white">
             <span className=" bg-[#2EABE2] rounded-full px-4 py-1">
-              {props.tomorow}
+              {props.tomorrow}
             </span>
           </p>
         ) : null}
