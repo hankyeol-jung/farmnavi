@@ -1,0 +1,347 @@
+[
+  {
+    "title": "24시간 평균온도",
+    "data": [
+      { "label": "2주평균", "value": 26.2 },
+      { "label": "1주평균", "value": 25.3 },
+      { "label": "어제", "value": 24.3 },
+      { "label": "오늘(예측)", "value": 27.2 },
+      { "label": "내일(예측)", "value": 26.4 }
+    ],
+    "growth": {
+      "nutrition": "up",
+      "reproductive": "down"
+    },
+    "advice": {
+      "nutrition": "24시간 평균온도를 높이세요.",
+      "reproductive": "24시간 평균온도를 낮추세요."
+    }
+  },
+  {
+    "title": "야간평균온도",
+    "data": [
+      { "label": "2주평균", "value": 24.8 },
+      { "label": "1주평균", "value": 22.2 },
+      { "label": "어제", "value": 21.8 },
+      { "label": "오늘(예측)", "value": 23.7 },
+      { "label": "내일(예측)", "value": 24.2 }
+    ],
+    "growth": { "nutrition": "up", "reproductive": "down" },
+    "advice": {
+      "nutrition": "야간평균온도를 높이세요.",
+      "reproductive": "야간평균온도를 낮추세요."
+    }
+  },
+  {
+    "title": "주야간온도차",
+    "data": [
+      { "label": "2주평균", "value": 3.5 },
+      { "label": "1주평균", "value": 6.1 },
+      { "label": "어제", "value": 4.9 },
+      { "label": "오늘(예측)", "value": 5.3 },
+      { "label": "내일(예측)", "value": 6.7 }
+    ],
+    "growth": { "nutrition": "down", "reproductive": "up" },
+    "advice": {
+      "nutrition": "주야간온도차를 줄이세요",
+      "reproductive": "주야간온도차를 키우세요"
+    }
+  },
+  {
+    "title": "24시간 평균습도",
+    "data": [
+      { "label": "2주평균", "value": 23 },
+      { "label": "1주평균", "value": 37 },
+      { "label": "어제", "value": 31 },
+      { "label": "오늘(예측)", "value": 25 },
+      { "label": "내일(예측)", "value": 28 }
+    ],
+    "growth": { "nutrition": "up", "reproductive": "down" },
+    "advice": {
+      "nutrition": "24시간 평균습도를 높이세요",
+      "reproductive": "24시간 평균습도를 낮추세요"
+    }
+  },
+  {
+    "title": "일출 후 온도변화",
+    "data": [
+      { "label": "2주평균", "value": 3.1 },
+      { "label": "1주평균", "value": 8.2 },
+      { "label": "어제", "value": 3.7 },
+      { "label": "오늘(예측)", "value": 6.5 },
+      { "label": "내일(예측)", "value": 7.3 }
+    ],
+    "growth": { "nutrition": "down", "reproductive": "up" },
+    "advice": {
+      "nutrition": "일출 후 온도변화를 느리게 해주세요",
+      "reproductive": "일출 후 온도변화를 빠르게 해주세요"
+    }
+  },
+  {
+    "title": "일몰 후 온도변화",
+    "data": [
+      { "label": "2주평균", "value": 2.8 },
+      { "label": "1주평균", "value": 3.6 },
+      { "label": "어제", "value": 2.5 },
+      { "label": "오늘(예측)", "value": 4.3 },
+      { "label": "내일(예측)", "value": 2.5 }
+    ],
+    "growth": { "nutrition": "down", "reproductive": "up" },
+    "advice": {
+      "nutrition": "일몰 후 온도변화를 느리게 해주세요",
+      "reproductive": "일몰 후 온도변화를 빠르게 해주세요"
+    }
+  },
+  {
+    "title": "24시간 온도편차",
+    "data": [
+      { "label": "2주평균", "value": 7.3 },
+      { "label": "1주평균", "value": 6.8 },
+      { "label": "어제", "value": 5.1 },
+      { "label": "오늘(예측)", "value": 8.7 },
+      { "label": "내일(예측)", "value": 9.3 }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "24시간 온도편차를 줄여주세요.",
+      "reproductive": "24시간 온도편차를 키워주세요."
+    }
+  },
+  {
+    "title": "CO2",
+    "data": [
+      { "label": "2주평균", "value": 23 },
+      { "label": "1주평균", "value": 17 },
+      { "label": "어제", "value": 16 },
+      { "label": "오늘(예측)", "value": 7 },
+      { "label": "내일(예측)", "value": 17 }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "CO2를 낮추세요.",
+      "reproductive": "CO2를 높이세요."
+    }
+  },
+  {
+    "title": "배지온도",
+    "data": [
+      { "label": "2주평균", "value": 23.2 },
+      { "label": "1주평균", "value": 17.8 },
+      { "label": "어제", "value": 21.3 },
+      { "label": "오늘(예측)", "value": 25.4 },
+      { "label": "내일(예측)", "value": 23.2 }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "배지온도를 낮추세요.",
+      "reproductive": "배지온도를 높이세요."
+    }
+  },
+  {
+    "title": "배지수분",
+    "data": [
+      { "label": "2주평균", "value": 48 },
+      { "label": "1주평균", "value": 63 },
+      { "label": "어제", "value": 49 },
+      { "label": "오늘(예측)", "value": 58 },
+      { "label": "내일(예측)", "value": 64 }
+    ],
+    "growth": {
+      "nutrition": "up",
+      "reproductive": "down"
+    },
+    "advice": {
+      "nutrition": "배지수분을 높이세요.",
+      "reproductive": "배지수분을 낮추세요."
+    }
+  },
+  {
+    "title": "주야간 함수편차",
+    "data": [
+      { "label": "2주평균", "value": 8 },
+      { "label": "1주평균", "value": 6 },
+      { "label": "어제", "value": 15 },
+      { "label": "오늘(예측)", "value": 13 },
+      { "label": "내일(예측)", "value": 11 }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "주야간 함수편차를 줄이세요.",
+      "reproductive": "주야간 함수편차를 키우세요."
+    }
+  },
+  {
+    "title": "일사량",
+    "data": [
+      { "label": "2주평균", "value": 13 },
+      { "label": "1주평균", "value": 19 },
+      { "label": "어제", "value": 12 },
+      { "label": "오늘(예측)", "value": 16 },
+      { "label": "내일(예측)", "value": 14 }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "일사량을 낮추세요.",
+      "reproductive": "일사량을 키우세요."
+    }
+  },
+  {
+    "title": "급액시작시간",
+    "data": [
+      { "label": "2주평균", "value": "10:23" },
+      { "label": "1주평균", "value": "10:38" },
+      { "label": "어제", "value": "11:03" },
+      { "label": "오늘(예측)", "value": "10:43" },
+      { "label": "내일(예측)", "value": "10:58" }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "급액시작시간을 늦추세요.",
+      "reproductive": "급액시작시간을 빠르게 하세요."
+    }
+  },
+  {
+    "title": "급액종료시간",
+    "data": [
+      { "label": "2주평균", "value": "12:33" },
+      { "label": "1주평균", "value": "12:28" },
+      { "label": "어제", "value": "12:59" },
+      { "label": "오늘(예측)", "value": "13:04" },
+      { "label": "내일(예측)", "value": "12:38" }
+    ],
+    "growth": {
+      "nutrition": "up",
+      "reproductive": "down"
+    },
+    "advice": {
+      "nutrition": "급액종료시간을 빠르게 하세요.",
+      "reproductive": "급액종료시간을 늦추세요."
+    }
+  },
+  {
+    "title": "EC",
+    "data": [
+      { "label": "2주평균", "value": 10 },
+      { "label": "1주평균", "value": 15 },
+      { "label": "어제", "value": 14 },
+      { "label": "오늘(예측)", "value": 18 },
+      { "label": "내일(예측)", "value": 19 }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "EC를 낮추세요.",
+      "reproductive": "EC를 높이세요."
+    }
+  },
+  {
+    "title": "배액율",
+    "data": [
+      { "label": "2주평균", "value": 8.5 },
+      { "label": "1주평균", "value": 7.3 },
+      { "label": "어제", "value": 14.2 },
+      { "label": "오늘(예측)", "value": 13.2 },
+      { "label": "내일(예측)", "value": 11.8 }
+    ],
+    "growth": {
+      "nutrition": "up",
+      "reproductive": "down"
+    },
+    "advice": {
+      "nutrition": "배액율을 높이세요.",
+      "reproductive": "배액율을 낮추세요."
+    }
+  },
+  {
+    "title": "총 급액양",
+    "data": [
+      { "label": "2주평균", "value": 29 },
+      { "label": "1주평균", "value": 37 },
+      { "label": "어제", "value": 26 },
+      { "label": "오늘(예측)", "value": 22 },
+      { "label": "내일(예측)", "value": 38 }
+    ],
+    "growth": {
+      "nutrition": "up",
+      "reproductive": "down"
+    },
+    "advice": {
+      "nutrition": "총 급액양을 키우세요.",
+      "reproductive": "총 급액양을 줄이세요."
+    }
+  },
+  {
+    "title": "회당 급액양",
+    "data": [
+      { "label": "2주평균", "value": 5 },
+      { "label": "1주평균", "value": 7 },
+      { "label": "어제", "value": 3 },
+      { "label": "오늘(예측)", "value": 4 },
+      { "label": "내일(예측)", "value": 9 }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "회당 급액양을 줄이세요.",
+      "reproductive": "회당 급액양을 키우세요."
+    }
+  },
+  {
+    "title": "급액횟수",
+    "data": [
+      { "label": "2주평균", "value": 5 },
+      { "label": "1주평균", "value": 2 },
+      { "label": "어제", "value": 4 },
+      { "label": "오늘(예측)", "value": 1 },
+      { "label": "내일(예측)", "value": 3 }
+    ],
+    "growth": {
+      "nutrition": "자주",
+      "reproductive": "적게"
+    },
+    "advice": {
+      "nutrition": "급액횟수를 자주해주세요.",
+      "reproductive": "급액횟수를 적게해주세요."
+    }
+  },
+  {
+    "title": "배지무게 편차",
+    "data": [
+      { "label": "2주평균", "value": 13 },
+      { "label": "1주평균", "value": 21 },
+      { "label": "어제", "value": 17 },
+      { "label": "오늘(예측)", "value": 19 },
+      { "label": "내일(예측)", "value": 20 }
+    ],
+    "growth": {
+      "nutrition": "down",
+      "reproductive": "up"
+    },
+    "advice": {
+      "nutrition": "배지무게 편차를 줄이세요.",
+      "reproductive": "배지무게 편차를 키우세요."
+    }
+  }
+]

@@ -13,11 +13,14 @@ import { useRef, useState, useEffect } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import UserInfo from "../json/user-information.json";
 import Recommend from "../json/recommend.json";
+import EnvironmentData from "../json/environment.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretDown,
   faCaretUp,
   faFire,
+  faArrowUp,
+  faArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -163,6 +166,17 @@ function Environment(tab) {
   let yesterdayEntering = "09:45";
   let tomorrowEntering = "10:21";
 
+  let [fade2, setFade2] = useState();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFade2("end");
+    }, [300]);
+    return () => {
+      setFade2("");
+    };
+  }, [guidedState]);
+
   return (
     <div className={"transition duration-[800ms] start " + fade}>
       <div className="absolute z-40 top-0 left-0 flex items-center justify-between w-full h-[6.625rem] border-b px-11 border-b-neutral-300">
@@ -257,7 +271,7 @@ function Environment(tab) {
             </div>
           </div>
 
-          <div className="transition duration-1000 reveal ">
+          {/* <div className="transition duration-1000 reveal ">
             <HDgraph
               timeValue={timeValue}
               result={result}
@@ -269,7 +283,7 @@ function Environment(tab) {
               tomorrowVentilation={tomorrowVentilation}
               tomorrowEntering={tomorrowEntering}
             />
-          </div>
+          </div> */}
           <div className="transition duration-1000 reveal">
             <div className=" mb-6 after:absolute after:w-px after:h-[5.625rem] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[5.625rem] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 w-full border rounded-xl border-neutral-400 px-6 py-4">
               <Suggestion
@@ -560,26 +574,25 @@ function Environment(tab) {
             </div>
           ) : null}
 
-          <div className="transition duration-1000 reveal">
-            <TemperatureGraph
-              title="24시간 평균온도(°C)"
-              advice={"24시간 평균온도를 낮추세요!"}
-              temperatureGraphData={averageTemperature}
-            />
-          </div>
-          <div className="transition duration-1000 reveal">
-            <TemperatureGraph
-              title="이른아침 온도상승(°C/시간당)"
-              advice={"오전 7시 ~ 9시 경에 온도를 서서히 높이세요!"}
-              temperatureGraphData={morningTemperature}
-            />
-          </div>
-          <div className="transition duration-1000 reveal">
-            <TemperatureGraph
-              title="주야간온도편차(°C)"
-              advice={"주야간 온도편차를 줄이세요!"}
-              temperatureGraphData={dayAndNight}
-            />
+          <div
+            className={
+              "grid grid-cols-2 gap-5 transition-all duration-300 start " +
+              fade2
+            }
+          >
+            {EnvironmentData.map((e, i) => {
+              return (
+                <TemperatureGraph
+                  title={e.title}
+                  nutrition={e.advice.nutrition}
+                  reproductive={e.advice.reproductive}
+                  temperatureGraphData={e.data}
+                  guidedState={guidedState}
+                  nutritionState={e.growth.nutrition}
+                  reproductiveState={e.growth.reproductive}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
@@ -621,7 +634,25 @@ function TemperatureGraph(props) {
     return l.label;
   });
 
-  let graphData = [26.2, 25.5, 24.2, 24.8, 24.3];
+  let graphData = [];
+  for (let i = 0; i < 5; i++) {
+    if (typeof props.temperatureGraphData[i].value == "string") {
+      const timeStr = props.temperatureGraphData[i].value;
+      const timeArr = timeStr.split(":");
+      const hour = parseInt(timeArr[0]);
+      const minute = parseInt(timeArr[1]);
+      const totalMinute = hour * 60 + minute;
+      graphData.push(totalMinute);
+    } else {
+      graphData = [
+        props.temperatureGraphData[0].value,
+        props.temperatureGraphData[1].value,
+        props.temperatureGraphData[2].value,
+        props.temperatureGraphData[3].value,
+        props.temperatureGraphData[4].value,
+      ];
+    }
+  }
 
   const options = {
     responsive: true,
@@ -636,18 +667,19 @@ function TemperatureGraph(props) {
     },
     elements: {
       point: {
-        hoverRadius: 10, // 클릭하면 hover 애니메이션을 제거할 반지름 값 설정
-        hitRadius: 10, // 클릭 가능한 반지름 값 설정
+        hoverRadius: 5, // 클릭하면 hover 애니메이션을 제거할 반지름 값 설정
+        hitRadius: 5, // 클릭 가능한 반지름 값 설정
         hoverBackgroundColor: "#ffffff",
-        hoverBorderWidth: 3,
+        hoverBorderWidth: 2,
       },
     },
-    pointRadius: 10,
+    pointRadius: 5,
     pointBackgroundColor: "#ffffff",
     pointBorderColor: "#2EABE2",
-    pointBorderWidth: 3,
+    pointBorderWidth: 2,
     maintainAspectRatio: false,
     lineTension: 0.5,
+    borderWidth: 1.5,
     scales: {
       y: {
         display: false,
@@ -689,26 +721,52 @@ function TemperatureGraph(props) {
   };
 
   return (
-    <div className=" flex items-center h-[18.75rem] justify-between w-full p-6 mb-6 border rounded-xl border-neutral-400 ">
-      <div className="w-[20.875rem] h-full flex flex-col justify-between mr-5">
+    <div
+      className={
+        "w-full p-6 mb-6 transition duration-1000 border reveal rounded-xl border-neutral-400"
+      }
+    >
+      <div className="mb-5">
         <div>
-          <p className="text-xl font-bold text-neutral-500">{props.title}</p>
+          <p className="mb-3 text-xl font-bold text-neutral-500">
+            {props.title}
+          </p>
         </div>
-        <div className="px-10 bg-[#2EABE2] w-full h-[9.5rem] text-white text-2xl font-bold rounded-2xl flex justify-center items-center text-center">
-          <p className=" break-keep">{props.advice}</p>
-        </div>
+        {props.guidedState == 0 ? null : (
+          <div className="px-10 bg-[#2EABE2] w-full py-2 text-white text-xl font-bold rounded-lg flex justify-center items-center text-center">
+            <p className=" break-keep">
+              {props.guidedState == 1 ? props.nutrition : props.reproductive}
+            </p>
+          </div>
+        )}
       </div>
-      <div className="z-10 w-[70%] h-full bg-[#31ABE220] rounded-2xl relative">
-        <div className="absolute flex flex-col justify-between w-full h-full py-3 text-base font-medium -z-10 text-neutral-600 ">
+      <div className="z-10 w-full bg-[#31ABE220] rounded-2xl relative ">
+        <div className="absolute z-10 flex flex-col justify-between w-full h-full py-3 text-base font-medium text-neutral-600 ">
           <div className="grid h-full grid-cols-5">
             {temperatureGraphData.map((l, i) => {
               return (
                 <div
                   key={i}
-                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[9.375rem] before:bg-neutral-400 h-full"
+                  className="before:last:w-0 relative before:w-px before:right-0 before:top-1/2 before:-translate-y-1/2 before:absolute before:h-[5rem] before:bg-neutral-400 h-full"
                 >
                   <div className="flex flex-col items-center justify-between h-full">
                     <p className="block text-center ">{l.label}</p>
+                    {props.guidedState == 0 ? null : l.label == "오늘(예측)" ? (
+                      <FontAwesomeIcon
+                        icon={
+                          props.guidedState == 1
+                            ? props.nutritionState == "up"
+                              ? faArrowUp
+                              : faArrowDown
+                            : props.reproductiveState == "up"
+                            ? faArrowUp
+                            : faArrowDown
+                        }
+                        className={
+                          " text-[#2EABE2] font-bold text-2xl absolute z-[100] bottom-[20%] animate-up-down"
+                        }
+                      />
+                    ) : null}
                     <p className="text-center">{l.value}</p>
                   </div>
                 </div>
@@ -716,7 +774,7 @@ function TemperatureGraph(props) {
             })}
           </div>
         </div>
-        <div className="w-full h-full px-[8.5%] py-12 mx-auto">
+        <div className="w-full px-[8.5%] mx-auto py-10 h-[130px]">
           <Line options={options} data={data} />
         </div>
       </div>
