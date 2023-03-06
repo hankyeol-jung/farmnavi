@@ -18,6 +18,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import BeeData from "../json/bee.json";
 import BeeData2 from "../json/bee2.json";
+import BeeData3 from "../json/bee3.json";
 import UserInfo from "../json/user-information.json";
 import farmMedia from "../media/팜커넥트_수정벌_AI인식모니터링영상.mp4";
 
@@ -169,6 +170,12 @@ function FertilizedBee() {
           <div className="transition duration-1000 reveal">
             <Beegraph data={data} result={result} />
           </div>
+          <div className="transition duration-1000 reveal">
+            <BeeByDategraph data={data} result={result} />
+          </div>
+          <div className="transition duration-1000 reveal">
+            <TotlaReport />
+          </div>
         </div>
       </div>
 
@@ -191,7 +198,31 @@ function FertilizedBee() {
   );
 }
 
-// 증산량 그래프 컴포넌트
+// 통합 리포트 컴포넌트
+function TotlaReport() {
+  return (
+    <div className="w-full mb-5 bg-white border p-7 rounded-xl border-neutral-400">
+      <p className="mb-5 text-2xl font-bold text-neutral-500">벌 활동 리포트</p>
+
+      <p className="text-2xl font-normal text-black break-keep">
+        2월11일 어제 벌통 투입 후 28일차입니다. <br />
+        <b className="font-bold">
+          수정벌 활동 횟수는 일 200회로 초기 대비 50% 줄었습니다.
+        </b>{" "}
+        <br />
+        비정상 활동 벌은 최근 1주일 평균 5회입니다.
+        <br />
+        수분 양 분석 결과, 수분 양 많은 벌은 65%, 적은 벌은 35%입니다.
+        <br />
+        시간대별 활동은 오전 10:00~11:00에 나가는 벌이 가장 많았으며,
+        <br />
+        오후 15:00~16:00에 들어온 벌이 가장 많았습니다.
+      </p>
+    </div>
+  );
+}
+
+// 시간대별 벌 활동 추적 컴포넌트
 function Beegraph(props) {
   let graphData = UserInfo[0].environment.temperatureHumidityGraph;
 
@@ -462,8 +493,135 @@ function Beegraph(props) {
           />
         </div>
       </div>
-      <div className="h-[300px]">
+      <div className="h-[200px]">
         <Chart type="line" data={data} options={options} className="" />
+      </div>
+    </div>
+  );
+}
+// 일자별 벌 활동횟수 컴포넌트
+function BeeByDategraph(props) {
+  const data = {
+    datasets: [
+      {
+        type: "bar",
+        label: "활동횟수",
+        backgroundColor: "#FFC107",
+        data: BeeData3,
+        borderColor: "#FFC107",
+        borderWidth: 2,
+      },
+    ],
+  };
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    spanGaps: true,
+    maxBarThickness: 30,
+    grouped: true,
+    interaction: {
+      mode: "index",
+    },
+    plugins: {
+      legend: {
+        display: false,
+        labels: {
+          usePointStyle: true,
+          padding: 10,
+          font: {
+            family: "'Noto Sans KR', 'serif'",
+            lineHeight: 1,
+          },
+        },
+      },
+      tooltip: {
+        backgroundColor: "rgba(124, 35, 35, 0.4)",
+        padding: 10,
+        bodySpacing: 5,
+        bodyFont: {
+          font: {
+            family: "'Noto Sans KR', sans-serif",
+          },
+        },
+        usePointStyle: true,
+        filter: (item) => item.parsed.y !== null,
+        callbacks: {
+          title: (context) => context[0].label,
+          label: (context) => {
+            let label = context.dataset.label + "" || "";
+
+            return context.parsed.y !== null
+              ? label + ": " + context.parsed.y
+              : null;
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        afterTickToLabelConversion: function (scaleInstance) {
+          const ticks = scaleInstance.ticks;
+
+          const newTicks = ticks.map((tick) => {
+            return {
+              ...tick,
+              label: tick.label,
+            };
+          });
+
+          scaleInstance.ticks = newTicks;
+        },
+        grid: {
+          display: false,
+          drawTicks: true,
+          tickLength: 4,
+          color: "#E2E2E230",
+        },
+        axis: "x",
+        position: "bottom",
+        ticks: {
+          minRotation: 45,
+          padding: 5,
+        },
+      },
+      y: {
+        type: "linear",
+        grid: {
+          color: "#E2E2E230",
+        },
+        axis: "y",
+        display: true,
+        position: "left",
+        title: {
+          display: true,
+          align: "end",
+          color: "#808080",
+          font: {
+            size: 12,
+            family: "'Noto Sans KR', sans-serif",
+            weight: 300,
+          },
+          // text: "단위: 배",
+        },
+        ticks: {
+          beginAtZero: true, // 0부터 시작하게 합니다.
+          stepSize: 20, // 20 씩 증가하도록 설정합니다.
+        },
+      },
+    },
+  };
+
+  ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+  return (
+    <div className="px-10 pt-6 mb-6 bg-white border pb-9 rounded-xl border-neutral-400">
+      <div className="flex items-center justify-between mb-5">
+        <p className="text-2xl font-bold text-neutral-500">
+          벌통 투입 후 일자별 벌 활동횟수
+        </p>
+      </div>
+      <div className="h-[200px]">
+        <Chart data={data} options={options} className="" />
       </div>
     </div>
   );
