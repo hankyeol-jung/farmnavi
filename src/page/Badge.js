@@ -533,7 +533,13 @@ function HDgraph(props) {
         </div>
       </div>
       <div className="h-[300px]">
-        <Chart type="line" data={data} options={options} className="" />
+        <Chart
+          id="badgeChart"
+          type="line"
+          data={data}
+          options={options}
+          className=""
+        />
       </div>
     </div>
   );
