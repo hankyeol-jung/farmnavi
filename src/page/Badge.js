@@ -12,9 +12,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line, Bar } from "react-chartjs-2";
+import { Line, Bar, Chart } from "react-chartjs-2";
 import axios from "axios";
 import { useQuery } from "react-query";
+import BadgeData from "../json/badge.json";
+import UserInfo from "../json/user-information.json";
 
 let supplywaterTimeData = [
   {
@@ -291,50 +293,66 @@ function Badge() {
 
 // 증산량 그래프 컴포넌트
 function HDgraph(props) {
-  let totalTimeData =
-    props.result.data &&
-    props.data().environment.temperatureHumidityGraph.map((a, i) => {
-      return a;
-    });
+  let graphData = UserInfo[0].environment.temperatureHumidityGraph;
+
+  let totalTimeData = graphData.map((a, i) => {
+    return a;
+  });
 
   let todayTimeData = [];
   let tomorowTimeData = [];
+  let todayTimeDataBadge = [];
+  let tomorowTimeDataBadge = [];
 
   function todayTimeDivision() {
-    for (
-      let i = 0;
-      i < props.data().environment.temperatureHumidityGraph.length / 2;
-      i++
-    ) {
-      todayTimeData.push(props.data().environment.temperatureHumidityGraph[i]);
+    for (let i = 0; i < graphData.length / 2; i++) {
+      todayTimeData.push(graphData[i]);
     }
   }
   function tomorowTimeDivision() {
-    for (
-      let i = props.data().environment.temperatureHumidityGraph.length / 2;
-      i < props.data().environment.temperatureHumidityGraph.length;
-      i++
-    ) {
+    for (let i = graphData.length / 2; i < graphData.length; i++) {
       i = i.toFixed();
-      tomorowTimeData.push(
-        props.data().environment.temperatureHumidityGraph[i]
-      );
+      tomorowTimeData.push(graphData[i]);
     }
   }
+
+  function todayTimeDivisionBadge() {
+    for (let i = 0; i < BadgeData.length / 2; i++) {
+      todayTimeDataBadge.push(BadgeData[i]);
+    }
+  }
+  function tomorowTimeDivisionBadge() {
+    for (let i = BadgeData.length / 2; i < BadgeData.length; i++) {
+      tomorowTimeDataBadge.push(BadgeData[i]);
+    }
+  }
+
+  todayTimeDivisionBadge();
+  tomorowTimeDivisionBadge();
 
   props.result.data && todayTimeDivision();
   props.result.data && tomorowTimeDivision();
 
   let recommendTest;
+  let badgeTest;
 
   let [recommendState, setRecommendState] = useState(1);
 
   if (recommendState == 0) {
     recommendTest = totalTimeData;
+    badgeTest = BadgeData;
   } else if (recommendState == 1) {
     recommendTest = todayTimeData;
+    badgeTest = todayTimeDataBadge;
   } else if (recommendState == 2) {
     recommendTest = tomorowTimeData;
+    badgeTest = tomorowTimeDataBadge;
+  }
+
+  const sampledData = [];
+  const step = 15;
+  for (let i = 0; i < recommendTest.length; i += step) {
+    sampledData.push(recommendTest[i]);
   }
 
   const data = {
@@ -342,19 +360,19 @@ function HDgraph(props) {
       {
         type: "line",
         label: "hd",
-        borderColor: "rgb(54, 162, 235)",
-        borderWidth: 1,
-        data: recommendTest,
+        borderColor: "#2FAAE1",
+        borderWidth: 2,
+        data: sampledData,
         yAxisID: "y_sub",
         pointRadius: 0,
-        lineTension: 0,
+        lineTension: 0.2,
       },
       {
         type: "bar",
         label: "증산",
-        backgroundColor: "rgb(255, 99, 132)",
-        data: recommendTest,
-        borderColor: "red",
+        backgroundColor: "#ABCC4D",
+        data: badgeTest,
+        borderColor: "#ABCC4D",
         borderWidth: 2,
       },
     ],
@@ -485,32 +503,37 @@ function HDgraph(props) {
   };
 
   ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+  let thisClick = (a) => {
+    setRecommendState(a);
+  };
 
   return (
     <div className="px-10 pt-6 mb-6 bg-white border pb-9 rounded-xl border-neutral-400">
-      <p className="mb-5 text-2xl font-bold text-neutral-500">증산량 그래프</p>
-      <div className="grid grid-cols-3 gap-5 mb-5">
-        <TimeViewButton
-          functionValue={1}
-          setRecommendState={setRecommendState}
-          recommendState={recommendState}
-          title={"오늘보기"}
-        />
-        <TimeViewButton
-          functionValue={2}
-          setRecommendState={setRecommendState}
-          recommendState={recommendState}
-          title={"내일보기"}
-        />
-        <TimeViewButton
-          functionValue={0}
-          setRecommendState={setRecommendState}
-          recommendState={recommendState}
-          title={"모두보기"}
-        />
+      <div className="flex items-center justify-between mb-5">
+        <p className="text-2xl font-bold text-neutral-500">증산량 그래프</p>
+        <div className="flex items-center justify-center">
+          <TimeViewButton
+            functionValue={1}
+            title={"오늘보기"}
+            thisClick={thisClick}
+            recommendState={recommendState}
+          />
+          <TimeViewButton
+            functionValue={2}
+            title={"내일보기"}
+            thisClick={thisClick}
+            recommendState={recommendState}
+          />
+          <TimeViewButton
+            functionValue={0}
+            title={"모두보기"}
+            thisClick={thisClick}
+            recommendState={recommendState}
+          />
+        </div>
       </div>
       <div className="h-[300px]">
-        <Line type="line" data={data} options={options} className="" />
+        <Chart type="line" data={data} options={options} className="" />
       </div>
     </div>
   );
@@ -521,7 +544,7 @@ function TimeViewButton(props) {
   return (
     <span
       className={
-        "px-4 py-2 text-xl text-center rounded-full cursor-pointer transition " +
+        "px-10 py-2 text-xl text-center rounded-full cursor-pointer transition ml-3 " +
         `${
           props.recommendState == props.functionValue
             ? "bg-[#2EABE2] text-white font-bold"
@@ -529,7 +552,7 @@ function TimeViewButton(props) {
         }`
       }
       onClick={() => {
-        props.setRecommendState(props.functionValue);
+        props.thisClick(props.functionValue);
       }}
     >
       {props.title}

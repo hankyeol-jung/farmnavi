@@ -603,8 +603,6 @@ function NavigationMenu(props) {
 
 // 환경 예측 컴포넌트
 function EnvironmentalForecasting(props) {
-  // let [state, setState] = useState("before:bg-[#28a745]");
-
   let stateColor = () => {
     if (props.state == "보통") {
       return "before:bg-[#28a745]";

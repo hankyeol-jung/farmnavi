@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 import useInterval from "../useinterval";
+import moment from "moment";
 
 const userUrl =
   "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
@@ -271,7 +272,7 @@ function Environment(tab) {
             </div>
           </div>
 
-          {/* <div className="transition duration-1000 reveal ">
+          <div className="transition duration-1000 reveal ">
             <HDgraph
               timeValue={timeValue}
               result={result}
@@ -283,7 +284,7 @@ function Environment(tab) {
               tomorrowVentilation={tomorrowVentilation}
               tomorrowEntering={tomorrowEntering}
             />
-          </div> */}
+          </div>
           <div className="transition duration-1000 reveal">
             <div className=" mb-6 after:absolute after:w-px after:h-[5.625rem] after:bg-gray-400 after:left-2/3 after:top-1/2 after:-translate-y-1/2 before:absolute before:w-px before:h-[5.625rem] before:bg-gray-400 before:left-1/3 before:top-1/2 before:-translate-y-1/2 relative grid grid-cols-3 gap-10 w-full border rounded-xl border-neutral-400 px-6 py-4">
               <Suggestion
@@ -901,7 +902,7 @@ function HDgraph(props) {
   return (
     <div className="px-10 pt-6 mb-6 bg-white border pb-9 rounded-xl border-neutral-400">
       <div className="flex items-center justify-between mb-5">
-        <p className="text-2xl font-bold text-neutral-500">증산량 그래프</p>
+        <p className="text-2xl font-bold text-neutral-500">HD 그래프</p>
         <div className="flex items-center justify-center">
           <TimeViewButton
             functionValue={1}
@@ -1084,111 +1085,56 @@ function TodayGraph(props) {
               ctx.stroke();
             }
 
-            if (index == timeChange(todaySunrise)) {
-              ctx.textAlign = "center";
-              const { x, y } = datapoint.tooltipPosition(index);
-              // ctx.fillStyle = "#000000";
-              let title = "일출";
-              const textWidtth = ctx.measureText(todaySunrise).width;
+            ctx.textAlign = "center";
 
-              roundRect(
-                x - (textWidtth + 10) / 2,
-                18,
-                textWidtth + 10,
-                40,
-                5,
-                "#eeeeee",
-                "#666666"
-              );
-              textLabel(title, x, 20 + 15);
-              textLabel(todaySunrise, x, 20 + 30);
-            }
-            if (index == timeChange(todaySunset)) {
-              const { x, y } = datapoint.tooltipPosition(index);
-              let title = "일몰";
-              const textWidtth = ctx.measureText(todaySunset).width;
+            let sunFunc = (sun, text) => {
+              if (index == timeChange(sun)) {
+                const { x, y } = datapoint.tooltipPosition(index);
+                let title = text;
+                const textWidtth = ctx.measureText(sun).width;
 
-              roundRect(
-                x - (textWidtth + 10) / 2,
-                18,
-                textWidtth + 10,
-                40,
-                5,
-                "#eeeeee",
-                "#666666"
-              );
-              textLabel(title, x, 20 + 15);
-              textLabel(todaySunset, x, 20 + 30);
-            }
-            if (index == timeChange(props.todayCrownWater)) {
-              const { x, y } = datapoint.tooltipPosition(index);
-              let title = "관수추천";
-              const textWidtth = ctx.measureText(props.todayCrownWater).width;
-              roundRect(
-                (width + left) / 2 - 80,
-                20,
-                textWidtth + 20,
-                40,
-                5,
-                "#ffffff",
-                "#666666"
-              );
+                roundRect(
+                  x - (textWidtth + 10) / 2,
+                  18,
+                  textWidtth + 10,
+                  40,
+                  5,
+                  "#eeeeee",
+                  "#666666"
+                );
+                textLabel(title, x, 20 + 15);
+                textLabel(sun, x, 20 + 30);
+              }
+            };
 
-              line((width + left) / 2 - 55, 60, x, y);
+            sunFunc(todaySunrise, "일출");
+            sunFunc(todaySunset, "일몰");
 
-              textLabel(title, (width + left) / 2 - 55, 40 - 2);
-              textLabel(
-                props.todayCrownWater,
-                (width + left) / 2 - 55,
-                40 + 12
-              );
-            }
-            if (index == timeChange(props.todayVentilation)) {
-              const { x, y } = datapoint.tooltipPosition(index);
-              // ctx.fillStyle = "#000000";
-              let title = "환기추천";
-              const textWidtth = ctx.measureText(props.todayVentilation).width;
+            let recommendFunc = (text, data, n1, n2) => {
+              if (index == timeChange(data)) {
+                const { x, y } = datapoint.tooltipPosition(index);
+                let title = text;
+                const textWidtth = ctx.measureText(data).width;
+                roundRect(
+                  (width + left) / 2 + n1,
+                  20,
+                  textWidtth + 20,
+                  40,
+                  5,
+                  "#ffffff",
+                  "#666666"
+                );
 
-              roundRect(
-                (width + left) / 2,
-                20,
-                textWidtth + 20,
-                40,
-                5,
-                "#ffffff",
-                "#666666"
-              );
+                line((width + left) / 2 + n2, 60, x, y);
 
-              line((width + left) / 2 + 25, 60, x, y);
+                textLabel(title, (width + left) / 2 + n2, 40 - 2);
+                textLabel(data, (width + left) / 2 + n2, 40 + 12);
+              }
+            };
 
-              textLabel(title, (width + left) / 2 + 25, 40 - 2);
-              textLabel(
-                props.todayCrownWater,
-                (width + left) / 2 + 25,
-                40 + 12
-              );
-            }
-            if (index == timeChange(props.todayEntering)) {
-              const { x, y } = datapoint.tooltipPosition(index);
-              // ctx.fillStyle = "#000000";
-              let title = "진입추천";
-              const textWidtth = ctx.measureText(props.todayEntering).width;
-
-              roundRect(
-                (width + left) / 2 + 80,
-                20,
-                textWidtth + 20,
-                40,
-                5,
-                "#ffffff",
-                "#666666"
-              );
-
-              line((width + left) / 2 + 105, 60, x, y);
-
-              textLabel(title, (width + left) / 2 + 105, 40 - 2);
-              textLabel(props.todayEntering, (width + left) / 2 + 105, 40 + 12);
-            }
+            recommendFunc("관수추천", props.todayCrownWater, -80, -55);
+            recommendFunc("환기추천", props.todayVentilation, 0, 25);
+            recommendFunc("진입추천", props.todayEntering, 80, 105);
           });
         });
       },
@@ -1199,7 +1145,7 @@ function TodayGraph(props) {
     datasets: [
       {
         type: "bar",
-        label: "",
+        labels: "",
         backgroundColor: recommendColor,
         data: todayTimeData,
         borderColor: recommendColor,
@@ -1261,11 +1207,7 @@ function TodayGraph(props) {
           const ticks = scaleInstance.ticks;
 
           const newTicks = ticks.map((tick) => {
-            let timeTick = new Date(tick.label);
-            let hour = timeTick.getHours(); // 시, 10
-            let min = timeTick.getMinutes(); // 분, 35
-
-            timeTick = hour + ":" + min;
+            let timeTick = moment(tick.label).format("HH:mm");
 
             return {
               ...tick,
@@ -1377,8 +1319,6 @@ function TomorrowGraph(props) {
 
   const myChartRef = useRef(null);
 
-  let todaySunrise = "6:21";
-  let todaySunset = "19:11";
   let tomorrowSunrise = "6:39";
   let tomorrowSunset = "19:23";
 
@@ -1448,132 +1388,90 @@ function TomorrowGraph(props) {
           ctx.fillText(label, x, y);
         }
 
+        function line(x, y, x2, y2) {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x2, y2);
+          ctx.strokeStyle = "#999999";
+          ctx.lineWidth = 1; // 라인 두께 설정
+          ctx.setLineDash([5, 5]); // 대쉬 패턴 설정
+          ctx.lineDashOffset = 0; // 대쉬 패턴 시작 위치 설정
+          ctx.stroke();
+        }
+
+        let recommendFunc = (text, data, n1, n2, id, point) => {
+          if (id == timeChange(data)) {
+            const { x, y } = point.tooltipPosition(id);
+            let title = text;
+            const textWidtth = ctx.measureText(data).width;
+            roundRect(
+              (width + left) / 2 + n1,
+              20,
+              textWidtth + 20,
+              40,
+              5,
+              "#ffffff",
+              "#666666"
+            );
+
+            line((width + left) / 2 + n2, 60, x, y);
+
+            textLabel(title, (width + left) / 2 + n2, 40 - 2);
+            textLabel(data, (width + left) / 2 + n2, 40 + 12);
+          }
+        };
+
         chart.data.datasets.forEach((dataset, i) => {
           chart.getDatasetMeta(i).data.forEach((datapoint, index) => {
-            function line(x, y, x2, y2) {
-              ctx.beginPath();
-              ctx.moveTo(x, y);
-              ctx.lineTo(x2, y2);
-              ctx.strokeStyle = "#999999";
-              ctx.lineWidth = 1; // 라인 두께 설정
-              ctx.setLineDash([5, 5]); // 대쉬 패턴 설정
-              ctx.lineDashOffset = 0; // 대쉬 패턴 시작 위치 설정
-              ctx.stroke();
-            }
+            ctx.textAlign = "center";
 
-            if (index == timeChange(tomorrowSunrise)) {
-              ctx.textAlign = "center";
-              const { x, y } = datapoint.tooltipPosition(index);
-              // ctx.fillStyle = "#000000";
-              let title = "일출";
-              const textWidtth = ctx.measureText(tomorrowSunrise).width;
+            let sunFunc = (sun, text) => {
+              if (index == timeChange(sun)) {
+                const { x, y } = datapoint.tooltipPosition(index);
+                let title = text;
+                const textWidtth = ctx.measureText(sun).width;
 
-              roundRect(
-                x - (textWidtth + 10) / 2,
-                18,
-                textWidtth + 10,
-                40,
-                5,
-                "#eeeeee",
-                "#666666"
-              );
-              textLabel(title, x, 20 + 15);
-              textLabel(tomorrowSunrise, x, 20 + 30);
-            }
-            if (index == timeChange(tomorrowSunset)) {
-              const { x, y } = datapoint.tooltipPosition(index);
-              let title = "일몰";
-              const textWidtth = ctx.measureText(tomorrowSunset).width;
+                roundRect(
+                  x - (textWidtth + 10) / 2,
+                  18,
+                  textWidtth + 10,
+                  40,
+                  5,
+                  "#eeeeee",
+                  "#666666"
+                );
+                textLabel(title, x, 20 + 15);
+                textLabel(sun, x, 20 + 30);
+              }
+            };
 
-              roundRect(
-                x - (textWidtth + 10) / 2,
-                18,
-                textWidtth + 10,
-                40,
-                5,
-                "#eeeeee",
-                "#666666"
-              );
-              textLabel(title, x, 20 + 15);
-              textLabel(tomorrowSunset, x, 20 + 30);
-            }
-            if (index == timeChange(props.tomorrowCrownWater)) {
-              const { x, y } = datapoint.tooltipPosition(index);
-              let title = "관수추천";
-              const textWidtth = ctx.measureText(
-                props.tomorrowCrownWater
-              ).width;
-              roundRect(
-                (width + left) / 2 - 80,
-                20,
-                textWidtth + 20,
-                40,
-                5,
-                "#ffffff",
-                "#666666"
-              );
+            sunFunc(tomorrowSunrise, "일출");
+            sunFunc(tomorrowSunset, "일몰");
 
-              line((width + left) / 2 - 55, 60, x, y);
-
-              textLabel(title, (width + left) / 2 - 55, 40 - 2);
-              textLabel(
-                props.tomorrowCrownWater,
-                (width + left) / 2 - 55,
-                40 + 12
-              );
-            }
-            if (index == timeChange(props.tomorrowVentilation)) {
-              const { x, y } = datapoint.tooltipPosition(index);
-              // ctx.fillStyle = "#000000";
-              let title = "환기추천";
-              const textWidtth = ctx.measureText(
-                props.tomorrowVentilation
-              ).width;
-
-              roundRect(
-                (width + left) / 2,
-                20,
-                textWidtth + 20,
-                40,
-                5,
-                "#ffffff",
-                "#666666"
-              );
-
-              line((width + left) / 2 + 25, 60, x, y);
-
-              textLabel(title, (width + left) / 2 + 25, 40 - 2);
-              textLabel(
-                props.tomorrowCrownWater,
-                (width + left) / 2 + 25,
-                40 + 12
-              );
-            }
-            if (index == timeChange(props.tomorrowEntering)) {
-              const { x, y } = datapoint.tooltipPosition(index);
-              // ctx.fillStyle = "#000000";
-              let title = "진입추천";
-              const textWidtth = ctx.measureText(props.tomorrowEntering).width;
-
-              roundRect(
-                (width + left) / 2 + 80,
-                20,
-                textWidtth + 20,
-                40,
-                5,
-                "#ffffff",
-                "#666666"
-              );
-
-              line((width + left) / 2 + 105, 60, x, y);
-
-              textLabel(title, (width + left) / 2 + 105, 40 - 2);
-              textLabel(
-                props.tomorrowEntering,
-                (width + left) / 2 + 105,
-                40 + 12
-              );
-            }
+            recommendFunc(
+              "관수추천",
+              props.tomorrowCrownWater,
+              -80,
+              -55,
+              index,
+              datapoint
+            );
+            recommendFunc(
+              "환기추천",
+              props.tomorrowVentilation,
+              0,
+              25,
+              index,
+              datapoint
+            );
+            recommendFunc(
+              "진입추천",
+              props.tomorrowEntering,
+              80,
+              105,
+              index,
+              datapoint
+            );
           });
         });
       },
@@ -1646,11 +1544,7 @@ function TomorrowGraph(props) {
           const ticks = scaleInstance.ticks;
 
           const newTicks = ticks.map((tick) => {
-            let timeTick = new Date(tick.label);
-            let hour = timeTick.getHours(); // 시, 10
-            let min = timeTick.getMinutes(); // 분, 35
-
-            timeTick = hour + ":" + min;
+            let timeTick = moment(tick.label).format("HH:mm");
 
             return {
               ...tick,
@@ -1861,10 +1755,11 @@ function AllGraph(props) {
               ctx.lineDashOffset = 0; // 대쉬 패턴 시작 위치 설정
               ctx.stroke();
             }
+
+            ctx.textAlign = "center";
+
             if (index == timeChange(todaySunrise)) {
-              ctx.textAlign = "center";
               const { x, y } = datapoint.tooltipPosition(index);
-              // ctx.fillStyle = "#000000";
               let title = "일출";
               const textWidtth = ctx.measureText(todaySunrise).width;
 
@@ -2168,11 +2063,7 @@ function AllGraph(props) {
           const ticks = scaleInstance.ticks;
 
           const newTicks = ticks.map((tick) => {
-            let timeTick = new Date(tick.label);
-            let hour = timeTick.getHours(); // 시, 10
-            let min = timeTick.getMinutes(); // 분, 35
-
-            timeTick = hour + ":" + min;
+            let timeTick = moment(tick.label).format("HH:mm");
 
             return {
               ...tick,
