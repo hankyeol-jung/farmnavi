@@ -45,7 +45,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
-import { userChange } from "./store.js";
+import { playChange } from "./store.js";
+import ReactPlayer from "react-player";
 
 const appHeight = () => {
   const doc = document.documentElement;
@@ -109,6 +110,7 @@ const userUrl =
   "https://raw.githubusercontent.com/hankyeol-jung/farmnavi/main/src/json/user-information.json";
 
 function App(tab) {
+  const location = useLocation();
   let sessionLog = sessionStorage.getItem("log");
   sessionLog = JSON.parse(sessionLog);
   let logState = sessionStorage.getItem("log");
@@ -169,7 +171,7 @@ function App(tab) {
 
   let [test, setTest] = useState(
     menuContents.map((m, i) =>
-      window.location.hash == "#/" + m.enname ? true : false
+      location.pathname == "/" + m.enname ? true : false
     )
   );
 
@@ -206,9 +208,41 @@ function App(tab) {
 
   let timeFirst = moment().format("a");
 
+  const playing = useSelector((state) => state.playing);
+  const playList = useSelector((state) => state.playList);
+  const playNum = useSelector((state) => state.playNum);
+  const playVolume = useSelector((state) => state.playVolume);
+
+  let locationReload = () => {
+    let copy = [...test];
+    copy.map((c, i) => {
+      copy[i] = false;
+    });
+    copy[0] = true;
+    setTest(copy);
+  };
+
+  useEffect(() => {
+    if (location.pathname == "/") {
+      locationReload();
+    }
+  }, [locationReload]);
+
   return (
     <>
       <div className="w-full h-full App bg-slate-200">
+        <MusicPlayer
+          url={
+            "/music/" +
+            playList[playNum].music +
+            " - " +
+            playList[playNum].name +
+            "." +
+            playList[playNum].extension
+          }
+          playing={playing}
+          playVolume={playVolume}
+        />
         {logState == false ? null : (
           // 헤더메뉴
           <Header
@@ -217,6 +251,8 @@ function App(tab) {
             navigate={navigate}
             data={data}
             result={result}
+            locationReload={locationReload}
+            test={test}
           />
         )}
 
@@ -235,7 +271,11 @@ function App(tab) {
             <Routes>
               <Route path="/" element={menuContents[0].file} />
               {menuContents.map((m, i) => (
-                <Route path={"/" + m.enname} element={m.file} />
+                <Route
+                  path={"/" + m.enname}
+                  element={m.file}
+                  playing={playing}
+                />
               ))}
               <Route
                 path="/login"
@@ -263,7 +303,7 @@ function App(tab) {
           )}
         </div>
         {logState == false ? null : (
-          <NavigationMenu test={test} setTest={setTest} />
+          <NavigationMenu test={test} setTest={setTest} location={location} />
         )}
       </div>
     </>
@@ -355,17 +395,15 @@ function Header(props) {
   return (
     <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
       <div className="w-1/3 cursor-pointer">
-        <Link
-          to={"/"}
-          className="w-[12.25rem]"
-          onClick={() => {
-            let copy = [...props.test];
-            props.test.map((a, i) => (copy[i] = false));
-            copy[0] = true;
-            props.setTest(copy);
-          }}
-        >
-          <img src={logo} className="w-[12.25rem]"></img>
+        <Link to={"/"} className="w-[12.25rem]">
+          <h1
+            className="w-full"
+            onClick={() => {
+              props.locationReload();
+            }}
+          >
+            <img src={logo} className="w-[12.25rem]"></img>
+          </h1>
         </Link>
       </div>
       <div className="flex items-end justify-center w-1/3">
@@ -538,14 +576,6 @@ function Login(props) {
 
 // 네비게이션 메뉴 컴포넌트
 function NavigationMenu(props) {
-  useEffect(() => {
-    if (window.location.path == "#/" || window.location.hash == undefined) {
-      let copy = [...props.test];
-      copy[0] = true;
-      props.setTest(copy);
-    }
-  }, []);
-
   return (
     <div className="bg-white grid grid-cols-8 h-[6.75rem] bottom-0 fixed w-screen">
       {menuContents.map((m, i) => (
@@ -638,6 +668,18 @@ function EnvironmentalForecasting(props) {
           </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+function MusicPlayer(props) {
+  return (
+    <div className="hidden">
+      <ReactPlayer
+        url={props.url}
+        playing={props.playing}
+        volume={props.playVolume}
+      />
     </div>
   );
 }

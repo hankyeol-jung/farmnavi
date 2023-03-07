@@ -108,7 +108,7 @@ function TotlaReport() {
     <div className="w-full mb-5 bg-white border p-7 rounded-xl border-neutral-400">
       <p className="mb-10 text-3xl font-bold text-black ">통합 리포트</p>
 
-      <p className="text-2xl font-normal text-black break-keep">
+      <p className="text-2xl font-normal leading-10 text-black break-keep">
         2월 11일의 일평균온도는 17.5°C 입니다.
         <br /> 주간평균 19.2°C , 야간평균 15.9°C, 주야간온도차는 3.3°C 입니다.
         <br />

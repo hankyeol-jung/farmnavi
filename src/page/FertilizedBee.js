@@ -21,6 +21,7 @@ import BeeData2 from "../json/bee2.json";
 import BeeData3 from "../json/bee3.json";
 import UserInfo from "../json/user-information.json";
 import farmMedia from "../media/팜커넥트_수정벌_AI인식모니터링영상.mp4";
+import moment from "moment";
 
 function FertilizedBee() {
   let userUrl =
@@ -204,7 +205,7 @@ function TotlaReport() {
     <div className="w-full mb-5 bg-white border p-7 rounded-xl border-neutral-400">
       <p className="mb-5 text-2xl font-bold text-neutral-500">벌 활동 리포트</p>
 
-      <p className="text-2xl font-normal text-black break-keep">
+      <p className="text-2xl font-normal leading-10 text-black break-keep">
         2월11일 어제 벌통 투입 후 28일차입니다. <br />
         <b className="font-bold">
           수정벌 활동 횟수는 일 200회로 초기 대비 50% 줄었습니다.
@@ -384,11 +385,7 @@ function Beegraph(props) {
           const ticks = scaleInstance.ticks;
 
           const newTicks = ticks.map((tick) => {
-            let timeTick = new Date(tick.label);
-            let hour = timeTick.getHours(); // 시, 10
-            let min = timeTick.getMinutes(); // 분, 35
-
-            timeTick = hour + ":" + min;
+            let timeTick = moment(tick.label).format("HH:mm");
 
             return {
               ...tick,
@@ -494,7 +491,7 @@ function Beegraph(props) {
         </div>
       </div>
       <div className="h-[200px]">
-        <Chart type="line" data={data} options={options} className="" />
+        <Chart data={data} options={options} className="" />
       </div>
     </div>
   );

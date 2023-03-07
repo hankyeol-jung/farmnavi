@@ -1263,7 +1263,6 @@ function TodayGraph(props) {
     <div className="h-[250px]">
       <Bar
         ref={myChartRef}
-        type="line"
         data={data}
         options={options}
         plugins={plugins}

@@ -17,6 +17,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import BadgeData from "../json/badge.json";
 import UserInfo from "../json/user-information.json";
+import moment from "moment";
 
 let supplywaterTimeData = [
   {
@@ -426,11 +427,7 @@ function HDgraph(props) {
           const ticks = scaleInstance.ticks;
 
           const newTicks = ticks.map((tick) => {
-            let timeTick = new Date(tick.label);
-            let hour = timeTick.getHours(); // 시, 10
-            let min = timeTick.getMinutes(); // 분, 35
-
-            timeTick = hour + ":" + min;
+            let timeTick = moment(tick.label).format("HH:mm");
 
             return {
               ...tick,
@@ -533,13 +530,7 @@ function HDgraph(props) {
         </div>
       </div>
       <div className="h-[300px]">
-        <Chart
-          id="badgeChart"
-          type="line"
-          data={data}
-          options={options}
-          className=""
-        />
+        <Chart id="badgeChart" data={data} options={options} className="" />
       </div>
     </div>
   );

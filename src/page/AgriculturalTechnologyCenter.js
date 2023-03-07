@@ -253,6 +253,7 @@ function AgriculturalTechnologyCenter(tab) {
                         handleChange={handleChange}
                         regist={regist}
                         setRegist={setRegist}
+                        wish={wish}
                       />
                     </div>
                   </Fade>
@@ -351,7 +352,6 @@ function ATcenterList(props) {
     let localRegist = localStorage.getItem("regist");
     localRegist = JSON.parse(localRegist);
     for (let i = 0; i < localRegist.length; i++) {
-      // console.log();
       if (localRegist[i].id == props.i) {
         // if(localRegist==id)
         localRegist.splice(i, 1);
