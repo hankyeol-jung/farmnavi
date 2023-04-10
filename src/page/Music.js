@@ -10,7 +10,6 @@ import {
   faVolumeXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState, useEffect } from "react";
-import ReactPlayer from "react-player";
 import { useSelector, useDispatch } from "react-redux";
 import {
   playChange,
@@ -192,7 +191,7 @@ function MusicList(props) {
 
 function List(props) {
   return (
-    <div className="transition duration-1000  reveal">
+    <div className="transition duration-1000 reveal">
       <span
         className={
           "grid grid-cols-5 text-2xl font-medium p-4 rounded-lg transition-all duration-300 " +
@@ -234,6 +233,18 @@ function List(props) {
 
 function MusicRemote(props) {
   const playVolume = useSelector((state) => state.playVolume);
+  const playing = useSelector((state) => state.playing);
+  const playList = useSelector((state) => state.playList);
+  const playNum = useSelector((state) => state.playNum);
+
+  const handleTouchEnd = () => {
+    // iOS에서 볼륨 슬라이더를 터치하여 조절한 후, 다시 터치했을 때 사운드가 발생하는 문제 해결을 위한 코드
+    const audio = document.getElementsByTagName("audio")[0];
+    audio.muted = false;
+    setTimeout(() => {
+      audio.muted = true;
+    }, 0);
+  };
 
   return (
     <div>
@@ -274,7 +285,7 @@ function MusicRemote(props) {
           </span>
         </div>
       </div>
-      <div className="flex items-center justify-between w-[90%] mx-auto">
+      {/* <div className="flex items-center justify-between w-[90%] mx-auto">
         <FontAwesomeIcon
           icon={faVolumeXmark}
           className="text-2xl text-neutral-400"
@@ -287,12 +298,14 @@ function MusicRemote(props) {
           step="0.01"
           value={playVolume}
           onChange={props.handleVolumeChange}
+          onInput={props.handleVolumeChange} // 모바일에서 터치 이벤트 지원
+          // onTouchEnd={handleTouchEnd} // iOS에서 사운드 발생하는 문제 해결
         />
         <FontAwesomeIcon
           icon={faVolumeHigh}
           className="text-2xl text-neutral-400"
         />
-      </div>
+      </div> */}
     </div>
   );
 }

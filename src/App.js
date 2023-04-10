@@ -13,6 +13,7 @@ import {
   faCloud,
   faCaretDown,
   faCaretUp,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import { faForumbee } from "@fortawesome/free-brands-svg-icons";
 import moment from "moment";
@@ -47,6 +48,9 @@ import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
 import { playChange } from "./store.js";
 import ReactPlayer from "react-player";
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 const appHeight = () => {
   const doc = document.documentElement;
@@ -124,22 +128,8 @@ function App(tab) {
     })
   );
 
-  let data = () => {
-    let index = 0;
-    for (let i = 0; i < (result.data && result.data.length); i++) {
-      if (result.data[i].userId == sessionLog.userId) {
-        index = i;
-        break;
-      }
-    }
-    return result.data[index];
-  };
-
-  let navigate = useNavigate();
-
-  let dispatch = useDispatch();
-
   useEffect(() => {
+    console.log("ddd");
     if (!localStorage.getItem("watched")) {
       localStorage.setItem("watched", JSON.stringify([]));
     }
@@ -161,7 +151,24 @@ function App(tab) {
     if (logState == false || logState == null) {
       navigate("/login");
     }
-  }, [tab]);
+  }, []);
+
+  let data = () => {
+    let index = 0;
+    if (sessionLog != null) {
+      for (let i = 0; i < result.data.length; i++) {
+        if (result.data[i].userId == sessionLog.userId) {
+          index = i;
+          break;
+        }
+      }
+      return result.data[index];
+    }
+  };
+
+  let navigate = useNavigate();
+
+  let dispatch = useDispatch();
 
   useEffect(() => {
     if (logState == true) {
@@ -227,6 +234,20 @@ function App(tab) {
       locationReload();
     }
   }, [locationReload]);
+
+  useEffect(() => {
+    menuContents.map((m, i) => {
+      if (location.pathname == "/" + m.enname) {
+        let copy = [...test];
+
+        test.map((a, i) => (copy[i] = false));
+
+        copy[i] = true;
+
+        setTest(copy);
+      }
+    });
+  }, [location.pathname]);
 
   return (
     <>
@@ -392,6 +413,48 @@ function FarmEnvironmentPrediction(props) {
 
 // 헤더 컴포넌트
 function Header(props) {
+  let [notificationState, setNotificationState] = useState(false);
+
+  let notification = [
+    {
+      menu: "컨설팅",
+      description: "2월 14일 통합 리포트를 확인해주세요.",
+      link: "/consulting",
+    },
+    {
+      menu: "농업기술센터",
+      description: "2023년 품목별 스마트 농업 교육 공지",
+      link: "/agricultural-technology-center",
+    },
+    {
+      menu: "수정벌",
+      description: "2월 14일 수정벌 활동 분석 리포트를 확인해주세요.",
+      link: "/fertilized-bee",
+    },
+  ];
+
+  let [fade2, setFade2] = useState("");
+
+  useEffect(() => {
+    setFade2("end");
+    return () => {
+      setFade2("");
+    };
+  }, []);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
   return (
     <div className="flex justify-between items-center px-6 py-3 shadow-md shadow-[#66666620] bg-white">
       <div className="w-1/3 cursor-pointer">
@@ -414,9 +477,11 @@ function Header(props) {
           <Clock format="hh:mm" ticking={true}></Clock>
         </p>
       </div>
-      <div className="flex items-center justify-end w-1/3">
+      <div className="relative flex items-center justify-end w-1/3">
         <p className="mr-3 text-xl font-bold text-neutral-700">
-          {props.result.data && props.data().name}님
+          {props.result.isLoading && "로딩중"}
+          {props.result.error && "에러"}
+          {props.result.data && props.data().name + "님"}
         </p>
         <span
           className="flex items-center cursor-pointer"
@@ -430,6 +495,51 @@ function Header(props) {
           <img src={userIcon} className="w-[3.25rem] mr-3"></img>
           <img src={arrowBottom} className="w-6"></img>
         </span>
+        <div>
+          <Button aria-describedby={id} onClick={handleClick} className="">
+            <span className="flex items-center ml-5 text-4xl cursor-pointer text-[#2eabe2] relative">
+              <span className="absolute z-10 w-5 h-5 flex justify-center items-center text-sm bg-[#2eabe2] rounded-full text-white border border-white -top-1 -right-2">
+                {notification.length}
+              </span>
+              <FontAwesomeIcon icon={faBell} className="mt-1" />
+            </span>
+          </Button>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <Typography sx={{ p: 0 }}>
+              <div className={" bg-white h-96 w-80 rounded-lg"}>
+                <div className="flex w-full px-3 h-14 items-center text-xl font-medium border-b break-keep text-white border-neutral-300 bg-[#2eabe2]">
+                  <p className="mr-2 font-bold ">알림창</p>
+                </div>
+                <div className="overflow-scroll h-[calc(100%_-_3.5rem)]">
+                  {notification.map((n, i) => {
+                    return (
+                      <Link
+                        to={n.link}
+                        className="flex w-full px-3 py-5 text-base font-medium border-b break-keep text-neutral-600 border-neutral-300"
+                      >
+                        <p className="mr-2 font-bold text-neutral-800 ">
+                          {n.menu}
+                        </p>
+                        <p className="overflow-hidden whitespace-nowrap text-ellipsis">
+                          {n.description}
+                        </p>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </Typography>
+          </Popover>
+        </div>
       </div>
     </div>
   );

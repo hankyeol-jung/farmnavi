@@ -130,13 +130,13 @@ function Environment(tab) {
 
   let navigate = useNavigate();
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (sessionLog.userId == undefined) {
-        navigate("/login");
-      }
-    }, [100]);
-  }, [tab]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (sessionLog.userId == undefined) {
+  //       navigate("/login");
+  //     }
+  //   }, [100]);
+  // }, [tab]);
 
   let scoreLength = result.data && data().environment.score.length;
 

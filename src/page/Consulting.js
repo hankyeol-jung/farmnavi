@@ -66,12 +66,14 @@ function Consulting() {
           <div className="transition duration-1000 reveal">
             <div className="grid grid-cols-2 gap-5">
               <iframe
-                className="w-full mb-6 rounded-xl"
+                className="w-full mb-6 rounded-xl h-[24rem]"
                 width="560"
-                height="300"
-                src="https://www.youtube.com/embed/CLraTCLg2ig"
+                height="315"
+                src="https://www.youtube.com/embed/9IQnymirqWc"
                 title="YouTube video player"
+                frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
               ></iframe>
 
               <ConsultingReport />
@@ -141,7 +143,7 @@ function TotlaReport() {
 // 컨설팅 보고서 컴포넌트
 function ConsultingReport() {
   return (
-    <div className="w-full h-[300px] bg-white border p-7 rounded-xl border-neutral-400">
+    <div className="w-full h-[24rem] bg-white border p-7 rounded-xl border-neutral-400">
       <p className="mb-5 text-2xl font-bold text-black ">
         2023년 1월 15일 컨설팅 보고서
       </p>
